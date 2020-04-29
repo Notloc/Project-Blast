@@ -8,12 +8,14 @@ public class ItemDatabaseInspector : Editor
 {
     private ItemDatabase database;
     private ItemMap registeredItems;
+    private StringMap nameMap;
     private StringMap missingItems;
 
     private void OnEnable()
     {
         database = (ItemDatabase)target;
         registeredItems = database.GetItemMap();
+        nameMap = database.GetNameMap();
         missingItems = database.GetMissingMap();
     }
 
@@ -23,6 +25,7 @@ public class ItemDatabaseInspector : Editor
         {
             database.UpdateDatabase();
             registeredItems = database.GetItemMap();
+            nameMap = database.GetNameMap();
             missingItems = database.GetMissingMap();
         }
 
@@ -42,7 +45,10 @@ public class ItemDatabaseInspector : Editor
                 GUILayout.BeginHorizontal("box");
                 {
                     GUILayout.Label(pair.Key.ToString());
-                    GUILayout.Label(pair.Value.GetName());
+
+                    string name;
+                    nameMap.TryGetValue(pair.Key, out name);
+                    GUILayout.Label(name);
                 }
                 GUILayout.EndHorizontal();
             }
