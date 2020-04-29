@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
         float rayCastLength = ((cameraT.position - eyePos).magnitude * 1.25f) + interactionDistance;
 
         RaycastHit hit;
-        if(Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, rayCastLength))
+        if(Physics.Raycast(cameraT.position, cameraT.forward, out hit, rayCastLength))
         {
             // Return if distance is larger
             if ((hit.point - eyePos).sqrMagnitude > Mathf.Pow(interactionDistance, 2))
