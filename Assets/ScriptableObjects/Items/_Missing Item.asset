@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22ac800ef8a8ec544ac9b88a921ddb62, type: 3}
-  m_Name: Lead Block
+  m_Name: _Missing Item
   m_EditorClassIdentifier: 
   itemValue: 1
-  itemWeight: 50
-  model: {fileID: 4685647945316824475, guid: 5c3ed3dba3592c8438cfa2472a7cd503, type: 3}
+  itemWeight: 1
+  model: {fileID: 4685647945316824475, guid: bd35e4d57b5023e4fb712b9bd7582450, type: 3}

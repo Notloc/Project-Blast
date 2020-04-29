@@ -10,9 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22ac800ef8a8ec544ac9b88a921ddb62, type: 3}
-  m_Name: Block
+  m_Name: Spoon
   m_EditorClassIdentifier: 
-  itemName: Block
   itemValue: 1
-  itemWeight: 1
-  model: {fileID: 4685647945316824475, guid: bd35e4d57b5023e4fb712b9bd7582450, type: 3}
+  itemWeight: 0.1
+  model: {fileID: 145877744339027375, guid: 20cc916cfbdfa8e438e42daa441abb66, type: 3}

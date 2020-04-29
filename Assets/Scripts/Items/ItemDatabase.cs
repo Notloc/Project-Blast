@@ -8,7 +8,9 @@ using RotaryHeart.Lib.SerializableDictionary;
 /// Manages all the ItemBases in the game
 /// This will automatically handle assigning ids to ItemBases
 /// Letting us to not worry about it... or mess it up
+/// It even tracks what Items gets deleted
 /// </summary>
+[CreateAssetMenu(menuName = "Databases/Create Item Database")]
 public class ItemDatabase : ScriptableObject
 {
     // Automatically handles retrieving the instance when first loaded
@@ -25,26 +27,26 @@ public class ItemDatabase : ScriptableObject
     // The ItemBase to use if an id is requested but not found in the database
     [SerializeField] private ItemBase defaultItem = null;
     //New items to register this update
-    [SerializeField] private List<ItemBase> newItems = new List<ItemBase>();
+    [SerializeField] private List<ItemBase> addItems = new List<ItemBase>();
 
     // The registered items that have been given an id
-    [SerializeField]
+    [SerializeField] [HideInInspector]
     private ItemMap registeredItems = new ItemMap();
 
     // Mapping of ids to names
-    [SerializeField]
+    [SerializeField] [HideInInspector]
     private StringMap nameMap = new StringMap();
 
     // Ids that have gone missing and need to be mapped to a new id
     private List<uint> missingIds = new List<uint>();
 
     // Mapping of missing ids to what their names were
-    [SerializeField]
+    [SerializeField] [HideInInspector]
     private StringMap missingNameMap = new StringMap();
 
 
     // The ever increasing id counter
-    [SerializeField]
+    [SerializeField] [HideInInspector]
     private uint idCounter = 1;
 
 
@@ -55,10 +57,10 @@ public class ItemDatabase : ScriptableObject
         return newMap;
     }
 
-    public StringMap GetNameMap()
+    public StringMap GetMissingMap()
     {
         StringMap newMap = new StringMap();
-        nameMap.CopyTo(newMap);
+        missingNameMap.CopyTo(newMap);
         return newMap;
     }
 
@@ -81,7 +83,7 @@ public class ItemDatabase : ScriptableObject
 
         // Add new items
         var existingValues = registeredItems.Values;
-        foreach(ItemBase newItem in newItems)
+        foreach(ItemBase newItem in addItems)
         {
             // No double registering
             if (existingValues.Contains(newItem))
@@ -91,7 +93,7 @@ public class ItemDatabase : ScriptableObject
             registeredItems.Add(idCounter, newItem);
             idCounter++;
         }
-        newItems.Clear();
+        addItems.Clear();
 
         //Remap missing items that have been filled out
         //
@@ -120,7 +122,6 @@ public class ItemDatabase : ScriptableObject
         nameMap.Clear();
         foreach (var pair in registeredItems)
         {
-            Debug.Log(pair.Value.GetName());
             nameMap.Add(pair.Key, pair.Value.GetName());
         }
     }

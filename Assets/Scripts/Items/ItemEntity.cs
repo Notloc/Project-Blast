@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemEntity : MonoBehaviour
 {
-    [SerializeField] new Rigidbody rigidbody;
+    [SerializeField] new Rigidbody rigidbody = null;
     private GameObject item3D;
     public void Initialize(Item item)
     {
