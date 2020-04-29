@@ -9,14 +9,14 @@ public class ItemSpewer : MonoBehaviour
     [SerializeField] Transform spawnPoint = null;
     [SerializeField] List<ItemBase> items = new List<ItemBase>();
 
-    [SerializeField] float delay = 0.2f;
-    [SerializeField] float numberOfItems = 25f;
+    [SerializeField] float delay = 0f;
+    [SerializeField] float numberOfItemsToSpawn = 25f;
 
     private float lastItemTime = -100f;
     private int itemsSpawned = 0;
-    private void Update()
+    private void FixedUpdate()
     {
-        if (itemsSpawned < numberOfItems)
+        if (itemsSpawned > numberOfItemsToSpawn)
             return;
         if (Time.time > lastItemTime)
         {

@@ -457,8 +457,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2d6d346ac31ce5f40bd1808154bcba67, type: 2}
   - {fileID: 11400000, guid: 97ae9ea651b399146a3c57687cbf7902, type: 2}
   - {fileID: 11400000, guid: f463f64530a9b2442ba654353ab716b6, type: 2}
-  delay: 0.04
-  numberOfItems: 50
+  delay: 0
+  numberOfItemsToSpawn: 1000
 --- !u!4 &1550621350
 Transform:
   m_ObjectHideFlags: 0
