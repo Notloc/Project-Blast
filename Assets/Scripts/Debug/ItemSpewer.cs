@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemSpewer : MonoBehaviour
+public class ItemSpewer : MonoBehaviour, IActivate
 {
     [Space]
     [SerializeField] ItemEntity itemPrefab = null;   
@@ -10,13 +10,24 @@ public class ItemSpewer : MonoBehaviour
     [SerializeField] List<ItemBase> items = new List<ItemBase>();
 
     [SerializeField] float delay = 0f;
-    [SerializeField] float numberOfItemsToSpawn = 25f;
+    [SerializeField] float launchSpeed = 7f;
+    [SerializeField] float speedVariance = 0.5f;
 
     private float lastItemTime = -100f;
     private int itemsSpawned = 0;
+
+
+
+    private bool isOn = false;
+
+    public void Activate()
+    {
+        isOn = !isOn;
+    }
+
     private void FixedUpdate()
     {
-        if (itemsSpawned > numberOfItemsToSpawn)
+        if (!isOn)
             return;
         if (Time.time > lastItemTime)
         {
@@ -30,6 +41,15 @@ public class ItemSpewer : MonoBehaviour
     {
         ItemBase randomBase = items[Random.Range(0, items.Count)];
         Item newItem = new Item(randomBase);
-        ItemEntityFactory.CreateItemEntity(itemPrefab, newItem, spawnPoint.position);
+        ItemEntity entity = ItemEntityFactory.CreateItemEntity(itemPrefab, newItem, spawnPoint.position);
+
+        Vector3 randomRotation = new Vector3(
+            Random.Range(-15f,15f),
+            Random.Range(-5f,5f),
+            Random.Range(-15f, 15f)            
+        );
+
+        float speed = launchSpeed + Random.Range(-speedVariance, speedVariance);
+        entity.Rigidbody.AddForce(Quaternion.Euler(randomRotation) * (spawnPoint.forward * launchSpeed), ForceMode.VelocityChange);
     }
 }
