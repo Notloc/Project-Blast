@@ -5,8 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Required References")]
-    [SerializeField] Rigidbody playerRBody = null;
-    [SerializeField] Camera targetCamera = null;
+    [SerializeField] new Rigidbody rigidbody = null;
     [SerializeField] GameObject cameraPivot = null;
 
     [Header("Movement Options")]
@@ -17,13 +16,24 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float maxXRotation = 80f;
     [SerializeField] float minXRotation = -80f;
 
-    public bool LookEnabled = true;
+    [Header("Interaction Options")]
+    [SerializeField] float interactionDistance = 3.5f;
 
+    private new Camera camera; 
     private float cameraRotation = 0f;
+    private bool lookEnabled = true;
 
-    void Update()
+    private IInteractable interactionTarget = null;
+
+    private void Start()
+    {
+        camera = Camera.main;
+    }
+
+    private void Update()
     {
         Rotate();
+        Interact();
     }
 
     private void FixedUpdate()
@@ -33,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
     private void Rotate()
     {
-        if (LookEnabled == false)
+        if (lookEnabled == false)
             return;
 
         // Body rotation
@@ -59,7 +69,29 @@ public class PlayerController : MonoBehaviour
         float yInput = Input.GetAxis("Vertical");
 
         Vector3 movement = Vector3.ClampMagnitude(new Vector3(xInput, 0f, yInput), 1f)  * speed;
-        
-        playerRBody.velocity = playerRBody.rotation * movement;
+
+        Vector3 verticalVelocity = new Vector3(0f, rigidbody.velocity.y, 0f);
+        rigidbody.velocity = rigidbody.rotation * movement + verticalVelocity;
+    }
+
+    private void Interact()
+    {
+        Transform cameraT = camera.transform;
+        Vector3 eyePos = this.transform.position + (Vector3.up * 1.65f); // Approx where the eyes would be
+
+        // Approx length for ray
+        float rayCastLength = ((cameraT.position - eyePos).magnitude * 1.25f) + interactionDistance;
+
+        RaycastHit hit;
+        if(Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, rayCastLength))
+        {
+            // Return if distance is larger
+            if ((hit.point - eyePos).sqrMagnitude > Mathf.Pow(interactionDistance, 2))
+                return;
+            interactionTarget = hit.collider.GetComponentInParent<IInteractable>();
+        }
+
+        if (interactionTarget != null && Input.GetButtonDown("Interact"))
+            interactionTarget.Interact();
     }
 }

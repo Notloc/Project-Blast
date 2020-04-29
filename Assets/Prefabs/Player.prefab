@@ -349,14 +349,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acee8d35f1573fe4889d2e6a503b39e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerRBody: {fileID: 7788034856381914483}
-  targetCamera: {fileID: 7788034855951125714}
+  rigidbody: {fileID: 7788034856381914483}
   cameraPivot: {fileID: 7788034855917988836}
   speed: 10
   sensitivity: 2
   maxXRotation: 80
   minXRotation: -80
-  LookEnabled: 1
+  interactionDistance: 3.5
 --- !u!54 &7788034856381914483
 Rigidbody:
   m_ObjectHideFlags: 0
