@@ -57,6 +57,13 @@ public class ItemDatabase : ScriptableObject
         return newMap;
     }
 
+    public StringMap GetNameMap()
+    {
+        StringMap newMap = new StringMap();
+        nameMap.CopyTo(newMap);
+        return newMap;
+    }
+
     public StringMap GetMissingMap()
     {
         StringMap newMap = new StringMap();
