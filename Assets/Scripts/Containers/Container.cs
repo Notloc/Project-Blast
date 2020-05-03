@@ -53,6 +53,16 @@ public class Container : IContainer
         return true;
     }
 
+    public bool Add(Item item, uint count = 1)
+    {
+        return Add(new List<ContainerItem>() {
+            new ContainerItem() {
+                item = item,
+                count = count
+            }
+        });
+    }
+
     public bool Add(List<ContainerItem> itemsToAdd)
     {
         if (!CanAdd(itemsToAdd))
