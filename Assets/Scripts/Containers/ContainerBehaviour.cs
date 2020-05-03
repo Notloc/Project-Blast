@@ -33,7 +33,7 @@ public class ContainerBehaviour : MonoBehaviour
             return;
 
         var items = container.Items;
-        var removed = new List<ItemCount>(items.Values);
+        var removed = new List<ContainerItem>(items.Values);
         if (container.Remove(removed))
         {
             foreach (var itemC in removed)

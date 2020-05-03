@@ -11,10 +11,9 @@ public class ContainerInspector : Editor
         containerBehaviour = (ContainerBehaviour)target;
     }
 
-
     public override void OnInspectorGUI()
     {
-        if (GUILayout.Button("Spew Container"))
+        if (GUILayout.Button("Empty Container Into World"))
         {
             containerBehaviour.EmptyIntoWorld();
         }

@@ -11,6 +11,7 @@ public class Container : IContainer
     {
         items = new ItemDictionary();
     }
+    public ContainerType ContainerType { get { return ContainerType.BASIC; } }
 
     public ItemDictionary Items { get { return items; } }
     [SerializeField] protected ItemDictionary items;
@@ -19,81 +20,81 @@ public class Container : IContainer
     {
         items = new ItemDictionary();
 
-        var contents = containerCont.GetContents();
+       var contents = containerCont.GetContents();
 
-        List<ItemCount> itemCounts = new List<ItemCount>();
+        List<ContainerItem> itemCounts = new List<ContainerItem>();
         foreach(ItemBaseCount baseCount in contents)
         {
             Item item = Game.Instance.Factories.ItemFactory.CreateItem(baseCount.itemBase);
-            itemCounts.Add(new ItemCount() { item = item, count = baseCount.count });
+            itemCounts.Add(new ContainerItem() { item = item, count = baseCount.count });
         }
 
         Add(itemCounts);
     }
 
-    protected virtual bool CanAdd(List<ItemCount> items) { return true; }
-    protected virtual bool CanRemove(List<ItemCount> itemsToRemove)
+    protected virtual bool CanAdd(List<ContainerItem> items) { return true; }
+    protected virtual bool CanRemove(List<ContainerItem> itemsToRemove)
     {
-        foreach (var itemC in itemsToRemove)
+        foreach (var removeItem in itemsToRemove)
         {
-            ScriptableItem key = itemC.Key;
+            ScriptableItem key = removeItem.Key;
 
             // Not in container
             if (!Items.ContainsKey(key))
                 return false;
 
-            ItemCount itemCount;
-            Items.TryGetValue(key, out itemCount);
+            ContainerItem cItem;
+            Items.TryGetValue(key, out cItem);
             // Not enough in container
-            if (itemCount.count < itemC.count)
+            if (cItem.count < removeItem.count)
                 return false;
         }
 
         return true;
     }
 
-    public bool Add(List<ItemCount> itemsToAdd)
+    public bool Add(List<ContainerItem> itemsToAdd)
     {
         if (!CanAdd(itemsToAdd))
             return false;
 
-        foreach(var itemC in itemsToAdd)
+        foreach(var addItem in itemsToAdd)
         {
-            ScriptableItem key = itemC.Key;
+            ScriptableItem key = addItem.Key;
 
             // Add to existing stack
-            if (!itemC.item.IsUnique && Items.ContainsKey(key))
+            if (!addItem.item.IsUnique && Items.ContainsKey(key))
             {
-                ItemCount count;
-                Items.TryGetValue(key, out count);
-                count.count += itemC.count;
-                Items[key] = count;
+                ContainerItem cItem;
+                Items.TryGetValue(key, out cItem);
+                cItem.count += addItem.count;
+                Items[key] = cItem;
             }
             else
             { // Add a new stack
-                Items.Add(itemC.Key, itemC);
+                Items.Add(addItem.Key, addItem);
             }
         }
         return true;
     }
 
-    public bool Remove(List<ItemCount> itemsToRemove)
+    public bool Remove(List<ContainerItem> itemsToRemove)
     {
         if (!CanRemove(itemsToRemove))
             return false;
 
-        foreach(var itemC in itemsToRemove)
+        foreach(var removeItem in itemsToRemove)
         {
-            ScriptableItem key = itemC.Key;
+            ScriptableItem key = removeItem.Key;
 
-            ItemCount itemCount;
-            Items.TryGetValue(key, out itemCount);
-            itemCount.count -= itemC.count;
+            ContainerItem cItem;
+            Items.TryGetValue(key, out cItem);
+            cItem.count -= removeItem.count;
 
-            if (itemCount.count == 0)
+            if (cItem.count == 0)
                 Items.Remove(key);
             else
-                Items[key] = itemCount;
+                Items[key] = cItem;
         }
         return true;
     }
