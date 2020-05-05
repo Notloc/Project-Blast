@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemSpewer : MonoBehaviour, IActivate
-{
-    [Space]
-    [SerializeField] ItemEntity itemPrefab = null;   
+{ 
     [SerializeField] Transform spawnPoint = null;
     [SerializeField] List<ItemBase> items = new List<ItemBase>();
 
@@ -40,8 +38,8 @@ public class ItemSpewer : MonoBehaviour, IActivate
     private void SpawnItem()
     {
         ItemBase randomBase = items[Random.Range(0, items.Count)];
-        Item newItem = new Item(randomBase);
-        ItemEntity entity = ItemEntityFactory.CreateItemEntity(itemPrefab, newItem, spawnPoint.position);
+        Item newItem = ItemFactory.Instance.CreateItem(randomBase);
+        ItemEntity entity = ItemEntityFactory.Instance.CreateItemEntity(newItem, spawnPoint.position);
 
         Vector3 randomRotation = new Vector3(
             Random.Range(-15f,15f),

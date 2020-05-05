@@ -8,7 +8,7 @@ public class ItemEntity : MonoBehaviour
     private GameObject item3D;
 
     public Rigidbody Rigidbody { get { return rigidbody; } }
-    public void Initialize(Item item)
+    public void Init(Item item)
     {
         item3D = Instantiate(item.GetModel(), this.transform);
         rigidbody.mass = item.GetBase().GetWeight();
