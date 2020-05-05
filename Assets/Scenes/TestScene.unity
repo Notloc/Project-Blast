@@ -508,6 +508,56 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
+--- !u!1 &1223137061 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7788034856381914493, guid: 03abb4120b377f048be8fd89ca7a5084,
+    type: 3}
+  m_PrefabInstance: {fileID: 1905344796}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1223137062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223137061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb809d17ab634e5478fd94289bb90727, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingContents: {fileID: 0}
+  type: 0
+  container:
+    items:
+      reorderableList:
+        canAdd: 1
+        canRemove: 1
+        draggable: 1
+        expandable: 1
+        multipleSelection: 1
+        isExpanded: 0
+        label:
+          m_Text: Keys
+          m_Image: {fileID: 0}
+          m_Tooltip: 
+        headerHeight: 18
+        footerHeight: 13
+        slideEasing: 0.15
+        verticalSpacing: 2
+        showDefaultBackground: 1
+        elementDisplayType: 0
+        elementNameProperty: 
+        elementNameOverride: 
+        elementIcon: {fileID: 0}
+      reqReferences: {fileID: 0}
+      isExpanded: 0
+      _keyValues: []
+      _keys: []
+      _values: []
+=======
+>>>>>>> 12-pickup-items
 --- !u!1001 &1380021900
 PrefabInstance:
   m_ObjectHideFlags: 0
