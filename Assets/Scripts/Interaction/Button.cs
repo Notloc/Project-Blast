@@ -5,7 +5,7 @@ using UnityEngine;
 public class Button : MonoBehaviour, IInteractable
 {
     [SerializeField] GameObject target = null;
-    public void Interact()
+    public void Interact(Player player)
     {
         if (target)
         {

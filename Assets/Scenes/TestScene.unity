@@ -508,6 +508,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1 &1223137061 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7788034856381914493, guid: 03abb4120b377f048be8fd89ca7a5084,
@@ -555,6 +556,8 @@ MonoBehaviour:
       _keyValues: []
       _keys: []
       _values: []
+=======
+>>>>>>> 12-pickup-items
 --- !u!1001 &1380021900
 PrefabInstance:
   m_ObjectHideFlags: 0
