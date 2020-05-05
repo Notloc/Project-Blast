@@ -6,9 +6,11 @@ public class GuiManager : MonoBehaviour
 {
     [SerializeField] InventoryGui inventory = null;
     [SerializeField] GameObject crosshair = null;
+    private Player player;
 
     private void Start()
     {
+        player = FindObjectOfType<Player>();
         inventory.CloseGui();
         crosshair.SetActive(true);
     }
@@ -23,6 +25,7 @@ public class GuiManager : MonoBehaviour
                 inventory.CloseGui();
 
             crosshair.SetActive(!inventory.isActiveAndEnabled);
+            player.GetController().SetControlsActive(!inventory.isActiveAndEnabled);
         }
     }
 }

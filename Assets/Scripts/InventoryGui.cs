@@ -106,7 +106,8 @@ public class InventoryGui : MonoBehaviour
         if (player.GetInventory().Remove(selected))
         {
             UpdateDisplay();
-            Game.Instance.Factories.ItemEntityFactory.CreateItemEntity(selected.item, player.transform.position + player.transform.forward + player.transform.up);
+            for(int i=0; i<selected.count; i++)
+                Game.Instance.Factories.ItemEntityFactory.CreateItemEntity(selected.item, player.transform.position + player.transform.forward + player.transform.up);
         }
     }
 }

@@ -25,11 +25,17 @@ public class PlayerController : MonoBehaviour
     private new Camera camera; 
     private float cameraRotation = 0f;
     private bool lookEnabled = true;
+    private bool controlEnabled = true;
 
     private IInteractable interactionTarget = null;
     private IGrabbable grabTarget = null;
     private float grabTimer = -100f;
     private bool grabbed = false;
+
+    public void SetControlsActive(bool state)
+    {
+        controlEnabled = state;
+    }
 
     private void Start()
     {
@@ -38,6 +44,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!controlEnabled)
+            return;
+
         Rotate();
         Interact();
 
@@ -54,6 +63,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!controlEnabled)
+            return;
+
         Move(Time.fixedDeltaTime);
     }
 

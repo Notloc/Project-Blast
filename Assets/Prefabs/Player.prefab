@@ -352,6 +352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   containerBehaviour: {fileID: 3496907384502537788}
+  controller: {fileID: 7788034856381914482}
 --- !u!114 &7788034856381914482
 MonoBehaviour:
   m_ObjectHideFlags: 0

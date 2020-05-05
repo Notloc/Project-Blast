@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.EventSystems;
+
 public class ContainerItemGui : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI nameText = null;
@@ -18,5 +20,10 @@ public class ContainerItemGui : MonoBehaviour
     public ContainerItem GetItem()
     {
         return item;
+    }
+
+    public void SetSelected()
+    {
+        EventSystem.current.SetSelectedGameObject(this.gameObject);
     }
 }
