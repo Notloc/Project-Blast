@@ -24,4 +24,14 @@ public class Item : ScriptableItem
     {
         return itemBase.GetModel();
     }
+
+    public string GetName()
+    {
+        return itemBase.GetName();
+    }
+
+    public float GetWeight()
+    {
+        return itemBase.GetWeight();
+    }
 }

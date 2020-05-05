@@ -88,6 +88,11 @@ public class Container : IContainer
         return true;
     }
 
+
+    public bool Remove(ContainerItem itemToRemove)
+    {
+        return Remove(new List<ContainerItem>() { itemToRemove });
+    }
     public bool Remove(List<ContainerItem> itemsToRemove)
     {
         if (!CanRemove(itemsToRemove))
