@@ -10,7 +10,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject cameraPivot = null;
 
     [Header("Movement Options")]
-    [SerializeField] float speed = 10f;
+    [SerializeField] float speed = 10f;     //Movement speed
+    [SerializeField] float boost = 5f;      //Sprinting speed, added to movement speed
+    [SerializeField] bool isSprint = false;
 
     [Header("Camera Options")]
     [SerializeField] float sensitivity = 2f;
@@ -40,7 +42,7 @@ public class PlayerController : MonoBehaviour
     {
         Rotate();
         Interact();
-
+        TakeSprintInput();
         UpdateTimers();
     }
 
@@ -84,10 +86,34 @@ public class PlayerController : MonoBehaviour
         float xInput = Input.GetAxis("Horizontal");
         float yInput = Input.GetAxis("Vertical");
 
-        Vector3 movement = Vector3.ClampMagnitude(new Vector3(xInput, 0f, yInput), 1f)  * speed;
+        Vector3 movement = Vector3.ClampMagnitude(new Vector3(xInput, 0f, yInput), 1f);
+        //Determines movement speed based on sprinting and sprint speed
+        if(isSprint)
+        {
+            movement *= (speed + boost);
+        }
+        else
+        {
+            movement *= speed;
+        }
 
         Vector3 verticalVelocity = new Vector3(0f, rigidbody.velocity.y, 0f);
         rigidbody.velocity = rigidbody.rotation * movement + verticalVelocity;
+    }
+
+    private void TakeSprintInput()
+    {
+        bool boostOn = Input.GetButtonDown("Sprint");
+        //If the sprint key is pressed, toggle sprint
+        if(boostOn)
+        {
+            isSprint = !isSprint;
+        }
+        //If not moving, stop sprinting
+        if (rigidbody.velocity.Equals(Vector3.zero))
+        {
+            isSprint = false;
+        }
     }
 
     private void Interact()
