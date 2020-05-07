@@ -4,74 +4,50 @@ using UnityEngine;
 
 // This class and related classes are based on this tutorial series
 // https://www.youtube.com/playlist?list=PLFt_AvWsXl0eBW2EiBtl_sxmDtSgZBxB3
-public class TerrainGenerator : MonoBehaviour
+public static class TerrainGenerator
 {
-    enum DisplayMode
+    public static TerrainData GenerateTerrainData(TerrainSettings terrainSettings)
     {
-        HEIGHT_MAP,
-        COLOR
+        return GenerateTerrainData(terrainSettings, terrainSettings.noiseOffset);
     }
 
-    public bool AutoUpdate = false;
-
-    [Header("Noise Generation Settings")]
-    [SerializeField] Vector2Int terrainResolution = Vector2Int.one;
-    [SerializeField] float noiseScale = 1f;
-    [Range(0, 15)]
-    [SerializeField] int octaves = 3;
-    [Range(0f,1f)]
-    [SerializeField] float persistance = 1f;
-    [SerializeField] float lacunarity = 1f;    
-    [SerializeField] Vector2 noiseOffset = Vector2.zero;
-    [SerializeField] int noiseSeed = 9999;
-    [SerializeField] TerrainNoise.NormalizeMode normalizeMode = TerrainNoise.NormalizeMode.Global;
-
-    [Header("Texture Settings")]
-    [SerializeField] new Renderer renderer = null;
-    [SerializeField] DisplayMode displayMode = DisplayMode.COLOR;
-    [SerializeField] List<TerrainRegion> regions = null;
-    
-    [Header("Mesh Settings")]
-    [SerializeField] float heightScale = 100f;
-    [SerializeField] AnimationCurve heightCurve = null;
-    [SerializeField] MeshFilter meshFilter = null;
-    [SerializeField] MeshCollider meshCollider = null;
-
-    private void Start()
+    public static TerrainData GenerateTerrainData(TerrainSettings terrainSettings, Vector2 offset)
     {
-        Generate();
-    }
+        int width = terrainSettings.terrainResolution.x;
+        int height = terrainSettings.terrainResolution.y;
 
-    public void Generate()
-    {
-        int width = terrainResolution.x;
-        int height = terrainResolution.y;
-
-        float[,] heightMap = TerrainNoise.GenerateNoiseMap(width, height, noiseSeed, noiseScale, octaves, persistance, lacunarity, noiseOffset, normalizeMode);
-
-        Color[] colorMap = new Color[width * height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++)
-            {
-                int index = width * y + x;
-                colorMap[index] = GetColor(heightMap[x,y]);
-            }
-        }
+        float[,] heightMap = TerrainNoise.GenerateNoiseMap(width, height, terrainSettings.noiseSeed, terrainSettings.noiseScale, terrainSettings.octaves, terrainSettings.persistance, terrainSettings.lacunarity, offset, terrainSettings.normalizeMode);
+        Color[] colorMap = CreateColorMap(heightMap, terrainSettings.regions);
 
         Texture2D tex;
-        if (displayMode == DisplayMode.COLOR)
+        if (terrainSettings.displayMode == TerrainSettings.DisplayMode.COLOR)
             tex = TextureGenerator.TextureFromColorMap(colorMap, width, height);
         else
             tex = TextureGenerator.TextureFromHeightMap(heightMap);
 
-        renderer.sharedMaterial.SetTexture("_MainTex", tex);
+        Mesh mesh = MeshGenerator.GenerateMesh(heightMap, terrainSettings.heightScale, terrainSettings.heightCurve);
 
-        var mesh = MeshGenerator.GenerateMesh(heightMap, heightScale, heightCurve);
-        meshFilter.mesh = mesh;
-        meshCollider.sharedMesh = mesh;
+        return new TerrainData(heightMap, mesh, tex);
     }
 
-    private Color32 GetColor(float height)
+    private static Color[] CreateColorMap(float[,] heightMap, List<TerrainRegion> regions)
+    {
+        int width = heightMap.GetLength(0);
+        int height= heightMap.GetLength(1);
+        Color[] colorMap = new Color[width * height];
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int index = width * y + x;
+                colorMap[index] = GetColor(heightMap[x, y], regions);
+            }
+        }
+        return colorMap;
+    }
+
+    private static Color32 GetColor(float height, List<TerrainRegion> regions)
     {
         Color col = Color.black;
 
@@ -81,25 +57,18 @@ public class TerrainGenerator : MonoBehaviour
 
         return col;
     }
-
-    private void OnValidate()
-    {
-        if (terrainResolution.x < 1)
-            terrainResolution.x = 1;
-        if (terrainResolution.y < 1)
-            terrainResolution.y = 1;
-
-        if (octaves < 0)
-            octaves = 0;
-
-        if (lacunarity < 1)
-            lacunarity = 1;
-    }
 }
-[System.Serializable]
-public struct TerrainRegion
+
+public struct TerrainData
 {
-    public string name;
-    public float height;
-    public Color color;
+    public readonly float[,] heightMap;
+    public readonly Mesh mesh;
+    public readonly Texture2D texture;
+
+    public TerrainData(float[,] heightMap, Mesh mesh, Texture2D texture)
+    {
+        this.heightMap = heightMap;
+        this.mesh = mesh;
+        this.texture = texture;
+    }
 }
