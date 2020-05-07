@@ -8,13 +8,23 @@ public static class TerrainGenerator
 {
     public static TerrainData GenerateTerrainData(TerrainSettings terrainSettings)
     {
-        return GenerateTerrainData(terrainSettings, terrainSettings.noiseOffset);
+        return GenerateTerrainData(terrainSettings, terrainSettings.terrainSize, terrainSettings.noiseOffset);
     }
 
     public static TerrainData GenerateTerrainData(TerrainSettings terrainSettings, Vector2 offset)
     {
-        int width = terrainSettings.terrainResolution.x;
-        int height = terrainSettings.terrainResolution.y;
+        return GenerateTerrainData(terrainSettings, terrainSettings.terrainSize, offset);
+    }
+
+    public static TerrainData GenerateTerrainData(TerrainSettings terrainSettings, Vector2Int size)
+    {
+        return GenerateTerrainData(terrainSettings, size, terrainSettings.noiseOffset);
+    }
+
+    public static TerrainData GenerateTerrainData(TerrainSettings terrainSettings, Vector2Int size, Vector2 offset)
+    {
+        int width = size.x;
+        int height = size.y;
 
         float[,] heightMap = TerrainNoise.GenerateNoiseMap(width, height, terrainSettings.noiseSeed, terrainSettings.noiseScale, terrainSettings.octaves, terrainSettings.persistance, terrainSettings.lacunarity, offset, terrainSettings.normalizeMode);
         Color[] colorMap = CreateColorMap(heightMap, terrainSettings.regions);

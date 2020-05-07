@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu()]
-public class TerrainSettings : ScriptableObject
+public class TerrainSettings : UpdatableData
 {
     [Header("Noise Generation Settings")]
-    public Vector2Int terrainResolution = Vector2Int.one;
+    public Vector2Int terrainSize = Vector2Int.one;
     public float noiseScale = 1f;
     [Range(0, 15)]
     public int octaves = 3;
@@ -25,7 +25,7 @@ public class TerrainSettings : ScriptableObject
     public float heightScale = 100f;
     public AnimationCurve heightCurve = null;
 
-    public Vector2Int physicalSize { get { return terrainResolution - Vector2Int.one; } }
+    public Vector2Int physicalSize { get { return terrainSize - Vector2Int.one; } }
 
     public enum DisplayMode
     {
@@ -33,18 +33,21 @@ public class TerrainSettings : ScriptableObject
         COLOR
     }
 
-    private void OnValidate()
+    protected override void OnValidate()
     {
-        if (terrainResolution.x < 1)
-            terrainResolution.x = 1;
-        if (terrainResolution.y < 1)
-            terrainResolution.y = 1;
+        if (terrainSize.x < 1)
+
+            terrainSize.x = 1;
+        if (terrainSize.y < 1)
+            terrainSize.y = 1;
 
         if (octaves < 0)
             octaves = 0;
 
         if (lacunarity < 1)
             lacunarity = 1;
+
+        base.OnValidate();
     }
 }
 
