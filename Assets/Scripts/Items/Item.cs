@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Item
+public class Item : ScriptableItem
 {
-    ItemBase itemBase;
+    [SerializeField] ItemBase itemBase;
     [SerializeField] uint itemId;
-    public Item(ItemBase itemBase)
+    public override bool IsUnique { get { return _isUnique; } }
+    [SerializeField] private bool _isUnique = false;
+
+    public void Init(ItemBase itemBase)
     {
         this.itemBase = itemBase;
         itemId = itemBase.GetId();
     }
 
-    public ItemBase GetBase()
+    public override ItemBase GetBase()
     {
         return itemBase;
     }
