@@ -23,4 +23,14 @@ public static class ExtensionMethods
     {
         return new Vector3Int(vector2.x, 0, vector2.y);
     }
+
+    /// <summary>
+    /// Returns the vector with Y = 0
+    /// </summary>
+    /// <param name="vector3"></param>
+    /// <returns></returns>
+    public static Vector3 Flatten(this Vector3 vector3)
+    {
+        return new Vector3(vector3.x, 0f, vector3.z);
+    }
 }

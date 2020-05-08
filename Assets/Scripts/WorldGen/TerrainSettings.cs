@@ -18,7 +18,6 @@ public class TerrainSettings : UpdatableData
     public TerrainNoise.NormalizeMode normalizeMode = TerrainNoise.NormalizeMode.Global;
 
     [Header("Texture Settings")]
-    public DisplayMode displayMode = DisplayMode.COLOR;
     public List<TerrainRegion> regions = null;
 
     [Header("Mesh Settings")]
@@ -26,12 +25,6 @@ public class TerrainSettings : UpdatableData
     public AnimationCurve heightCurve = null;
 
     public Vector2Int physicalSize { get { return terrainSize - Vector2Int.one; } }
-
-    public enum DisplayMode
-    {
-        HEIGHT_MAP,
-        COLOR
-    }
 
     protected override void OnValidate()
     {

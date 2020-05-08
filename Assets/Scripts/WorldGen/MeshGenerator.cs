@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class MeshGenerator
 {
-    public static Mesh GenerateMesh(float[,] heightMap, float heightScale, AnimationCurve heightCurve)
+    public static MeshData GenerateMesh(float[,] heightMap, float heightScale, AnimationCurve heightCurve)
     {
         int width = heightMap.GetLength(0);
         int height = heightMap.GetLength(1);
@@ -29,10 +29,10 @@ public static class MeshGenerator
             }
         }
 
-        return meshData.CreateMesh();
+        return meshData;
     }
 
-    private struct MeshData
+    public struct MeshData
     {
         private int triIndex;
         public int[] triangles;

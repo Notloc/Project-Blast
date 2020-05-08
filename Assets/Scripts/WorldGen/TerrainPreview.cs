@@ -5,17 +5,32 @@ using UnityEngine;
 
 public class TerrainPreview : MonoBehaviour
 {
+    [SerializeField] TerrainGenerator terrainGenerator = null;
     [SerializeField] new Renderer renderer = null;
     [SerializeField] MeshFilter meshFilter = null;
 
     [SerializeField] Vector2Int terrainSize = Vector2Int.one;
     [SerializeField] TerrainSettings terrainSettings = null;
 
+    [SerializeField] DisplayMode displayMode = DisplayMode.COLOR;
+    private enum DisplayMode
+    {
+        HEIGHT_MAP,
+        COLOR
+    }
+
+
     public void GeneratePreview()
     {
-        TerrainData data = TerrainGenerator.GenerateTerrainData(terrainSettings, terrainSize);
-        renderer.sharedMaterial.SetTexture("_MainTex", data.texture);
-        meshFilter.mesh = data.mesh;
+        TerrainData data = terrainGenerator.GenerateTerrainData(terrainSettings, terrainSize);
+
+        Texture2D texture = new Texture2D(data.size.x, data.size.y);
+        texture.filterMode = FilterMode.Point;
+        texture.SetPixels(data.colorMap);
+        texture.Apply();
+
+        renderer.sharedMaterial.SetTexture("_MainTex", texture);
+        meshFilter.mesh = data.meshData.CreateMesh();
     }
 
 #if UNITY_EDITOR
