@@ -20,7 +20,6 @@ MonoBehaviour:
   noiseOffset: {x: 0, y: 0}
   noiseSeed: 10040
   normalizeMode: 1
-  displayMode: 1
   regions:
   - name: Water
     height: 0
@@ -37,7 +36,7 @@ MonoBehaviour:
   - name: Snow
     height: 0.82
     color: {r: 0.8349056, g: 1, b: 0.96446437, a: 0}
-  heightScale: 200
+  heightScale: 40
   heightCurve:
     serializedVersion: 2
     m_Curve:

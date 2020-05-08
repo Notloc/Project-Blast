@@ -37,7 +37,7 @@ public class TerrainGenerator : MonoBehaviour
         Color[] colorMap = CreateColorMap(heightMap, terrainSettings.regions);
         MeshData meshData = MeshGenerator.GenerateMesh(heightMap, terrainSettings.heightScale, heightCurve);
 
-        return new TerrainData(heightMap, colorMap, meshData, size);
+        return new TerrainData(heightMap, colorMap, meshData, size, terrainSettings);
     }
 
 
@@ -109,13 +109,15 @@ public struct TerrainData
     public readonly float[,] heightMap;
     public readonly Color[] colorMap;
     public readonly MeshData meshData;
-    public Vector2Int size;
+    public readonly Vector2Int size;
+    public readonly TerrainSettings settings;
 
-    public TerrainData(float[,] heightMap, Color[] colorMap, MeshData meshData, Vector2Int size)
+    public TerrainData(float[,] heightMap, Color[] colorMap, MeshData meshData, Vector2Int size, TerrainSettings settings)
     {
         this.heightMap = heightMap;
         this.meshData = meshData;
         this.colorMap = colorMap;
         this.size = size;
+        this.settings = settings;
     }
 }

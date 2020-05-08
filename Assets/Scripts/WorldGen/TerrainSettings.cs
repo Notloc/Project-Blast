@@ -24,7 +24,7 @@ public class TerrainSettings : UpdatableData
     public float heightScale = 100f;
     public AnimationCurve heightCurve = null;
 
-    public Vector2Int physicalSize { get { return terrainSize - Vector2Int.one; } }
+    public Vector2Int unitSize { get { return terrainSize - Vector2Int.one; } }
 
     protected override void OnValidate()
     {
