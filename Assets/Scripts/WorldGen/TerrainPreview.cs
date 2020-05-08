@@ -24,10 +24,17 @@ public class TerrainPreview : MonoBehaviour
     {
         TerrainData data = terrainGenerator.GenerateTerrainData(terrainSettings, terrainSize);
 
-        Texture2D texture = new Texture2D(data.size.x, data.size.y);
-        texture.filterMode = FilterMode.Point;
-        texture.SetPixels(data.colorMap);
-        texture.Apply();
+        Texture2D texture;
+        if (displayMode == DisplayMode.COLOR)
+        { 
+            texture = new Texture2D(data.size.x, data.size.y);
+            texture.filterMode = FilterMode.Point;
+            texture.SetPixels(data.colorMap);
+            texture.Apply();
+        }
+        else
+            texture = TextureGenerator.TextureFromHeightMap(data.heightMap);
+
 
         renderer.sharedMaterial.SetTexture("_MainTex", texture);
         meshFilter.mesh = data.meshData.CreateMesh();
