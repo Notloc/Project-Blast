@@ -385,6 +385,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryContainer: {fileID: 3496907384502537788}
   equipmentManager: {fileID: 8647212790352195064}
+  controller: {fileID: 7788034856381914482}
 --- !u!114 &7788034856381914482
 MonoBehaviour:
   m_ObjectHideFlags: 0

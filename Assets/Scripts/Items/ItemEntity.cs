@@ -12,6 +12,8 @@ public class ItemEntity : GrabbableEntity, IInteractable
         this.item = item;
         item3D = Instantiate(item.GetModel(), this.transform);
         rigidbody.mass = item.GetItemBase().GetWeight();
+        this.name = "Item  - "+item.GetName();
+
     }
 
     public void Interact(Player player)
