@@ -10,13 +10,13 @@ public class Item : ScriptableItem
     public override bool IsUnique { get { return _isUnique; } }
     [SerializeField] private bool _isUnique = false;
 
-    public void Init(ItemBase itemBase)
+    public virtual void Init(ItemBase itemBase)
     {
         this.itemBase = itemBase;
         itemId = itemBase.GetId();
     }
 
-    public override ItemBase GetBase()
+    public override ItemBase GetItemBase()
     {
         return itemBase;
     }

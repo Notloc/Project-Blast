@@ -15,7 +15,7 @@ public class ItemBase : ScriptableItem
     [SerializeField] private GameObject model = null;
 
     public override bool IsUnique { get { return false; } }
-    public override ItemBase GetBase() { return this; }
+    public override ItemBase GetItemBase() { return this; }
 
     private uint _id = 0;
     public uint GetId() { return _id; }

@@ -11,12 +11,12 @@ public class ItemEntity : GrabbableEntity, IInteractable
     {
         this.item = item;
         item3D = Instantiate(item.GetModel(), this.transform);
-        rigidbody.mass = item.GetBase().GetWeight();
+        rigidbody.mass = item.GetItemBase().GetWeight();
     }
 
     public void Interact(Player player)
     {
-        var inventory = player.GetInventory();
+        var inventory = player.Inventory;
         if (inventory.Add(item))
             Destroy(this.gameObject);
     }

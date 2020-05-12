@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2778128045290476311
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8172239003999617434}
+  m_Layer: 0
+  m_Name: WeaponSlot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8172239003999617434
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2778128045290476311}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.258, y: 1.011, z: 0.367}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7788034856381914481}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5252144212147335450
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,6 +345,7 @@ GameObject:
   - component: {fileID: 7788034856381914482}
   - component: {fileID: 7788034856381914483}
   - component: {fileID: 3496907384502537788}
+  - component: {fileID: 8647212790352195064}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -336,6 +367,7 @@ Transform:
   - {fileID: 7896849291328171397}
   - {fileID: 7788034855458971504}
   - {fileID: 7788034855917988837}
+  - {fileID: 8172239003999617434}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -351,7 +383,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40575611cb185c04790d4a7c847f6615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  containerBehaviour: {fileID: 3496907384502537788}
+  inventoryContainer: {fileID: 3496907384502537788}
+  equipmentManager: {fileID: 8647212790352195064}
 --- !u!114 &7788034856381914482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,6 +401,8 @@ MonoBehaviour:
   rigidbody: {fileID: 7788034856381914483}
   cameraPivot: {fileID: 7788034855917988836}
   speed: 10
+  boost: 5
+  isSprint: 0
   sensitivity: 2
   maxXRotation: 80
   minXRotation: -80
@@ -402,8 +437,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb809d17ab634e5478fd94289bb90727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingContents: {fileID: 0}
   type: 0
+  contentsMode: 0
+  startingContents: {fileID: 0}
+  randomContents: []
   container:
     items:
       reorderableList:
@@ -431,3 +468,16 @@ MonoBehaviour:
       _keyValues: []
       _keys: []
       _values: []
+--- !u!114 &8647212790352195064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7788034856381914493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b11c6f3b8eff8dd44a5f2d447410f133, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  primaryWeaponSlot: {fileID: 8172239003999617434}

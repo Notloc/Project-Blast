@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6488691878883615680}
   - component: {fileID: 6488691878883615684}
   - component: {fileID: 6488691878883615685}
+  - component: {fileID: 2988262631368302271}
   m_Layer: 0
   m_Name: _Application
   m_TagString: Untagged
@@ -61,6 +62,7 @@ MonoBehaviour:
   Factories:
     ItemFactory: {fileID: 6488691878883615684}
     ItemEntityFactory: {fileID: 6488691878883615685}
+    EquipmentEntityFactory: {fileID: 2988262631368302271}
 --- !u!114 &6488691878883615684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,4 +88,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemEntityPrefab: {fileID: 5506676578043545359, guid: 0689cb1739990644e87e28feb90944d3,
+    type: 3}
+--- !u!114 &2988262631368302271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6488691878883615681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e54cd0198f26a5a469c506ad63ce966d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equipmentEntityPrefab: {fileID: 3639074170442673879, guid: ec4dfbce9820dde4c997406d9857c767,
     type: 3}

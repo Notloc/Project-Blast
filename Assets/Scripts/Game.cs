@@ -17,6 +17,7 @@ public class Game : MonoBehaviour
     {
         public ItemFactory ItemFactory;
         public ItemEntityFactory ItemEntityFactory;
+        public EquipmentEntityFactory EquipmentEntityFactory;
     }
 }
 

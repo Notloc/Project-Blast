@@ -11,7 +11,7 @@ public struct ContainerItem
             if (item.IsUnique)
                 return item;
             else
-                return item.GetBase();
+                return item.GetItemBase();
         }
     }
 }
