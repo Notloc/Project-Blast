@@ -47,16 +47,39 @@ public class ContainerBehaviour : MonoBehaviour
 
     public void EmptyIntoWorld()
     {
-        if (container == null)
+        if (container == null || isSpewing)
             return;
+
+        StartCoroutine(SpewItems());
+    }
+
+    bool isSpewing = false;
+    private IEnumerator SpewItems()
+    {
+        isSpewing = true;
+
+        var anim = GetComponent<ContainerAnimation>();
+        if (anim)
+            anim.OpenContainer();
+
+
+        yield return new WaitForSeconds(0.1f);
 
         var items = container.Items;
         var removed = new List<ContainerItem>(items.Values);
         if (container.Remove(removed))
         {
             foreach (var itemC in removed)
+            {
                 for (int i = 0; i < itemC.count; i++)
+                {
                     Game.Instance.Factories.ItemEntityFactory.CreateItemEntity(itemC.item, transform.position + Vector3.up);
+                    yield return new WaitForFixedUpdate();
+                }
+            }
         }
+
+        isSpewing = false;
     }
+
 }
