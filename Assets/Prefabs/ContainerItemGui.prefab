@@ -238,6 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2b0f3c8cf6b4aa4c9a6ae14d53cf27c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 8387456637637013584}
   nameText: {fileID: 1464695686094730611}
   countText: {fileID: 1677265163841971396}
 --- !u!114 &8387456637637013584

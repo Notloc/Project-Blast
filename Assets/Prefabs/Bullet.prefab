@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1571979931371407947}
   - component: {fileID: 5967499542631571452}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 228422012256430304}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3820279, y: 1.3820279, z: 1.0682937}
   m_Children:
   - {fileID: 1102102729154321262}
   m_Father: {fileID: 0}
@@ -45,6 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravity: {x: 0, y: -0.4, z: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  mass: 0.1
 --- !u!1 &7932589131930466733
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,7 +60,7 @@ GameObject:
   - component: {fileID: 1102102729154321262}
   - component: {fileID: 1318593166970789130}
   - component: {fileID: 2068884234843582355}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +76,7 @@ Transform:
   m_GameObject: {fileID: 7932589131930466733}
   m_LocalRotation: {x: 0.70710707, y: -0, z: -0, w: 0.70710653}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.015, y: 0.015, z: 0.015}
+  m_LocalScale: {x: 0.0191115, y: 0.037584674, z: 0.0191115}
   m_Children: []
   m_Father: {fileID: 1571979931371407947}
   m_RootOrder: 0

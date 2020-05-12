@@ -36,9 +36,11 @@ public class PlayerWeaponController : MonoBehaviour
 
     private void FireGun()
     {
-        var weaponEquipment = player.Equipment.PrimaryWeapon;
+        var equipment = player.Equipment.PrimaryWeapon;
+        if (!equipment)
+            return;
 
-        var weapon = weaponEquipment.GetWeapon();
+        var weapon = equipment.GetWeapon();
         if (weapon)
             weapon.Fire();
     }

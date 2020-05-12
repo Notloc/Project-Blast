@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemValue: 15
   itemWeight: 5
-  model: {fileID: 0}
+  model: {fileID: 4685647945316824475, guid: 514e24b429e96cb4d9c8558135f1f6ee, type: 3}
   equipmentSlot: 0

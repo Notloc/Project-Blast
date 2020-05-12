@@ -455,7 +455,7 @@ MonoBehaviour:
     type: 3}
   muzzle: {fileID: 5326924956713829771}
   damage: 3
-  projectileSpeed: 90
+  projectileSpeed: 112
 --- !u!1 &8414323711912863626
 GameObject:
   m_ObjectHideFlags: 0
