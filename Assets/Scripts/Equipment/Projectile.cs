@@ -3,48 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] Vector3 gravity = Vector3.zero;
-    [SerializeField] LayerMask layerMask = 0;
-    [SerializeField] float mass = 0.05f;
-    [SerializeField] float lifeTime = 8f;
+    [SerializeField] new Rigidbody rigidbody;
+    [SerializeField] float lifeTime = 15f;
+    [SerializeField] [Range(0f, 1f)] float survivalChance = 0.1f;
+    [SerializeField] new Collider collider;
 
     private float damage = 0f;
-    private Vector3 currentSpeed = Vector3.zero;
-
-    public void Init(float damage, float speed, Quaternion rotation)
+    public void Init(float damage, float speed, Quaternion rotation, Collider[] colliders)
     {
         this.damage = damage;
-        this.transform.rotation = rotation;
-        currentSpeed = transform.forward * speed;
+        rigidbody.isKinematic = false;
 
+        rigidbody.rotation = rotation;
+        rigidbody.velocity = rigidbody.rotation * (Vector3.forward * speed);
         Destroy(gameObject, lifeTime);
+
+        foreach (Collider c in colliders)
+            Physics.IgnoreCollision(collider, c);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        transform.LookAt(transform.position, transform.position + currentSpeed);
+        rigidbody.rotation = Quaternion.LookRotation(rigidbody.velocity);
+    }
 
-        RaycastHit hit;
-        if(Physics.Raycast(transform.position, currentSpeed, out hit, layerMask))
-        {
-            var damagable = hit.transform.GetComponentInParent<IDamagable>();
-            if (damagable != null)
-                damagable.Damage(damage);
+    private void OnCollisionEnter(Collision collision)
+    {
+        var damagable = collision.transform.GetComponentInParent<IDamagable>();
+        if (damagable != null)
+            damagable.Damage(damage);
 
-            Rigidbody rigidbody = hit.transform.GetComponent<Rigidbody>();
-            if (rigidbody)
-                rigidbody.AddForce(currentSpeed * mass, ForceMode.Impulse);
-
-            
-
-            Destroy(gameObject);
-        }
-        else
-        {
-            currentSpeed += (gravity * Time.deltaTime);
-            transform.position += currentSpeed * Time.deltaTime;
-        }
+        //Destroy(gameObject);
     }
 }

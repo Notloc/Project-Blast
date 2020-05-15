@@ -5,13 +5,23 @@ using UnityEngine;
 public class PlayerWeaponController : MonoBehaviour
 {
     [SerializeField] Player player = null;
+    [SerializeField] float zeroingDistance = 250f;
+
+    new Camera camera;
 
     bool pressedPrimary = false;
     bool pressedSecondary = false;
 
+
+    private void Start()
+    {
+        camera = Camera.main;
+    }
+
     private void Update()
     {
         TakeInput();
+        PointGun();
     }
 
     private void FixedUpdate()
@@ -23,6 +33,17 @@ public class PlayerWeaponController : MonoBehaviour
     {
         pressedPrimary = Input.GetButton("Primary Fire");
         pressedSecondary = Input.GetButton("Secondary Fire");
+    }
+
+    private void PointGun()
+    {
+        var equipment = player.Equipment.PrimaryWeapon;
+        if (!equipment)
+            return;
+
+        var weapon = equipment.GetWeapon();
+        if (weapon)
+            weapon.Aim(camera.transform.position, camera.transform.forward, zeroingDistance);
     }
 
     private void ProcessInput()

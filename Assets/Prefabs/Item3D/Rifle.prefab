@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2393589671308012941}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.081, z: 0.595}
+  m_LocalPosition: {x: 0, y: 0.081, z: 0.568}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7145452927462399973}
@@ -456,6 +456,12 @@ MonoBehaviour:
   muzzle: {fileID: 5326924956713829771}
   damage: 3
   projectileSpeed: 112
+  colliders:
+  - {fileID: 3329862732854117740}
+  - {fileID: 5253034299604131114}
+  - {fileID: 2716669305107525482}
+  - {fileID: 483717819748778162}
+  - {fileID: 604652546810924527}
 --- !u!1 &8414323711912863626
 GameObject:
   m_ObjectHideFlags: 0
