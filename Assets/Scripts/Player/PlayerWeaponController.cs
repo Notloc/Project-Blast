@@ -49,8 +49,6 @@ public class PlayerWeaponController : MonoBehaviour
 
         if (pressedPrimary)
             FireGun();
-
-
     }
 
     private void FireGun()
