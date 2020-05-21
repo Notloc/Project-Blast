@@ -7,6 +7,8 @@ public class PlayerWeaponController : MonoBehaviour
     [SerializeField] Player player = null;
     [SerializeField] float zeroingDistance = 250f;
 
+    [SerializeField] Collider[] playerColliders = null;
+
     new Camera camera;
 
     bool pressedPrimary = false;
@@ -18,14 +20,10 @@ public class PlayerWeaponController : MonoBehaviour
         camera = Camera.main;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         TakeInput();
         PointGun();
-    }
-
-    private void FixedUpdate()
-    {
         ProcessInput();
     }
 
@@ -63,7 +61,7 @@ public class PlayerWeaponController : MonoBehaviour
 
         var weapon = equipment.GetWeapon();
         if (weapon)
-            weapon.Fire();
+            weapon.Fire(playerColliders);
     }
 
 }

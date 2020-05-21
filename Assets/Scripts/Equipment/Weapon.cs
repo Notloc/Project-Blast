@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -10,10 +11,14 @@ public class Weapon : MonoBehaviour
     [SerializeField] float damage = 1f;
     [SerializeField] float projectileSpeed = 1f;
     [SerializeField] Collider[] colliders = null;
+    [SerializeField] float fireRate = 5f;
 
-    public void Fire()
+    private float fireTimer = -100f;
+
+    public void Fire(Collider[] shooterColliders)
     {
-        FireProjectile();
+        if (fireTimer < Time.time)
+            FireProjectile(shooterColliders);
     }
 
     public void Aim(Vector3 aimStart, Vector3 forward, float zeroing)
@@ -30,9 +35,11 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    private void FireProjectile()
+    private void FireProjectile(Collider[] shooterColliders)
     {
-        var projectile = Instantiate(projectilePrefab, muzzle.position, transform.rotation);
-        projectile.Init(damage, projectileSpeed, transform.rotation, colliders);
+        fireTimer = Time.time + (1.0f / fireRate);
+
+        Projectile projectile = Instantiate(projectilePrefab, muzzle.position, muzzle.rotation);
+        projectile.Init(damage, projectileSpeed, transform.rotation, colliders, shooterColliders);
     }
 }
