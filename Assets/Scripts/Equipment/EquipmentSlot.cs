@@ -17,8 +17,12 @@ public class EquipmentSlot : MonoBehaviour
 
     public void Equip(IEquipmentItem equipmentItem)
     {
+        bool sameItem = this.equipmentItem == equipmentItem;
         if (!this.equipmentItem.IsNull())
             Unequip();
+
+        if (sameItem)
+            return;
 
         this.equipmentItem = equipmentItem;
         equipmentBehaviour = Instantiate(this.equipmentItem.EquipmentBehaviour, transform);
@@ -28,6 +32,7 @@ public class EquipmentSlot : MonoBehaviour
     public void Unequip()
     {
         equipmentItem = null;
-        Destroy(equipmentBehaviour);
+        Destroy(equipmentBehaviour.gameObject);
+        equipmentBehaviour = null;
     }
 }
