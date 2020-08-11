@@ -1,0 +1,9 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public interface IEquipmentItem : IScriptableObject
+{
+    EquipmentType EquipmentType { get; }
+    EquipmentBehaviour EquipmentBehaviour { get; }
+}

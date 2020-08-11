@@ -5,6 +5,32 @@ using UnityEngine;
 public static class ExtensionMethods
 {
     /// <summary>
+    /// Checks if the IGameObject is null.
+    /// Uses Unity's bool override, properly returning as null if the C++ object has already been deleted.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public static bool IsNull(this IGameObject obj)
+    {
+        if (obj == null)
+            return true;
+        return !obj.gameObject;
+    }
+
+    /// <summary>
+    /// Checks if the IScriptableObject is null.
+    /// Uses Unity's bool override, properly returning as null if the C++ object has already been deleted.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public static bool IsNull(this IScriptableObject obj)
+    {
+        if (obj == null)
+            return true;
+        return !(ScriptableObject)obj;
+    }
+
+    /// <summary>
     /// Converts the vector2 into a vector3, using the Y coordinate as Z instead.
     /// </summary>
     /// <param name="vector2"></param>

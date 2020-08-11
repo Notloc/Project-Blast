@@ -10,9 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f07bdccccddf62a4095e9391fe05ab8b, type: 3}
-  m_Name: 6-Shooter
+  m_Name: Six-Shooter
   m_EditorClassIdentifier: 
-  itemValue: 1
-  itemWeight: 1
-  model: {fileID: 0}
-  projectile: {fileID: 0}
+  itemValue: 500
+  itemWeight: 5
+  model: {fileID: 3542390902973601997, guid: b2ec3bbdf57f41442879d9578e44eb7c, type: 3}
+  equipmentBehaviour: {fileID: 8123092567738330147, guid: d17709c29be691e4b93f571008a01936,
+    type: 3}
+  projectile: {fileID: 6002941138965439427, guid: c951bb1be9edfaf458712850f4c68544,
+    type: 3}

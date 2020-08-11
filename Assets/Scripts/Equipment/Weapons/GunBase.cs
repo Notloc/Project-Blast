@@ -7,8 +7,7 @@ public class GunBase : EquipmentBase
 {
     public override EquipmentType EquipmentType => EquipmentType.GUN;
 
-
-    [SerializeField] Projectile projectile;
+    [SerializeField] Projectile projectile = null;
     public Projectile Projectile { get { return projectile; } }
 
 }
