@@ -352,6 +352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   containerBehaviour: {fileID: 3496907384502537788}
+  controller: {fileID: 7788034856381914482}
 --- !u!114 &7788034856381914482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,19 +362,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 7788034856381914493}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: acee8d35f1573fe4889d2e6a503b39e2, type: 3}
+  m_Script: {fileID: 11500000, guid: da91d500081abce42bafabfc6b177d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 5930233270721937698}
   rigidbody: {fileID: 7788034856381914483}
   cameraPivot: {fileID: 7788034855917988836}
   speed: 10
+  boost: 5
+  isSprint: 0
   sensitivity: 2
   maxXRotation: 80
   minXRotation: -80
   interactionDistance: 3.5
   holdToGrabLength: 0.35
-  grabbedItemDistanceMult: 0.7
+  grabbedItemDistanceMult: 0.5
 --- !u!54 &7788034856381914483
 Rigidbody:
   m_ObjectHideFlags: 0
