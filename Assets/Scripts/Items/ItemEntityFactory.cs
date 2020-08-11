@@ -2,14 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class ItemEntityFactory
+public class ItemEntityFactory : MonoBehaviour
 {
-    private static ItemDatabase ItemDB { get { return ItemDatabase.Instance; } }
+    public static ItemEntityFactory Instance { get; private set; }
+    [SerializeField] ItemEntity itemEntityPrefab = null;
 
-    public static ItemEntity CreateItemEntity(ItemEntity prefab, Item item, Vector3 position)
+    private void Awake()
     {
-        ItemEntity newItem = Object.Instantiate(prefab, position, Quaternion.identity);
-        newItem.Initialize(item);
+        Instance = this;
+    }
+
+    public ItemEntity CreateItemEntity(Item item, Vector3 position)
+    {
+        ItemEntity newItem = Object.Instantiate(itemEntityPrefab, position, Quaternion.identity);
+        newItem.Init(item);
         return newItem;
     }
 }
