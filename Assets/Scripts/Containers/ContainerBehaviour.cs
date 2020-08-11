@@ -4,9 +4,19 @@ using UnityEngine;
 
 public class ContainerBehaviour : MonoBehaviour
 {
-    [SerializeField] ContainerContents startingContents = null;
-    [Space]
+    public enum ContentsMode
+    {
+        PRESET,
+        RANDOM
+    }
+    
     [SerializeField] ContainerType type = ContainerType.BASIC;
+
+    [Header("Contents Options")]
+    [SerializeField] ContentsMode contentsMode = ContentsMode.PRESET;
+    [SerializeField] ContainerContents startingContents = null;
+    [SerializeField] List<ContainerContents> randomContents = null;
+    [Space]
     [SerializeField] Container container = new Container();
 
     void Start()
@@ -18,8 +28,16 @@ public class ContainerBehaviour : MonoBehaviour
         else if (type == ContainerType.INVENTORY)
             ;// container = new InventoryContainer();
 
-        if (startingContents)
-            container.Init(startingContents);
+        if (contentsMode == ContentsMode.PRESET)
+        {
+            if (startingContents)
+                container.Init(startingContents);
+        }
+        else
+        {
+            if (randomContents.Count > 0)
+                container.Init(randomContents[Random.Range(0, randomContents.Count)]);
+        }
     }
 
     public Container GetContainer()

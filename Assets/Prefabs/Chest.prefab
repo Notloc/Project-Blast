@@ -232,8 +232,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb809d17ab634e5478fd94289bb90727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingContents: {fileID: 0}
   type: 0
+  contentsMode: 1
+  startingContents: {fileID: 0}
+  randomContents:
+  - {fileID: 11400000, guid: 3cc2c37e802a6204a82761c1cd663285, type: 2}
+  - {fileID: 11400000, guid: 852f652ace8fb3c4093b925d6a295e80, type: 2}
+  - {fileID: 11400000, guid: bd510c67ea4d875489d87f146a4910db, type: 2}
   container:
     items:
       reorderableList:
