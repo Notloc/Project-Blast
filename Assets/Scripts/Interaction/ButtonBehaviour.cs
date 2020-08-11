@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Button : MonoBehaviour, IInteractable
+public class ButtonBehaviour : MonoBehaviour, IInteractable
 {
     [SerializeField] GameObject target = null;
     public void Interact(Player player)
