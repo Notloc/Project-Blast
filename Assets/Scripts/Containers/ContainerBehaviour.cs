@@ -10,22 +10,23 @@ public class ContainerBehaviour : MonoBehaviour
         RANDOM
     }
     
-    [SerializeField] ContainerType type = ContainerType.BASIC;
-
-    [Header("Contents Options")]
+    [Header("Container Options")]
+    [SerializeField] ContainerType containerType = ContainerType.BASIC;
     [SerializeField] ContentsMode contentsMode = ContentsMode.PRESET;
     [SerializeField] ContainerContents startingContents = null;
     [SerializeField] List<ContainerContents> randomContents = null;
     [Space]
     [SerializeField] Container container = new Container();
 
+    private bool isSpewing = false;
+    
     void Start()
     {
-        if (type == ContainerType.BASIC)
+        if (containerType == ContainerType.BASIC)
             container = new Container();
-        else if (type == ContainerType.WEIGHTED)
+        else if (containerType == ContainerType.WEIGHTED)
             container = new WeightedContainer();
-        else if (type == ContainerType.INVENTORY)
+        else if (containerType == ContainerType.INVENTORY)
             ;// container = new InventoryContainer();
 
         if (contentsMode == ContentsMode.PRESET)
@@ -53,7 +54,6 @@ public class ContainerBehaviour : MonoBehaviour
         StartCoroutine(SpewItems());
     }
 
-    bool isSpewing = false;
     private IEnumerator SpewItems()
     {
         isSpewing = true;
