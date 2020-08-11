@@ -2021,6 +2021,16 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8117655335255230188, guid: 262cbafcb79cc4f4f8f5630b37d6ecc5,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8850819312832752419, guid: 262cbafcb79cc4f4f8f5630b37d6ecc5,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8861157443649859951, guid: 262cbafcb79cc4f4f8f5630b37d6ecc5,
         type: 3}
       propertyPath: m_AnchorMax.x

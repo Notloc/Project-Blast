@@ -45,10 +45,10 @@ public class InventoryGui : MonoBehaviour
                 newDisplayItems.Add(cItem.Key);
                 ContainerItemGui gui = Instantiate(itemGuiPrefab, itemGuiParent);
                 displayMap.Add(cItem.Key, gui);
-                gui.SetItem(cItem);
+                gui.SetItem(cItem, HandleClick);
             }
             else
-                displayMap[cItem.Key].SetItem(cItem);
+                displayMap[cItem.Key].SetItem(cItem, HandleClick);
         }
 
         displayItems.ExceptWith(newDisplayItems);
@@ -92,6 +92,14 @@ public class InventoryGui : MonoBehaviour
 
         if (Input.GetButtonDown("Drop Item"))
             DropSelected(modify);
+    }
+
+    private void HandleClick(Item item)
+    {
+        if (item as IEquipmentItem != null)
+        {
+            player.GetEquipmentManager().Equip((IEquipmentItem)item);
+        }
     }
 
     private void DropSelected(bool modify)

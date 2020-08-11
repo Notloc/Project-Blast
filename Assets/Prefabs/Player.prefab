@@ -119,11 +119,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6838807981593242168}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.457, y: 1.08, z: 0.283}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 7788034855458971504}
-  m_RootOrder: 0
+  m_Father: {fileID: 7788034856381914481}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5200445070524798577
 MonoBehaviour:
@@ -166,8 +166,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -0, y: 1.08, z: 0}
   m_LocalScale: {x: 0.2, y: 0.643736, z: 0.2}
-  m_Children:
-  - {fileID: 2900381352512622379}
+  m_Children: []
   m_Father: {fileID: 7788034856381914481}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
@@ -261,7 +260,7 @@ Transform:
   m_Children:
   - {fileID: 7788034855951125715}
   m_Father: {fileID: 7788034856381914481}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7788034855951125712
 GameObject:
@@ -360,6 +359,7 @@ GameObject:
   - component: {fileID: 7788034856381914483}
   - component: {fileID: 3496907384502537788}
   - component: {fileID: 2341943546452228825}
+  - component: {fileID: 3399384544421983738}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -380,6 +380,7 @@ Transform:
   m_Children:
   - {fileID: 7896849291328171397}
   - {fileID: 7788034855458971504}
+  - {fileID: 2900381352512622379}
   - {fileID: 7788034855917988837}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -398,6 +399,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   containerBehaviour: {fileID: 3496907384502537788}
   controller: {fileID: 7788034856381914482}
+  equipmentManager: {fileID: 2341943546452228825}
 --- !u!114 &7788034856381914482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -494,3 +496,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunSlot: {fileID: 5200445070524798577}
+--- !u!114 &3399384544421983738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7788034856381914493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd52eafdae0d7ee42a1aa594ed2b9f14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equipmentManager: {fileID: 2341943546452228825}
