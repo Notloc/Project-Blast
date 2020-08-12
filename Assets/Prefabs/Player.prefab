@@ -352,9 +352,15 @@ MonoBehaviour:
   rigidbody: {fileID: 7788034856381914483}
   cameraPivot: {fileID: 7788034855917988836}
   speed: 10
+  boost: 0
+  crouchPenalty: 0
+  isSprint: 0
+  isCrouch: 0
   sensitivity: 2
   maxXRotation: 80
   minXRotation: -80
+  cameraHeight: 1
+  cameraCrouch: 0.5
   interactionDistance: 3.5
 --- !u!54 &7788034856381914483
 Rigidbody:
