@@ -25,7 +25,7 @@ public class GuiManager : MonoBehaviour
                 inventory.CloseGui();
 
             crosshair.SetActive(!inventory.isActiveAndEnabled);
-            player.GetController().SetControlsActive(!inventory.isActiveAndEnabled);
+            player.GetPlayerController().SetControlsActive(!inventory.isActiveAndEnabled);
         }
     }
 }

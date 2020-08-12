@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IController
 {
     [Header("Required References")]
     [SerializeField] Player player = null;
@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float holdToGrabLength = 0.35f;
     [SerializeField] float grabbedItemDistanceMult = 0.5f;
 
+    private InputScript inputScript;
+
     private new Camera camera; 
     private float cameraRotation = 0f;
     private bool lookEnabled = true;
@@ -39,6 +41,11 @@ public class PlayerController : MonoBehaviour
         controlEnabled = state;
     }
 
+    public void SetInput(InputScript input)
+    {
+        this.inputScript = input;
+    }
+
     private void Start()
     {
         camera = Camera.main;
@@ -48,16 +55,18 @@ public class PlayerController : MonoBehaviour
     {
         if (!controlEnabled)
             return;
-
-        Rotate();
         Interact();
+
+        if (!inputScript)
+            return;
+        Rotate();
         TakeSprintInput();
         UpdateTimers();
     }
 
     private void UpdateTimers()
     {
-        if (Input.GetButton("Interact"))
+        if (inputScript.GetButton("PlayerInteract"))
             grabTimer += Time.deltaTime;
         else
             grabTimer = 0f;
@@ -77,14 +86,14 @@ public class PlayerController : MonoBehaviour
             return;
 
         // Body rotation
-        float yRotation = Input.GetAxis("Mouse X")*sensitivity;
+        float yRotation = inputScript.GetAxis("CameraYaw")*sensitivity;
         Quaternion deltaRotation = Quaternion.Euler(0f, yRotation, 0f);
 
         this.transform.rotation = deltaRotation * this.transform.rotation;
 
         // Camera rotation
 
-        float deltaXRotation = Input.GetAxis("Mouse Y")*sensitivity;
+        float deltaXRotation = inputScript.GetAxis("CameraPitch")*sensitivity;
 
         cameraRotation -= deltaXRotation;
 
@@ -95,8 +104,8 @@ public class PlayerController : MonoBehaviour
 
     private void Move(float deltaTime)
     {
-        float xInput = Input.GetAxis("Horizontal");
-        float yInput = Input.GetAxis("Vertical");
+        float xInput = inputScript.GetAxis("PlayerStrafe");
+        float yInput = inputScript.GetAxis("PlayerForward");
 
         Vector3 movement = Vector3.ClampMagnitude(new Vector3(xInput, 0f, yInput), 1f);
         //Determines movement speed based on sprinting and sprint speed
@@ -115,7 +124,7 @@ public class PlayerController : MonoBehaviour
 
     private void TakeSprintInput()
     {
-        bool boostOn = Input.GetButtonDown("Sprint");
+        bool boostOn = inputScript.GetButtonDown("PlayerSprint");
         //If the sprint key is pressed, toggle sprint
         if(boostOn)
         {
@@ -159,7 +168,7 @@ public class PlayerController : MonoBehaviour
             interactionTarget = hit.collider.GetComponentInParent<IInteractable>();
         }
 
-        if (interactionTarget != null && Input.GetButtonUp("Interact"))
+        if (interactionTarget != null && inputScript.GetButtonUp("PlayerInteract"))
             interactionTarget.Interact(player);
     }
 
@@ -190,7 +199,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateGrab()
     {
-        if (grabTarget == null || Input.GetButtonUp("Interact"))
+        if (grabTarget == null || inputScript.GetButtonUp("PlayerInteract"))
         {
             if (grabTarget != null)
             {
