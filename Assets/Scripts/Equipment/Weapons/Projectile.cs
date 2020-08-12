@@ -7,9 +7,9 @@ public class Projectile : MonoBehaviour
     [SerializeField] new Collider collider = null;
     [SerializeField] new Rigidbody rigidbody = null;
     [SerializeField] TrailRenderer trailRenderer = null;
+    [SerializeField] int richochetCount = 3;
     
     private float damage;
-    private bool live;
 
     public void Init(float damage, float speed, Collider[] colliders)
     {
@@ -21,18 +21,20 @@ public class Projectile : MonoBehaviour
 
         trailRenderer.emitting = true;
         rigidbody.velocity = transform.forward * speed;
-        live = true;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (richochetCount <= 0)
+            return;
+
         IDamagable damagable = collision.collider.GetComponent<IDamagable>();
         if (!damagable.IsNull())
         {
             damagable.Damage(damage);
         }
 
-        trailRenderer.emitting = false;
-        live = false;
+        richochetCount--;
+        trailRenderer.emitting = richochetCount > 0;
     }
 }

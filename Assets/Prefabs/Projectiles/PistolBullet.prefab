@@ -51,6 +51,7 @@ MonoBehaviour:
   collider: {fileID: 6625855905315037490}
   rigidbody: {fileID: 578675772548317273}
   trailRenderer: {fileID: 1469381173782619848}
+  richochetCount: 3
 --- !u!33 &3967599720331341126
 MeshFilter:
   m_ObjectHideFlags: 0
