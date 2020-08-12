@@ -11,13 +11,17 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement Options")]
     [SerializeField] float speed = 10f;     //Movement speed
-    [SerializeField] float boost = 5f;      //Sprinting speed, added to movement speed
+    [SerializeField] float boost = 0f;      //Sprinting speed, added to movement speed
+    [SerializeField] float crouchPenalty = 0f;
     [SerializeField] bool isSprint = false;
+    [SerializeField] bool isCrouch = false;
 
     [Header("Camera Options")]
     [SerializeField] float sensitivity = 2f;
     [SerializeField] float maxXRotation = 80f;
     [SerializeField] float minXRotation = -80f;
+    [SerializeField] float cameraHeight = 1f;
+    [SerializeField] float cameraCrouch = 0.5f;
 
     [Header("Interaction Options")]
     [SerializeField] float interactionDistance = 3.5f;
@@ -51,8 +55,9 @@ public class PlayerController : MonoBehaviour
 
         Rotate();
         Interact();
-        TakeSprintInput();
         UpdateTimers();
+        Sprint();
+        Crouch();
     }
 
     private void UpdateTimers()
@@ -100,31 +105,42 @@ public class PlayerController : MonoBehaviour
 
         Vector3 movement = Vector3.ClampMagnitude(new Vector3(xInput, 0f, yInput), 1f);
         //Determines movement speed based on sprinting and sprint speed
-        if(isSprint)
-        {
-            movement *= (speed + boost);
-        }
-        else
-        {
-            movement *= speed;
-        }
-
         Vector3 verticalVelocity = new Vector3(0f, rigidbody.velocity.y, 0f);
-        rigidbody.velocity = rigidbody.rotation * movement + verticalVelocity;
+        rigidbody.velocity = rigidbody.rotation * (movement * ((speed + boost) * (1 - crouchPenalty))) + verticalVelocity;
     }
 
-    private void TakeSprintInput()
+    private void Sprint()
     {
         bool boostOn = Input.GetButtonDown("Sprint");
         //If the sprint key is pressed, toggle sprint
-        if(boostOn)
+        if (boostOn && !isCrouch)
         {
             isSprint = !isSprint;
+            boost = 5f;
+            isCrouch = false;
         }
         //If not moving, stop sprinting
-        if (rigidbody.velocity.Equals(Vector3.zero))
+        if (!Input.GetButton("Horizontal") && !Input.GetButton("Vertical") || !isSprint)
         {
             isSprint = false;
+            boost = 0f;
+        }
+    }
+
+    private void Crouch()
+    {
+        if (Input.GetButtonDown("Crouch"))
+        {
+            isCrouch = !isCrouch;
+            isSprint = false;
+            cameraPivot.transform.localPosition = new Vector3(0f, cameraCrouch, 0f);
+            crouchPenalty = 0.7f;
+        }
+        if (Input.GetButtonUp("Crouch"))
+        {
+            isCrouch = false;
+            cameraPivot.transform.localPosition = new Vector3(0f, cameraHeight, 0f);
+            crouchPenalty = 0f;
         }
     }
 
