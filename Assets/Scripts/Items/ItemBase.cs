@@ -8,12 +8,14 @@ using System;
 /// Provides the base stats and data.
 /// </summary>
 [CreateAssetMenu(menuName = "Items/New Item")]
-public class ItemBase : ScriptableObject
+public class ItemBase : ScriptableItem
 {
     [SerializeField] private float itemValue = 1f;
     [SerializeField] private float itemWeight = 1f;
     [SerializeField] private GameObject model = null;
 
+    public override bool IsUnique { get { return false; } }
+    public override ItemBase GetBase() { return this; }
 
     private uint _id = 0;
     public uint GetId() { return _id; }

@@ -311,8 +311,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7788034856381914481}
+  - component: {fileID: 5930233270721937698}
   - component: {fileID: 7788034856381914482}
   - component: {fileID: 7788034856381914483}
+  - component: {fileID: 3496907384502537788}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -337,6 +339,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5930233270721937698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7788034856381914493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40575611cb185c04790d4a7c847f6615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containerBehaviour: {fileID: 3496907384502537788}
+  controller: {fileID: 7788034856381914482}
 --- !u!114 &7788034856381914482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,22 +362,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 7788034856381914493}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: acee8d35f1573fe4889d2e6a503b39e2, type: 3}
+  m_Script: {fileID: 11500000, guid: da91d500081abce42bafabfc6b177d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 5930233270721937698}
   rigidbody: {fileID: 7788034856381914483}
   cameraPivot: {fileID: 7788034855917988836}
   speed: 10
-  boost: 0
-  crouchPenalty: 0
+  boost: 5
   isSprint: 0
-  isCrouch: 0
   sensitivity: 2
   maxXRotation: 80
   minXRotation: -80
-  cameraHeight: 1
-  cameraCrouch: 0.5
   interactionDistance: 3.5
+  holdToGrabLength: 0.35
+  grabbedItemDistanceMult: 0.5
 --- !u!54 &7788034856381914483
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -378,3 +393,44 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &3496907384502537788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7788034856381914493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb809d17ab634e5478fd94289bb90727, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingContents: {fileID: 0}
+  type: 0
+  container:
+    items:
+      reorderableList:
+        canAdd: 1
+        canRemove: 1
+        draggable: 1
+        expandable: 1
+        multipleSelection: 1
+        isExpanded: 1
+        label:
+          m_Text: Keys
+          m_Image: {fileID: 0}
+          m_Tooltip: 
+        headerHeight: 18
+        footerHeight: 13
+        slideEasing: 0.15
+        verticalSpacing: 2
+        showDefaultBackground: 1
+        elementDisplayType: 0
+        elementNameProperty: 
+        elementNameOverride: 
+        elementIcon: {fileID: 0}
+      reqReferences: {fileID: 0}
+      isExpanded: 1
+      _keyValues: []
+      _keys: []
+      _values: []
