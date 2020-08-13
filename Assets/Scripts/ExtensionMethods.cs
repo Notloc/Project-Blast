@@ -33,4 +33,11 @@ public static class ExtensionMethods
     {
         return new Vector3(vector3.x, 0f, vector3.z);
     }
+
+    public static Quaternion Flatten(this Quaternion rotation)
+    {
+        Vector3 eulers = rotation.eulerAngles;
+        eulers.x = 0f;
+        return Quaternion.Euler(eulers);
+    }
 }

@@ -19,4 +19,3 @@ public class Game : MonoBehaviour
         public ItemEntityFactory ItemEntityFactory;
     }
 }
-

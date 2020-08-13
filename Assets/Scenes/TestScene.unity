@@ -526,8 +526,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb809d17ab634e5478fd94289bb90727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingContents: {fileID: 0}
   type: 0
+  contentsMode: 0
+  startingContents: {fileID: 0}
+  randomContents: []
   container:
     items:
       reorderableList:

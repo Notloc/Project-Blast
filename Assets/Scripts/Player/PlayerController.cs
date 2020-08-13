@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     [Header("Required References")]
     [SerializeField] Player player = null;
     [SerializeField] new Rigidbody rigidbody = null;
-    [SerializeField] GameObject cameraPivot = null;
 
     [Header("Movement Options")]
     [SerializeField] float speed = 10f;     //Movement speed
@@ -15,28 +14,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float crouchPenalty = 0f;
     [SerializeField] bool isSprint = false;
     [SerializeField] bool isCrouch = false;
-
-    [Header("Camera Options")]
-    [SerializeField] float sensitivity = 2f;
-    [SerializeField] float maxXRotation = 80f;
-    [SerializeField] float minXRotation = -80f;
-    [SerializeField] float cameraHeight = 1f;
-    [SerializeField] float cameraCrouch = 0.5f;
+    [SerializeField] float rotationSmoothing = 5f;
 
     [Header("Interaction Options")]
     [SerializeField] float interactionDistance = 3.5f;
     [SerializeField] float holdToGrabLength = 0.35f;
     [SerializeField] float grabbedItemDistanceMult = 0.5f;
 
-    private new Camera camera; 
-    private float cameraRotation = 0f;
-    private bool lookEnabled = true;
     private bool controlEnabled = true;
 
     private IInteractable interactionTarget = null;
     private IGrabbable grabTarget = null;
     private float grabTimer = -100f;
     private bool grabbed = false;
+
+    private new Camera camera;
 
     public void SetControlsActive(bool state)
     {
@@ -73,29 +65,25 @@ public class PlayerController : MonoBehaviour
         if (!controlEnabled)
             return;
 
+        Rotate();
         Move(Time.fixedDeltaTime);
     }
 
     private void Rotate()
     {
-        if (lookEnabled == false)
+        Vector3 direction = new Vector3(
+            Input.GetAxis("Horizontal"),
+            0f,
+            Input.GetAxis("Vertical")
+        );
+        if (direction == Vector3.zero)
             return;
 
-        // Body rotation
-        float yRotation = Input.GetAxis("Mouse X")*sensitivity;
-        Quaternion deltaRotation = Quaternion.Euler(0f, yRotation, 0f);
+        Quaternion cameraRotationFlat = camera.transform.rotation.Flatten();
 
-        this.transform.rotation = deltaRotation * this.transform.rotation;
-
-        // Camera rotation
-
-        float deltaXRotation = Input.GetAxis("Mouse Y")*sensitivity;
-
-        cameraRotation -= deltaXRotation;
-
-        cameraRotation = Mathf.Clamp(cameraRotation, minXRotation, maxXRotation);
-
-        cameraPivot.transform.localRotation = Quaternion.Euler(cameraRotation, 0f, 0f);
+        Quaternion rotation = Quaternion.LookRotation(cameraRotationFlat * direction);
+        rotation = Quaternion.Slerp(rigidbody.rotation, rotation, Time.fixedDeltaTime * rotationSmoothing);
+        rigidbody.MoveRotation(rotation);
     }
 
     private void Move(float deltaTime)
@@ -106,7 +94,7 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = Vector3.ClampMagnitude(new Vector3(xInput, 0f, yInput), 1f);
         //Determines movement speed based on sprinting and sprint speed
         Vector3 verticalVelocity = new Vector3(0f, rigidbody.velocity.y, 0f);
-        rigidbody.velocity = rigidbody.rotation * (movement * ((speed + boost) * (1 - crouchPenalty))) + verticalVelocity;
+        rigidbody.velocity = camera.transform.rotation.Flatten() * (movement * ((speed + boost) * (1 - crouchPenalty))) + verticalVelocity;
     }
 
     private void Sprint()
@@ -133,13 +121,11 @@ public class PlayerController : MonoBehaviour
         {
             isCrouch = !isCrouch;
             isSprint = false;
-            cameraPivot.transform.localPosition = new Vector3(0f, cameraCrouch, 0f);
             crouchPenalty = 0.7f;
         }
         if (Input.GetButtonUp("Crouch"))
         {
             isCrouch = false;
-            cameraPivot.transform.localPosition = new Vector3(0f, cameraHeight, 0f);
             crouchPenalty = 0f;
         }
     }
@@ -160,7 +146,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleInteraction()
     {
-        Transform cameraT = camera.transform;
+        Transform cameraT = Camera.main.transform;
         Vector3 eyePos = this.transform.position + (Vector3.up * 1.65f); // Approx where the eyes would be
 
         // Approx length for ray
@@ -181,7 +167,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleGrab()
     {
-        Transform cameraT = camera.transform;
+        Transform cameraT = Camera.main.transform;
         Vector3 eyePos = this.transform.position + (Vector3.up * 1.65f); // Approx where the eyes would be
 
         // Approx length for ray
@@ -218,7 +204,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        Transform cameraT = camera.transform;
+        Transform cameraT = Camera.main.transform;
         Vector3 eyePos = this.transform.position + (Vector3.up * 1.65f); // Approx where the eyes would be
         float offset = ((cameraT.position - eyePos).magnitude * 1.25f) + interactionDistance;
         grabTarget.Rigidbody.MovePosition(cameraT.position + (cameraT.forward * offset * grabbedItemDistanceMult));

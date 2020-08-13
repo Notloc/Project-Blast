@@ -7,6 +7,11 @@ public class Player : MonoBehaviour
     [SerializeField] ContainerBehaviour containerBehaviour = null;
     [SerializeField] PlayerController controller = null;
 
+    private void Start()
+    {
+        CameraManager.Instance.SetCameraController(CameraControllerType.PLAYER, transform);
+    }
+
     public Container GetInventory()
     {
         return containerBehaviour.GetContainer();
