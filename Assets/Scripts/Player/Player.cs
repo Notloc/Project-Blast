@@ -12,6 +12,11 @@ public class Player : Actor
         SetActiveController(playerController);
     }
 
+    private void Start()
+    {
+        CameraManager.Instance.SetCameraController(CameraControllerType.PLAYER, transform);
+    }
+
     public Container GetInventory()
     {
         return containerBehaviour.GetContainer();

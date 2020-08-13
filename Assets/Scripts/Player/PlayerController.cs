@@ -7,17 +7,14 @@ public class PlayerController : MonoBehaviour, IController
     [Header("Required References")]
     [SerializeField] Player player = null;
     [SerializeField] new Rigidbody rigidbody = null;
-    [SerializeField] GameObject cameraPivot = null;
 
     [Header("Movement Options")]
     [SerializeField] float speed = 10f;     //Movement speed
-    [SerializeField] float boost = 5f;      //Sprinting speed, added to movement speed
+    [SerializeField] float boost = 0f;      //Sprinting speed, added to movement speed
+    [SerializeField] float crouchPenalty = 0f;
     [SerializeField] bool isSprint = false;
-
-    [Header("Camera Options")]
-    [SerializeField] float sensitivity = 2f;
-    [SerializeField] float maxXRotation = 80f;
-    [SerializeField] float minXRotation = -80f;
+    [SerializeField] bool isCrouch = false;
+    [SerializeField] float rotationSmoothing = 5f;
 
     [Header("Interaction Options")]
     [SerializeField] float interactionDistance = 3.5f;
@@ -26,15 +23,14 @@ public class PlayerController : MonoBehaviour, IController
 
     private InputScript inputScript;
 
-    private new Camera camera; 
-    private float cameraRotation = 0f;
-    private bool lookEnabled = true;
     private bool controlEnabled = true;
 
     private IInteractable interactionTarget = null;
     private IGrabbable grabTarget = null;
     private float grabTimer = -100f;
     private bool grabbed = false;
+
+    private new Camera camera;
 
     public void SetControlsActive(bool state)
     {
@@ -59,9 +55,11 @@ public class PlayerController : MonoBehaviour, IController
 
         if (!inputScript)
             return;
-        Rotate();
-        TakeSprintInput();
+
+        Interact();
         UpdateTimers();
+        Sprint();
+        Crouch();
     }
 
     private void UpdateTimers()
@@ -77,29 +75,25 @@ public class PlayerController : MonoBehaviour, IController
         if (!controlEnabled)
             return;
 
+        Rotate();
         Move(Time.fixedDeltaTime);
     }
 
     private void Rotate()
     {
-        if (lookEnabled == false)
+        Vector3 direction = new Vector3(
+            inputScript.GetAxis("PlayerStrafe"),
+            0f,
+            inputScript.GetAxis("PlayerForward")
+        );
+        if (direction == Vector3.zero)
             return;
 
-        // Body rotation
-        float yRotation = inputScript.GetAxis("CameraYaw")*sensitivity;
-        Quaternion deltaRotation = Quaternion.Euler(0f, yRotation, 0f);
+        Quaternion cameraRotationFlat = camera.transform.rotation.Flatten();
 
-        this.transform.rotation = deltaRotation * this.transform.rotation;
-
-        // Camera rotation
-
-        float deltaXRotation = inputScript.GetAxis("CameraPitch")*sensitivity;
-
-        cameraRotation -= deltaXRotation;
-
-        cameraRotation = Mathf.Clamp(cameraRotation, minXRotation, maxXRotation);
-
-        cameraPivot.transform.localRotation = Quaternion.Euler(cameraRotation, 0f, 0f);
+        Quaternion rotation = Quaternion.LookRotation(cameraRotationFlat * direction);
+        rotation = Quaternion.Slerp(rigidbody.rotation, rotation, Time.fixedDeltaTime * rotationSmoothing);
+        rigidbody.MoveRotation(rotation);
     }
 
     private void Move(float deltaTime)
@@ -109,31 +103,40 @@ public class PlayerController : MonoBehaviour, IController
 
         Vector3 movement = Vector3.ClampMagnitude(new Vector3(xInput, 0f, yInput), 1f);
         //Determines movement speed based on sprinting and sprint speed
-        if(isSprint)
-        {
-            movement *= (speed + boost);
-        }
-        else
-        {
-            movement *= speed;
-        }
-
         Vector3 verticalVelocity = new Vector3(0f, rigidbody.velocity.y, 0f);
-        rigidbody.velocity = rigidbody.rotation * movement + verticalVelocity;
+        rigidbody.velocity = camera.transform.rotation.Flatten() * (movement * ((speed + boost) * (1 - crouchPenalty))) + verticalVelocity;
     }
 
-    private void TakeSprintInput()
+    private void Sprint()
     {
         bool boostOn = inputScript.GetButtonDown("PlayerSprint");
         //If the sprint key is pressed, toggle sprint
-        if(boostOn)
+        if (boostOn && !isCrouch)
         {
             isSprint = !isSprint;
+            boost = 5f;
+            isCrouch = false;
         }
         //If not moving, stop sprinting
-        if (rigidbody.velocity.Equals(Vector3.zero))
+        if (!inputScript.GetButton("PlayerStrafe") && !inputScript.GetButton("PlayerForward") || !isSprint)
         {
             isSprint = false;
+            boost = 0f;
+        }
+    }
+
+    private void Crouch()
+    {
+        if (inputScript.GetButtonDown("Crouch"))
+        {
+            isCrouch = !isCrouch;
+            isSprint = false;
+            crouchPenalty = 0.7f;
+        }
+        if (inputScript.GetButtonUp("Crouch"))
+        {
+            isCrouch = false;
+            crouchPenalty = 0f;
         }
     }
 
@@ -153,7 +156,7 @@ public class PlayerController : MonoBehaviour, IController
 
     private void HandleInteraction()
     {
-        Transform cameraT = camera.transform;
+        Transform cameraT = Camera.main.transform;
         Vector3 eyePos = this.transform.position + (Vector3.up * 1.65f); // Approx where the eyes would be
 
         // Approx length for ray
@@ -174,7 +177,7 @@ public class PlayerController : MonoBehaviour, IController
 
     private void HandleGrab()
     {
-        Transform cameraT = camera.transform;
+        Transform cameraT = Camera.main.transform;
         Vector3 eyePos = this.transform.position + (Vector3.up * 1.65f); // Approx where the eyes would be
 
         // Approx length for ray
@@ -211,7 +214,7 @@ public class PlayerController : MonoBehaviour, IController
             return;
         }
 
-        Transform cameraT = camera.transform;
+        Transform cameraT = Camera.main.transform;
         Vector3 eyePos = this.transform.position + (Vector3.up * 1.65f); // Approx where the eyes would be
         float offset = ((cameraT.position - eyePos).magnitude * 1.25f) + interactionDistance;
         grabTarget.Rigidbody.MovePosition(cameraT.position + (cameraT.forward * offset * grabbedItemDistanceMult));
