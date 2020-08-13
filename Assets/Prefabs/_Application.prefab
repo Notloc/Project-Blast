@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 6488691878883615685}
   - component: {fileID: 232459987341503752}
   - component: {fileID: 7592952599207660218}
+  - component: {fileID: 5036947193670209334}
   m_Layer: 0
   m_Name: _Application
   m_TagString: Untagged
@@ -186,6 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCameraController: {fileID: 7592952599207660218}
+  spaceshipCameraController: {fileID: 5036947193670209334}
 --- !u!114 &7592952599207660218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,7 +195,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6488691878883615681}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad5b05f88e388fd418dd5a06f8459039, type: 3}
   m_Name: 
@@ -204,3 +206,17 @@ MonoBehaviour:
   minXRotation: -80
   height: {x: 0, y: 1, z: 0}
   offset: {x: 0.75, y: 0.825, z: -2.5}
+--- !u!114 &5036947193670209334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6488691878883615681}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667cf4463449b3f4e91c729eef5ed537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraTransform: {fileID: 1414983550109065369}
+  offset: {x: 0, y: 2.5, z: -18}

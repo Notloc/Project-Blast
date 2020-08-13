@@ -35,6 +35,11 @@ public class Spaceship : MonoBehaviour, IVehicle, IInteractable
         SeatPilot(newPilot);
         newPilot.SetActiveController(shipController);
 
+        if (newPilot as Player)
+        {
+            CameraManager.Instance.SetCameraController(CameraControllerType.SPACESHIP, transform);
+        }
+
         return true;
     }
 
@@ -42,6 +47,11 @@ public class Spaceship : MonoBehaviour, IVehicle, IInteractable
     {
         if (!canExit)
             return false;
+
+        if (pilot as Player)
+        {
+            CameraManager.Instance.SetCameraController(CameraControllerType.PLAYER, pilot.transform);
+        }
 
         RemovePilot();
         return true;

@@ -12,7 +12,7 @@ public enum CameraControllerType
 public class CameraManager : MonoBehaviour
 {
     [SerializeField] PlayerCameraController playerCameraController = null;
-
+    [SerializeField] SpaceshipCameraController spaceshipCameraController = null;
     public static CameraManager Instance { get; private set; }
     private CameraController activeCameraController;
 
@@ -29,7 +29,7 @@ public class CameraManager : MonoBehaviour
                 SetActiveCameraController(playerCameraController, target);
                 break;
             case CameraControllerType.SPACESHIP:
-                //SetActiveCameraController(spaceshipCameraController, target);
+                SetActiveCameraController(spaceshipCameraController, target);
                 break;
         }
     }

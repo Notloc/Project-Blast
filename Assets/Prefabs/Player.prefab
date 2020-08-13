@@ -255,12 +255,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 5930233270721937698}
   rigidbody: {fileID: 7788034856381914483}
-  cameraPivot: {fileID: 0}
   speed: 10
   boost: 5
   crouchPenalty: 0
   isSprint: 0
   isCrouch: 0
+  rotationSmoothing: 5
   interactionDistance: 3.5
   holdToGrabLength: 0.35
   grabbedItemDistanceMult: 0.5
@@ -283,7 +283,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 1
+      isExpanded: 0
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -298,28 +298,58 @@ MonoBehaviour:
       elementNameOverride: 
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
-    isExpanded: 1
+    isExpanded: 0
     _keyValues:
+    - PlayerForward
+    - PlayerStrafe
+    - PlayerSprint
+    - PlayerCrouch
+    - PlayerInteract
+    - CameraPitch
+    - CameraYaw
     - ShipPitch
     - ShipYaw
     - ShipRoll
     - ShipLand
     - ShipExit
     - ShipTakeOff
+    - ShipThrottleUp
+    - ShipThrottleDown
+    - Crouch
     _keys:
+    - PlayerForward
+    - PlayerStrafe
+    - PlayerSprint
+    - PlayerCrouch
+    - PlayerInteract
+    - CameraPitch
+    - CameraYaw
     - ShipPitch
     - ShipYaw
     - ShipRoll
     - ShipLand
     - ShipExit
     - ShipTakeOff
+    - ShipThrottleUp
+    - ShipThrottleDown
+    - Crouch
     _values:
+    - Vertical
+    - Horizontal
+    - Sprint
+    - Crouch
+    - Interact
+    - Mouse Y
+    - Mouse X
     - Vertical
     - Horizontal
     - Roll
     - ShipLand
     - ShipExit
     - ShipTakeOff
+    - ThrottleUp
+    - ThrottleDown
+    - Crouch
 --- !u!54 &7788034856381914483
 Rigidbody:
   m_ObjectHideFlags: 0
