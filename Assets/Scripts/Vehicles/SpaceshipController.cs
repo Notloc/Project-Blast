@@ -34,7 +34,7 @@ public class SpaceshipController : MonoBehaviour, IController
 
     private void TakeInput()
     {
-        rotationInput = new Vector3(inputScript.GetAxis("ShipYaw"), inputScript.GetAxis("ShipPitch"), inputScript.GetAxis("ShipRoll"));
+        rotationInput = new Vector3(inputScript.GetAxis("ShipPitch"), inputScript.GetAxis("ShipYaw"), inputScript.GetAxis("ShipRoll"));
         takeOff = inputScript.GetButton("ShipTakeOff");
         landShip = inputScript.GetButton("ShipLand");
         exitShip = inputScript.GetButton("ShipExit");
@@ -95,8 +95,8 @@ public class SpaceshipController : MonoBehaviour, IController
     {
         Quaternion deltaRotation = Quaternion.Euler(rotationInput.y, rotationInput.x, rotationInput.z);
 
-        rigidbody.MoveRotation(rigidbody.rotation * deltaRotation);
         rigidbody.AddRelativeForce(Vector3.forward * throttle * spaceship.MaxSpeed, ForceMode.Acceleration);
+        rigidbody.AddRelativeTorque(rotationInput * spaceship.TurnSpeed, ForceMode.Acceleration);
 
         if (landShip)
         {

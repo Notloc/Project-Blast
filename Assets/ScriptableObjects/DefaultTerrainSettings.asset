@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace1078024c2d954f81cc3dab9bdf423, type: 3}
   m_Name: DefaultTerrainSettings
   m_EditorClassIdentifier: 
-  terrainSize: {x: 51, y: 51}
+  terrainSize: {x: 26, y: 26}
   noiseScale: 100
   octaves: 6
   persistance: 0.5

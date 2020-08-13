@@ -15,9 +15,11 @@ public class Spaceship : MonoBehaviour, IVehicle, IInteractable
     [SerializeField] float launchTime = 3.5f;
 
     [SerializeField] float maxSpeed = 100f;
+    [SerializeField] float turnSpeed = 5;
 
     public SpaceShipState ShipState { get { return shipState; } }
     public float MaxSpeed { get { return maxSpeed; } }
+    public float TurnSpeed { get { return turnSpeed; } }
 
     Actor pilot;
     bool canExit = true;
