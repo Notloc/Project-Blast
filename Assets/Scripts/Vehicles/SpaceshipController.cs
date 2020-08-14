@@ -10,6 +10,10 @@ public class SpaceshipController : MonoBehaviour, IController
     [SerializeField] Spaceship spaceship = null;
     [SerializeField] protected new Rigidbody rigidbody = null;
 
+    [SerializeField] float pitchMultiplier = 1f;
+    [SerializeField] float yawMultiplier = 0.25f;
+    [SerializeField] float rollMultiplier = 3f;
+
     private InputScript inputScript;
     private bool controlsActive = true;
 
@@ -34,7 +38,7 @@ public class SpaceshipController : MonoBehaviour, IController
 
     private void TakeInput()
     {
-        rotationInput = new Vector3(inputScript.GetAxis("ShipPitch"), inputScript.GetAxis("ShipYaw"), inputScript.GetAxis("ShipRoll"));
+        rotationInput = new Vector3(inputScript.GetAxis("ShipPitch") * pitchMultiplier, inputScript.GetAxis("ShipYaw") * yawMultiplier, inputScript.GetAxis("ShipRoll") * rollMultiplier);
         takeOff = inputScript.GetButton("ShipTakeOff");
         landShip = inputScript.GetButton("ShipLand");
         exitShip = inputScript.GetButton("ShipExit");
