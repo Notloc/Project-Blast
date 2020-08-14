@@ -10,22 +10,23 @@ public class ContainerBehaviour : MonoBehaviour
         RANDOM
     }
     
-    [SerializeField] ContainerType type = ContainerType.BASIC;
-
-    [Header("Contents Options")]
+    [Header("Container Options")]
+    [SerializeField] ContainerType containerType = ContainerType.BASIC;
     [SerializeField] ContentsMode contentsMode = ContentsMode.PRESET;
     [SerializeField] ContainerContents startingContents = null;
     [SerializeField] List<ContainerContents> randomContents = null;
     [Space]
     [SerializeField] Container container = new Container();
 
+    private bool isSpewing = false;
+    
     void Start()
     {
-        if (type == ContainerType.BASIC)
+        if (containerType == ContainerType.BASIC)
             container = new Container();
-        else if (type == ContainerType.WEIGHTED)
+        else if (containerType == ContainerType.WEIGHTED)
             container = new WeightedContainer();
-        else if (type == ContainerType.INVENTORY)
+        else if (containerType == ContainerType.INVENTORY)
             ;// container = new InventoryContainer();
 
         if (contentsMode == ContentsMode.PRESET)
@@ -47,16 +48,38 @@ public class ContainerBehaviour : MonoBehaviour
 
     public void EmptyIntoWorld()
     {
-        if (container == null)
+        if (container == null || isSpewing)
             return;
+
+        StartCoroutine(SpewItems());
+    }
+
+    private IEnumerator SpewItems()
+    {
+        isSpewing = true;
+
+        var anim = GetComponent<ContainerAnimation>();
+        if (anim)
+            anim.OpenContainer();
+
+
+        yield return new WaitForSeconds(0.1f);
 
         var items = container.Items;
         var removed = new List<ContainerItem>(items.Values);
         if (container.Remove(removed))
         {
             foreach (var itemC in removed)
+            {
                 for (int i = 0; i < itemC.count; i++)
+                {
                     Game.Instance.Factories.ItemEntityFactory.CreateItemEntity(itemC.item, transform.position + Vector3.up);
+                    yield return new WaitForFixedUpdate();
+                }
+            }
         }
+
+        isSpewing = false;
     }
+
 }
