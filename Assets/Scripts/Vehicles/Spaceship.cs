@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Policy;
+using System.Threading;
 using UnityEngine;
 
 public class Spaceship : MonoBehaviour, IVehicle, IInteractable
@@ -16,6 +18,9 @@ public class Spaceship : MonoBehaviour, IVehicle, IInteractable
 
     [SerializeField] float maxSpeed = 100f;
     [SerializeField] float turnSpeed = 5;
+    
+    [SerializeField] float landingRadius = 100f;
+    [SerializeField] float landingTime = 6f;
 
     public SpaceShipState ShipState { get { return shipState; } }
     public float MaxSpeed { get { return maxSpeed; } }
@@ -113,9 +118,43 @@ public class Spaceship : MonoBehaviour, IVehicle, IInteractable
         shipState = SpaceShipState.FLYING;
     }
 
-    public void Land()
+    public void TryToLand()
     {
+        LandingZone zone = FindLandingZone();
+        if (!zone)
+            return;
+
+        StartCoroutine(Land(zone.GetLandingPosition()));
+    }
+
+    private LandingZone FindLandingZone()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, landingRadius);
+        foreach (var c in colliders)
+        {
+            LandingZone zone = c.GetComponent<LandingZone>();
+            if (zone)
+            {
+                return zone;
+            }
+        }
+        return null;
+    }
+
+    private IEnumerator Land(Vector3 landingPosition)
+    {
+        shipState = SpaceShipState.LANDING;
         SetRigidbodyLanded();
+
+        Vector3 startingPosition = rigidbody.position;
+        float timer = 0f;
+        while (timer < landingTime)
+        {
+            yield return null;
+            timer += Time.fixedDeltaTime;
+            rigidbody.MovePosition(Vector3.Lerp(startingPosition, landingPosition, timer/landingTime));
+        }
+        
         shipState = SpaceShipState.LANDED;
     }
 

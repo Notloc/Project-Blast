@@ -104,7 +104,7 @@ public class SpaceshipController : MonoBehaviour, IController
 
         if (landShip)
         {
-            spaceship.Land();
+            spaceship.TryToLand();
         }
     }
 }
