@@ -117,9 +117,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 1414983550109065369}
   offset: {x: 0, y: 2, z: -25}
-  rotationSmoothing: 6
+  rotationSmoothing: 4
   rotationEffectSmoothing: 4
-  rotationMovementScale: 6.5
+  rotationMovementScale: 18
 --- !u!1 &6488691878883615681
 GameObject:
   m_ObjectHideFlags: 0
