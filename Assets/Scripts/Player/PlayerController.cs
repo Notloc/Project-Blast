@@ -51,10 +51,10 @@ public class PlayerController : MonoBehaviour, IController
     {
         if (!controlEnabled)
             return;
+        Interact();
         if (!inputScript)
             return;
 
-        Interact();
         UpdateTimers();
         Sprint();
         Crouch();
