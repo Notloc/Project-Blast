@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class CameraController : MonoBehaviour
+namespace ProjectBlast.CameraScripts
 {
-    public abstract CameraControllerType CameraControllerType { get; }
-    [SerializeField] protected Transform cameraTransform;
-    protected Transform target;
-
-
-    public virtual void Enable(Transform target)
+    public abstract class CameraController : MonoBehaviour
     {
-        this.enabled = true;
-        this.target = target;
-    }
+        public abstract CameraControllerType CameraControllerType { get; }
+        [SerializeField] protected Transform cameraTransform;
+        protected Transform target;
 
-    public virtual void Disable()
-    {
-        this.enabled = false;
+
+        public virtual void Enable(Transform target)
+        {
+            enabled = true;
+            this.target = target;
+        }
+
+        public virtual void Disable()
+        {
+            enabled = false;
+        }
     }
 }

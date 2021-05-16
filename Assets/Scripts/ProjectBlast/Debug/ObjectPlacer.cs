@@ -1,73 +1,77 @@
-﻿using System.Collections;
+﻿using Notloc.Terrain;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static EndlessTerrain;
+using static Notloc.Terrain.EndlessTerrain;
 
-public class ObjectPlacer : MonoBehaviour
+namespace ProjectBlast.Debug
 {
-    [SerializeField] float entitiesPerChunk = 50f;
-
-    [SerializeField] LayerMask terrainLayers = 0;
-
-    [SerializeField] float rayStartHeight = 800f;
-    [SerializeField] float rayLength = 1000f;
-
-    [SerializeField] GameObject prefab = null;
-    [SerializeField] EndlessTerrain endlessTerrain = null;
-
-    const int maxAttempts = 500;
-
-    private void Awake()
+    public class ObjectPlacer : MonoBehaviour
     {
-        endlessTerrain.OnChunkCreated += PopulateChunk;
-    }
+        [SerializeField] float entitiesPerChunk = 50f;
 
-    public void PopulateChunk(TerrainChunk chunk)
-    {
-        bool activeState = chunk.gameObject.activeSelf;
-        if (!activeState)
-            chunk.gameObject.SetActive(true);
+        [SerializeField] LayerMask terrainLayers = 0;
 
-        float scale = endlessTerrain.Scale;
-        Vector2 areaSize = ((Vector2)chunk.terrainData.settings.unitSize) * scale;
+        [SerializeField] float rayStartHeight = 800f;
+        [SerializeField] float rayLength = 1000f;
 
-        int successes = 0;
-        for (int i = maxAttempts; i > 0; i--)
+        [SerializeField] GameObject prefab = null;
+        [SerializeField] EndlessTerrain endlessTerrain = null;
+
+        const int maxAttempts = 500;
+
+        private void Awake()
         {
-            if (RandomlySpawnObject(chunk.gameObject, areaSize))
-                successes++;
-
-            if (successes >= entitiesPerChunk)
-                break;
+            endlessTerrain.OnChunkCreated += PopulateChunk;
         }
 
-        if (!activeState)
-            chunk.gameObject.SetActive(false);
-    }
-
-    private bool RandomlySpawnObject(GameObject chunk, Vector2 areaSize)
-    {
-        Vector3 rayStart = chunk.transform.position + new Vector3(
-            Random.Range(0f, areaSize.x),
-            rayStartHeight,
-            Random.Range(0f, areaSize.y)
-        );
-
-        RaycastHit hit;
-        if (Physics.Raycast(rayStart, Vector3.down, out hit, rayLength, terrainLayers))
+        public void PopulateChunk(TerrainChunk chunk)
         {
-            var newEntity = Instantiate(prefab, chunk.transform);
-            newEntity.transform.position = hit.point;
-            newEntity.transform.rotation = Quaternion.Euler(
-                new Vector3(
-                    Random.Range(-15f, 15f),
-                    Random.Range(0f, 360f),
-                    Random.Range(-20f, 20f)
-                )    
+            bool activeState = chunk.gameObject.activeSelf;
+            if (!activeState)
+                chunk.gameObject.SetActive(true);
+
+            float scale = endlessTerrain.Scale;
+            Vector2 areaSize = (Vector2)chunk.terrainData.settings.unitSize * scale;
+
+            int successes = 0;
+            for (int i = maxAttempts; i > 0; i--)
+            {
+                if (RandomlySpawnObject(chunk.gameObject, areaSize))
+                    successes++;
+
+                if (successes >= entitiesPerChunk)
+                    break;
+            }
+
+            if (!activeState)
+                chunk.gameObject.SetActive(false);
+        }
+
+        private bool RandomlySpawnObject(GameObject chunk, Vector2 areaSize)
+        {
+            Vector3 rayStart = chunk.transform.position + new Vector3(
+                Random.Range(0f, areaSize.x),
+                rayStartHeight,
+                Random.Range(0f, areaSize.y)
             );
 
-            return true;
+            RaycastHit hit;
+            if (Physics.Raycast(rayStart, Vector3.down, out hit, rayLength, terrainLayers))
+            {
+                var newEntity = Instantiate(prefab, chunk.transform);
+                newEntity.transform.position = hit.point;
+                newEntity.transform.rotation = Quaternion.Euler(
+                    new Vector3(
+                        Random.Range(-15f, 15f),
+                        Random.Range(0f, 360f),
+                        Random.Range(-20f, 20f)
+                    )
+                );
+
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 }

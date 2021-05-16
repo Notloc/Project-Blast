@@ -1,17 +1,21 @@
-﻿using System.Collections;
+﻿using ProjectBlast.PlayerScripts;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Button : MonoBehaviour, IInteractable
+namespace ProjectBlast.Interaction
 {
-    [SerializeField] GameObject target = null;
-    public void Interact(Player player)
+    public class Button : MonoBehaviour, IInteractable
     {
-        if (target)
+        [SerializeField] GameObject target = null;
+        public void Interact(Player player)
         {
-            IActivate activator = target.GetComponent<IActivate>();
-            if (activator != null)
-                activator.Activate();
+            if (target)
+            {
+                IActivate activator = target.GetComponent<IActivate>();
+                if (activator != null)
+                    activator.Activate();
+            }
         }
     }
 }

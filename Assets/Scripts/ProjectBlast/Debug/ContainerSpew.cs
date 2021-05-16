@@ -1,12 +1,17 @@
-﻿using System.Collections;
+﻿using ProjectBlast.Interaction;
+using ProjectBlast.PlayerScripts;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ContainerSpew : MonoBehaviour, IInteractable
+namespace ProjectBlast.Debug
 {
-    public void Interact(Player player)
+    public class ContainerSpew : MonoBehaviour, IInteractable
     {
-        var container = GetComponent<ContainerBehaviour>();
-        container.EmptyIntoWorld();
+        public void Interact(Player player)
+        {
+            var container = GetComponent<ContainerBehaviour>();
+            container.EmptyIntoWorld();
+        }
     }
 }

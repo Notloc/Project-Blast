@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿using Notloc.Utility;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IGrabbable : IGameObject
+namespace ProjectBlast.Interaction
 {
-    Rigidbody Rigidbody { get; }
-    void SetGrabbed(bool isGrabbed);
+    public interface IGrabbable : IGameObject
+    {
+        Rigidbody Rigidbody { get; }
+        void SetGrabbed(bool isGrabbed);
+    }
 }

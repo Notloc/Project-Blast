@@ -1,53 +1,57 @@
-﻿using System.Collections;
+﻿using ProjectBlast.CameraScripts;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Actor
+namespace ProjectBlast.PlayerScripts
 {
-    [SerializeField] ContainerBehaviour containerBehaviour = null;
-    [SerializeField] PlayerController playerController = null;
-
-    private void Awake()
+    public class Player : Actor
     {
-        SetActiveController(playerController);
-    }
+        [SerializeField] ContainerBehaviour containerBehaviour = null;
+        [SerializeField] PlayerController playerController = null;
 
-    private void Start()
-    {
-        CameraManager.Instance.SetCameraController(CameraControllerType.PLAYER, transform);
-    }
-
-    public Container GetInventory()
-    {
-        return containerBehaviour.GetContainer();
-    }
-
-    public PlayerController GetPlayerController()
-    {
-        return playerController;
-    }
-
-    public override void Lock()
-    {
-        base.Lock();
-        playerController.SetControlsActive(false);
-    }
-
-    public override void Unlock()
-    {
-        base.Unlock();
-        playerController.SetControlsActive(true);
-    }
-
-    public override void SetActiveController(IController controller)
-    {
-        base.SetActiveController(controller);
-        if (activeController == null)
+        private void Awake()
         {
-            activeController = playerController;
-            activeController.SetInput(inputScript);
-            activeController.enabled = true;
-            activeController.SetControlsActive(!isLocked);
+            SetActiveController(playerController);
+        }
+
+        private void Start()
+        {
+            CameraManager.Instance.SetCameraController(CameraControllerType.PLAYER, transform);
+        }
+
+        public Container GetInventory()
+        {
+            return containerBehaviour.GetContainer();
+        }
+
+        public PlayerController GetPlayerController()
+        {
+            return playerController;
+        }
+
+        public override void Lock()
+        {
+            base.Lock();
+            playerController.SetControlsActive(false);
+        }
+
+        public override void Unlock()
+        {
+            base.Unlock();
+            playerController.SetControlsActive(true);
+        }
+
+        public override void SetActiveController(IController controller)
+        {
+            base.SetActiveController(controller);
+            if (activeController == null)
+            {
+                activeController = playerController;
+                activeController.SetInput(inputScript);
+                activeController.enabled = true;
+                activeController.SetControlsActive(!isLocked);
+            }
         }
     }
 }

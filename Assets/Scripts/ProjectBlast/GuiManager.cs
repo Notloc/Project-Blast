@@ -1,31 +1,35 @@
-﻿using System.Collections;
+﻿using ProjectBlast.PlayerScripts;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GuiManager : MonoBehaviour
+namespace ProjectBlast.Gui
 {
-    [SerializeField] InventoryGui inventory = null;
-    [SerializeField] GameObject crosshair = null;
-    private Player player;
-
-    private void Start()
+    public class GuiManager : MonoBehaviour
     {
-        player = FindObjectOfType<Player>();
-        inventory.CloseGui();
-        crosshair.SetActive(true);
-    }
+        [SerializeField] InventoryGui inventory = null;
+        [SerializeField] GameObject crosshair = null;
+        private Player player;
 
-    void Update()
-    {
-        if (Input.GetButtonDown("Inventory"))
+        private void Start()
         {
-            if (!inventory.isActiveAndEnabled)
-                inventory.OpenGui();
-            else
-                inventory.CloseGui();
+            player = FindObjectOfType<Player>();
+            inventory.CloseGui();
+            crosshair.SetActive(true);
+        }
 
-            crosshair.SetActive(!inventory.isActiveAndEnabled);
-            player.GetPlayerController().SetControlsActive(!inventory.isActiveAndEnabled);
+        void Update()
+        {
+            if (Input.GetButtonDown("Inventory"))
+            {
+                if (!inventory.isActiveAndEnabled)
+                    inventory.OpenGui();
+                else
+                    inventory.CloseGui();
+
+                crosshair.SetActive(!inventory.isActiveAndEnabled);
+                player.GetPlayerController().SetControlsActive(!inventory.isActiveAndEnabled);
+            }
         }
     }
 }

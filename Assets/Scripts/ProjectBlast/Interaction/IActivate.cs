@@ -1,12 +1,12 @@
-﻿using ProjectBlast.PlayerScripts;
+﻿using Notloc.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProjectBlast.Interaction
 {
-    public interface IInteractable
+    public interface IActivate : IGameObject
     {
-        void Interact(Player player);
+        void Activate();
     }
 }

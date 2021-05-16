@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IVehicle
+namespace ProjectBlast.Vehicles
 {
-    bool Enter(Actor pilot);
-    bool Exit();
+    public interface IVehicle
+    {
+        bool Enter(Actor pilot);
+        bool Exit();
+    }
 }
