@@ -2,18 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewContainer : MonoBehaviour
+namespace ProjectBlast.Items.Containers
 {
-    [SerializeField] int width;
-    [SerializeField] int height;
+    [System.Serializable]
+    public class NewContainer
+    {
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+        public int Size => Width * Height;
+        public NewContainerContents contents { get; private set; }
 
-    
+
+        public NewContainer(int width, int height)
+        {
+            this.Width = width;
+            this.Height = height;
+            contents = new NewContainerContents(width, height);
+        }
 
 
-
-    public int size => width * height;
-    public int Width => width;
-    public int Height => height;
-    
-
+    }
 }

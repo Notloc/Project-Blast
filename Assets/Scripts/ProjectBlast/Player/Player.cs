@@ -1,4 +1,5 @@
 ﻿using ProjectBlast.CameraScripts;
+using ProjectBlast.Items.Containers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace ProjectBlast.PlayerScripts
 {
     public class Player : Actor
     {
-        [SerializeField] ContainerBehaviour containerBehaviour = null;
+        //[SerializeField] ContainerBehaviour containerBehaviour = null;
         [SerializeField] PlayerController playerController = null;
 
         private void Awake()
@@ -20,9 +21,9 @@ namespace ProjectBlast.PlayerScripts
             CameraManager.Instance.SetCameraController(CameraControllerType.PLAYER, transform);
         }
 
-        public Container GetInventory()
+        public NewContainer GetInventory()
         {
-            return containerBehaviour.GetContainer();
+            return null;
         }
 
         public PlayerController GetPlayerController()
