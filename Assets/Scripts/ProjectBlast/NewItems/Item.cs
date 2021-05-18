@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class NewItem : ScriptableObject
+public class Item : ScriptableObject
 {
     [SerializeField] Sprite sprite = null;
     [SerializeField] Vector2Int size = Vector2Int.one;

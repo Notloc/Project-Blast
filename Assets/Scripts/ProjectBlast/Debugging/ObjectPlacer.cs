@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Notloc.Terrain.EndlessTerrain;
 
-namespace ProjectBlast.Debug
+namespace ProjectBlast.Debugging
 {
     public class ObjectPlacer : MonoBehaviour
     {

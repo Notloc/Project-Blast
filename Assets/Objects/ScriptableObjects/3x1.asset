@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5caa7cd08520d4f47938b49b47f05fba, type: 3}
-  m_Name: TestItem
+  m_Name: 3x1
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: dcc13e79f329a624d9349b45601ee1ee, type: 3}
-  size: {x: 1, y: 2}
+  size: {x: 3, y: 1}

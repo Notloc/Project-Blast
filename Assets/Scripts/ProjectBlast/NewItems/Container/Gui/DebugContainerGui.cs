@@ -4,19 +4,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DebugContainerGui : MonoBehaviour
+namespace ProjectBlast.Debugging
 {
-    [SerializeField] NewContainer container = null;
-    [SerializeField] ContainerView containerView = null;
-
-    private void Start()
+    public class DebugContainerGui : MonoBehaviour
     {
-        containerView.SetContainer(container);
-    }
+        Container container;
+        [SerializeField] ContainerGui containerView = null;
+        [SerializeField] List<Item> items = null;
+        [SerializeField] int width, height;
 
-    [EasyButtons.Button]
-    public void UpdateContainer()
-    {
-        containerView.SetContainer(container);
+        private void Start()
+        {
+            container = new Container(width, height);
+            
+            foreach (Item item in items)
+            {
+                container.AddItem(item);
+            }
+
+            containerView.SetContainer(container);
+        }
     }
 }

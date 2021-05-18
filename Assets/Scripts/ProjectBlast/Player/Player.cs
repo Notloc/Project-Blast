@@ -21,7 +21,7 @@ namespace ProjectBlast.PlayerScripts
             CameraManager.Instance.SetCameraController(CameraControllerType.PLAYER, transform);
         }
 
-        public NewContainer GetInventory()
+        public Container GetInventory()
         {
             return null;
         }

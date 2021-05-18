@@ -168,6 +168,8 @@ MonoBehaviour:
     type: 3}
   grid: {fileID: 233368207275690206}
   itemArea: {fileID: 577203090577631145}
+  validHoverColor: {r: 0.21765614, g: 1, b: 0, a: 0.5019608}
+  invalidHoverColor: {r: 1, g: 0.12061543, b: 0, a: 0.49019608}
 --- !u!114 &5121941724148339324
 MonoBehaviour:
   m_ObjectHideFlags: 0

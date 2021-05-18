@@ -1,6 +1,9 @@
+using Notloc.Utility;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 namespace ProjectBlast.Items.Containers
@@ -19,63 +22,44 @@ namespace ProjectBlast.Items.Containers
             gridSlots = new ContainerItemGridSlot[width * height];
         }
 
-        public void FillSlots(ICollection<Vector2Int> coordinates)
+        public void FillSlots(Item item, Vector2Int coordinates)
         {
-            foreach (Vector2Int coord in coordinates)
-            {
-                int index = coord.y * width + coord.x;
-                FillSlot(gridSlots, index);
+            for (int x = 0; x < item.Size.x; x++) {
+                for (int y = 0; y < item.Size.y; y++)
+                {
+                    Vector2Int coord = coordinates + new Vector2Int(x, y);
+                    int index = coord.y * width + coord.x;
+                    gridSlots[index].isFilled = true;
+                }
             }
         }
 
-        public void FillSlots(ICollection<int> indexes)
+        public void ClearSlots(Item item, Vector2Int coordinates)
         {
-            foreach (int index in indexes)
-                FillSlot(gridSlots, index);
-        }
-
-        public void FillSlot(int index)
-        {
-            FillSlot(gridSlots, index);
-        }
-
-        private static void FillSlot(ContainerItemGridSlot[] slots, int index)
-        {
-            slots[index].isFilled = true;
-        }
-
-        public void ClearSlots(ICollection<int> indexes)
-        {
-            foreach (int index in indexes)
-                ClearSlot(gridSlots, index);
-        }
-
-        public void ClearSlots(ICollection<Vector2Int> coordinates)
-        {
-            foreach (Vector2Int coord in coordinates)
-            {
-                int index = coord.y * width + coord.x;
-                ClearSlot(gridSlots, index);
+            for (int x = 0; x < item.Size.x; x++) {
+                for (int y = 0; y < item.Size.y; y++)
+                {
+                    Vector2Int coord = coordinates + new Vector2Int(x, y);
+                    int index = coord.y * width + coord.x;
+                    gridSlots[index].isFilled = false;
+                }
             }
         }
 
-        public void ClearSlot(int index)
+        public bool IsSlotsClear(Item item, Vector2Int coordinates)
         {
-            ClearSlot(gridSlots, index);
+            for (int x = 0; x < item.Size.x; x++)
+                for (int y = 0; y < item.Size.y; y++) 
+                    if (!IsSlotClear(coordinates + new Vector2Int(x, y)))
+                        return false;
+            
+            return true;
         }
 
-        private static void ClearSlot(ContainerItemGridSlot[] slots, int index)
+        public bool IsValidCoordinates(Vector2Int coordinates)
         {
-            slots[index].isFilled = false;
-        }
-
-        public bool IsSlotsClear(ICollection<int> indexes)
-        {
-            foreach (int index in indexes)
-            {
-                if (!IsSlotClear(gridSlots, index))
-                    return false;
-            }
+            if (coordinates.x < 0 || coordinates.y < 0 || coordinates.x >= width || coordinates.y >= height)
+                return false;
             return true;
         }
 
@@ -83,6 +67,9 @@ namespace ProjectBlast.Items.Containers
         {
             foreach (Vector2Int coord in coordinates)
             {
+                if (!IsValidCoordinates(coord))
+                    return false;
+
                 int index = coord.y * width + coord.x;
                 if (!IsSlotClear(gridSlots, index))
                     return false;
@@ -90,14 +77,19 @@ namespace ProjectBlast.Items.Containers
             return true;
         }
 
-        public bool IsSlotClear(int index)
+        public bool IsSlotClear(Vector2Int coordinates)
         {
+            if (!IsValidCoordinates(coordinates))
+                return false;
+            int index = coordinates.y * width + coordinates.x;
             return IsSlotClear(gridSlots, index);
         }
 
-        public static bool IsSlotClear(ContainerItemGridSlot[] slots, int index)
+        private static bool IsSlotClear(ContainerItemGridSlot[] slots, int index)
         {
-            return slots[index].isFilled;
+            if (index < 0 || index >= slots.Length)
+                return false; // Out of Bounds
+            return !slots[index].isFilled;
         }
 
     }

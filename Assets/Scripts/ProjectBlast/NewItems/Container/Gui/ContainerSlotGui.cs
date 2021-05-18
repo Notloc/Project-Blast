@@ -7,17 +7,22 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ContainerSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ContainerSlotGui : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    public static readonly int SLOT_SIZE_PIXELS = 64;
+
     [SerializeField] Image tintImage = null;
     [SerializeField] Color selectedTint = new Color(1f, 1f, 1f, 0.4f);
 
-    private NewContainer container;
+    private Container container;
     private int index;
 
     private bool isSelected;
+    private bool isTinted;
 
-    public void Assign(NewContainer container, int index)
+    private Color customTint = Color.clear;
+
+    public void Assign(Container container, int index)
     {
         this.container = container;
         this.index = index;
@@ -44,6 +49,19 @@ public class ContainerSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void UpdateTint()
     {
-        tintImage.color = isSelected ? selectedTint : Color.clear;
+        tintImage.color = isTinted ? customTint : isSelected ? selectedTint : Color.clear;
+    }
+
+    public void SetTint(Color customTint)
+    {
+        isTinted = true;
+        this.customTint = customTint;
+        UpdateTint();
+    }
+
+    public void ClearTint()
+    {
+        isTinted = false;
+        UpdateTint();
     }
 }
