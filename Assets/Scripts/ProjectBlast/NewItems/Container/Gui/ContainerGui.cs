@@ -75,11 +75,11 @@ namespace ProjectBlast.Items.Containers.Gui
 
         private void UpdateItems()
         {
-            IList<ContainerItemData> items = activeContainer.Contents.GetItems();
+            IList<ContainerItemInstance> items = activeContainer.Contents.GetItems();
             List<ContainerItemGui> itemGuis = containerItemPool.Get(items.Count);
             for (int i = 0; i < itemGuis.Count; i++)
             {
-                ContainerItemData itemData = items[i];
+                ContainerItemInstance itemData = items[i];
                 ContainerItemGui itemGui = itemGuis[i];
 
                 itemGui.gameObject.SetActive(true);
@@ -103,7 +103,7 @@ namespace ProjectBlast.Items.Containers.Gui
             activeContainer = null;
         }
 
-        public void HoverItem(Item item, Vector2Int coordinates, bool isValid)
+        public void HoverItem(ItemInstance item, Vector2Int coordinates, bool isValid)
         {
             Vector2Int dimensions = activeContainer.Dimensions;
             Vector2Int itemSize = item.Size;

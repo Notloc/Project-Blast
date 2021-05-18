@@ -21,7 +21,7 @@ namespace ProjectBlast.Items.Containers.Gui
         private RectTransform rect;
 
         private Container container;
-        private ContainerItemData itemData;
+        private ContainerItemInstance itemData;
         private Vector2Int coordinates;
 
         private void Awake()
@@ -43,8 +43,8 @@ namespace ProjectBlast.Items.Containers.Gui
             rect.anchoredPosition = anchorPos * ContainerSlotGui.SLOT_SIZE_PIXELS;
         }
 
-        public ContainerItemData GetItemData() => itemData; 
-        public void SetItemData(ContainerItemData itemData)
+        public ContainerItemInstance GetItemData() => itemData; 
+        public void SetItemData(ContainerItemInstance itemData)
         {
             this.itemData = itemData;
             itemImage.sprite = itemData != null ? itemData.Item.Sprite : null;

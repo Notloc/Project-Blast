@@ -25,7 +25,7 @@ namespace ProjectBlast.Items.Containers
             contents = new ContainerContents(width, height);
         }
 
-        public bool AddItem(Item item)
+        public bool AddItem(ItemInstance item)
         {
             Vector2Int size = item.Size;
             for (int y = 0; y < height && y + size.y <= height; y++) {
@@ -58,12 +58,12 @@ namespace ProjectBlast.Items.Containers
             return false;
         }
 
-        public bool AddItem(Item item, Vector2Int coordinates)
+        public bool AddItem(ItemInstance item, Vector2Int coordinates)
         {
             return contents.AddItem(item, coordinates);
         }
 
-        public bool RemoveItem(Item item)
+        public bool RemoveItem(ItemInstance item)
         {
             return contents.RemoveItem(item);
         }

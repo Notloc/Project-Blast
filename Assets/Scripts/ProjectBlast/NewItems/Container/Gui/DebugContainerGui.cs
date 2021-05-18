@@ -10,16 +10,16 @@ namespace ProjectBlast.Debugging
     {
         Container container;
         [SerializeField] ContainerGui containerView = null;
-        [SerializeField] List<Item> items = null;
+        [SerializeField] List<ItemBase> items = null;
         [SerializeField] int width, height;
 
         private void Start()
         {
             container = new Container(width, height);
             
-            foreach (Item item in items)
+            foreach (ItemBase item in items)
             {
-                container.AddItem(item);
+                container.AddItem(new ItemInstance(item));
             }
 
             containerView.SetContainer(container);

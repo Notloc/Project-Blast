@@ -5,15 +5,16 @@ using UnityEngine;
 namespace ProjectBlast.Items.Containers
 {
     [System.Serializable]
-    public class ContainerItemData
+    public class ContainerItemInstance
     {
-        [SerializeField] Item item;
+        [SerializeField] ItemInstance item;
         [SerializeField] Vector2Int coordinates;
+        [SerializeField] bool isRotated = false;
 
-        public Item Item => item;
+        public ItemInstance Item => item;
         public Vector2Int Coordinates => coordinates;
 
-        public ContainerItemData(Item item, Vector2Int coordinates)
+        public ContainerItemInstance(ItemInstance item, Vector2Int coordinates)
         {
             this.item = item;
             this.coordinates = coordinates;

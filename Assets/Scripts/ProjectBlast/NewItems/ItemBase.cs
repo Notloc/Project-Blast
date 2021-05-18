@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class Item : ScriptableObject
+public class ItemBase : ScriptableObject
 {
-    [SerializeField] Sprite sprite = null;
     [SerializeField] Vector2Int size = Vector2Int.one;
+    [SerializeField] Sprite sprite = null;
 
-    public Sprite Sprite => sprite;
     public Vector2Int Size => size;
+    public Sprite Sprite => sprite;
 }

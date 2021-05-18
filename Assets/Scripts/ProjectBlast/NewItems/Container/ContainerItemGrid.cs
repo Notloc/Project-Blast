@@ -22,10 +22,10 @@ namespace ProjectBlast.Items.Containers
             gridSlots = new ContainerItemGridSlot[width * height];
         }
 
-        public void FillSlots(Item item, Vector2Int coordinates)
+        public void FillSlots(Vector2Int size, Vector2Int coordinates)
         {
-            for (int x = 0; x < item.Size.x; x++) {
-                for (int y = 0; y < item.Size.y; y++)
+            for (int x = 0; x < size.x; x++) {
+                for (int y = 0; y < size.y; y++)
                 {
                     Vector2Int coord = coordinates + new Vector2Int(x, y);
                     int index = coord.y * width + coord.x;
@@ -34,10 +34,10 @@ namespace ProjectBlast.Items.Containers
             }
         }
 
-        public void ClearSlots(Item item, Vector2Int coordinates)
+        public void ClearSlots(Vector2Int size, Vector2Int coordinates)
         {
-            for (int x = 0; x < item.Size.x; x++) {
-                for (int y = 0; y < item.Size.y; y++)
+            for (int x = 0; x < size.x; x++) {
+                for (int y = 0; y < size.y; y++)
                 {
                     Vector2Int coord = coordinates + new Vector2Int(x, y);
                     int index = coord.y * width + coord.x;
@@ -46,10 +46,10 @@ namespace ProjectBlast.Items.Containers
             }
         }
 
-        public bool IsSlotsClear(Item item, Vector2Int coordinates)
+        public bool IsSlotsClear(Vector2Int size, Vector2Int coordinates)
         {
-            for (int x = 0; x < item.Size.x; x++)
-                for (int y = 0; y < item.Size.y; y++) 
+            for (int x = 0; x < size.x; x++)
+                for (int y = 0; y < size.y; y++) 
                     if (!IsSlotClear(coordinates + new Vector2Int(x, y)))
                         return false;
             

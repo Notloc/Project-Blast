@@ -16,8 +16,8 @@ namespace ProjectBlast.Items.Containers.Gui
 
         public static void OnItemDragStart(ContainerItemGui itemGui, Container container)
         {
-            ContainerItemData itemData = itemGui.GetItemData();
-            Item item = itemData.Item;
+            ContainerItemInstance itemData = itemGui.GetItemData();
+            ItemInstance item = itemData.Item;
             originContainer = container;
 
             originCoordinates.Clear();
@@ -28,8 +28,8 @@ namespace ProjectBlast.Items.Containers.Gui
 
         public static void OnItemDrag(ContainerItemGui itemGui, Container originContainer)
         {
-            ContainerItemData itemData = itemGui.GetItemData();
-            Item item = itemData.Item;
+            ContainerItemInstance itemData = itemGui.GetItemData();
+            ItemInstance item = itemData.Item;
 
             int pixelSize = ContainerSlotGui.SLOT_SIZE_PIXELS;
             RectTransform rect = (RectTransform)itemGui.transform;
@@ -63,8 +63,8 @@ namespace ProjectBlast.Items.Containers.Gui
 
         public static void OnItemDragEnd(ContainerItemGui itemGui, Container originContainer)
         {
-            ContainerItemData itemData = itemGui.GetItemData();
-            Item item = itemData.Item;
+            ContainerItemInstance itemData = itemGui.GetItemData();
+            ItemInstance item = itemData.Item;
 
             int pixelSize = ContainerSlotGui.SLOT_SIZE_PIXELS;
             RectTransform rect = (RectTransform)itemGui.transform;
@@ -122,7 +122,7 @@ namespace ProjectBlast.Items.Containers.Gui
             return uiRaycastBuffer[0].gameObject.GetComponentInParent<ContainerGui>();
         }
 
-        private static void ItemHover(Item item, Vector2Int itemCoordinates, ContainerGui targetGui, bool isValid)
+        private static void ItemHover(ItemInstance item, Vector2Int itemCoordinates, ContainerGui targetGui, bool isValid)
         {
             targetGui.HoverItem(item, itemCoordinates, isValid);
             previousHoverGui = targetGui;

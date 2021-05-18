@@ -37,6 +37,28 @@ namespace Notloc.Utility
             return new Vector3(vector3.x, 0f, vector3.z);
         }
 
+
+
+
+
+
+
+
+
+        public static Vector2Int Swap(this Vector2Int vector)
+        {
+            return new Vector2Int(vector.y, vector.x);
+        }
+
+
+
+
+
+
+
+
+
+
         /// <summary>
         /// Zeroes the quaternion's x rotation.
         /// In the right reference frame this "flattens" the rotation to be on plane.
