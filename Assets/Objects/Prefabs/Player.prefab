@@ -203,7 +203,6 @@ GameObject:
   - component: {fileID: 7788034856381914481}
   - component: {fileID: 5930233270721937698}
   - component: {fileID: 7788034856381914482}
-  - component: {fileID: 8332492404274437293}
   - component: {fileID: 7788034856381914483}
   m_Layer: 0
   m_Name: Player
@@ -241,7 +240,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 7788034856381914483}
-  inputScript: {fileID: 8332492404274437293}
   playerController: {fileID: 7788034856381914482}
 --- !u!114 &7788034856381914482
 MonoBehaviour:
@@ -266,92 +264,6 @@ MonoBehaviour:
   interactionDistance: 3.5
   holdToGrabLength: 0.35
   grabbedItemDistanceMult: 0.5
---- !u!114 &8332492404274437293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7788034856381914493}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e226cc8f5110fc40abd6e99da54b78e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputs:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 0
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues:
-    - PlayerForward
-    - PlayerStrafe
-    - PlayerSprint
-    - PlayerCrouch
-    - PlayerInteract
-    - CameraPitch
-    - CameraYaw
-    - ShipPitch
-    - ShipYaw
-    - ShipRoll
-    - ShipLand
-    - ShipExit
-    - ShipTakeOff
-    - ShipThrottleUp
-    - ShipThrottleDown
-    - Crouch
-    _keys:
-    - PlayerForward
-    - PlayerStrafe
-    - PlayerSprint
-    - PlayerCrouch
-    - PlayerInteract
-    - CameraPitch
-    - CameraYaw
-    - ShipPitch
-    - ShipYaw
-    - ShipRoll
-    - ShipLand
-    - ShipExit
-    - ShipTakeOff
-    - ShipThrottleUp
-    - ShipThrottleDown
-    - Crouch
-    _values:
-    - Vertical
-    - Horizontal
-    - Sprint
-    - Crouch
-    - Interact
-    - Mouse Y
-    - Mouse X
-    - Vertical
-    - Horizontal
-    - Roll
-    - ShipLand
-    - ShipExit
-    - ShipTakeOff
-    - ThrottleUp
-    - ThrottleDown
-    - Crouch
 --- !u!54 &7788034856381914483
 Rigidbody:
   m_ObjectHideFlags: 0

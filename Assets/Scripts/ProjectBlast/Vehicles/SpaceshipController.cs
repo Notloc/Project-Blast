@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ProjectBlast.Vehicles
 {
-    public class SpaceshipController : MonoBehaviour, IController
+    public class SpaceshipController : MonoBehaviour
     {
         [SerializeField] Spaceship spaceship = null;
         [SerializeField] protected new Rigidbody rigidbody = null;
@@ -16,7 +16,6 @@ namespace ProjectBlast.Vehicles
         [SerializeField] float yawMultiplier = 0.25f;
         [SerializeField] float rollMultiplier = 3f;
 
-        private InputScript inputScript;
         private bool controlsActive = true;
 
         Vector3 rotationInput;
@@ -31,14 +30,7 @@ namespace ProjectBlast.Vehicles
             controlsActive = state;
         }
 
-        public void SetInput(InputScript input)
-        {
-            inputScript = input;
-            if (input)
-                TakeInput();
-        }
-
-        private void TakeInput()
+/*        private void TakeInput()
         {
             rotationInput = new Vector3(inputScript.GetAxis("ShipPitch") * pitchMultiplier, inputScript.GetAxis("ShipYaw") * yawMultiplier, inputScript.GetAxis("ShipRoll") * rollMultiplier);
             takeOff = inputScript.GetButton("ShipTakeOff");
@@ -55,14 +47,14 @@ namespace ProjectBlast.Vehicles
 
                 throttle = Mathf.Clamp01(throttle);
             }
-        }
+        }*/
 
         private void Update()
         {
             if (!controlsActive)
                 return;
 
-            TakeInput();
+            //TakeInput();
         }
 
         private void FixedUpdate()

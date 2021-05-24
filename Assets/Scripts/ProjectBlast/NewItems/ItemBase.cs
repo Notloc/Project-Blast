@@ -8,6 +8,6 @@ public class ItemBase : ScriptableObject
     [SerializeField] Vector2Int size = Vector2Int.one;
     [SerializeField] Sprite sprite = null;
 
-    public Vector2Int Size => size;
+    public Vector2Int BaseSize => size;
     public Sprite Sprite => sprite;
 }

@@ -11,11 +11,6 @@ namespace ProjectBlast.PlayerScripts
         //[SerializeField] ContainerBehaviour containerBehaviour = null;
         [SerializeField] PlayerController playerController = null;
 
-        private void Awake()
-        {
-            SetActiveController(playerController);
-        }
-
         private void Start()
         {
             CameraManager.Instance.SetCameraController(CameraControllerType.PLAYER, transform);
@@ -41,18 +36,6 @@ namespace ProjectBlast.PlayerScripts
         {
             base.Unlock();
             playerController.SetControlsActive(true);
-        }
-
-        public override void SetActiveController(IController controller)
-        {
-            base.SetActiveController(controller);
-            if (activeController == null)
-            {
-                activeController = playerController;
-                activeController.SetInput(inputScript);
-                activeController.enabled = true;
-                activeController.SetControlsActive(!isLocked);
-            }
         }
     }
 }

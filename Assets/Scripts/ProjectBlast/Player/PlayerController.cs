@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ProjectBlast.PlayerScripts
 {
-    public class PlayerController : MonoBehaviour, IController
+    public class PlayerController : MonoBehaviour
     {
         [Header("Required References")]
         [SerializeField] Player player = null;
@@ -25,8 +25,6 @@ namespace ProjectBlast.PlayerScripts
         [SerializeField] float holdToGrabLength = 0.35f;
         [SerializeField] float grabbedItemDistanceMult = 0.5f;
 
-        private InputScript inputScript;
-
         private bool controlEnabled = true;
 
         private IInteractable interactionTarget = null;
@@ -41,11 +39,6 @@ namespace ProjectBlast.PlayerScripts
             controlEnabled = state;
         }
 
-        public void SetInput(InputScript input)
-        {
-            inputScript = input;
-        }
-
         private void Start()
         {
             camera = Camera.main;
@@ -56,20 +49,9 @@ namespace ProjectBlast.PlayerScripts
             if (!controlEnabled)
                 return;
             Interact();
-            if (!inputScript)
-                return;
 
-            UpdateTimers();
             Sprint();
             Crouch();
-        }
-
-        private void UpdateTimers()
-        {
-            if (inputScript.GetButton("PlayerInteract"))
-                grabTimer += Time.deltaTime;
-            else
-                grabTimer = 0f;
         }
 
         private void FixedUpdate()
@@ -83,11 +65,7 @@ namespace ProjectBlast.PlayerScripts
 
         private void Rotate()
         {
-            Vector3 direction = new Vector3(
-                inputScript.GetAxis("PlayerStrafe"),
-                0f,
-                inputScript.GetAxis("PlayerForward")
-            );
+            Vector3 direction = Vector3.zero;
             if (direction == Vector3.zero)
                 return;
 
@@ -100,8 +78,8 @@ namespace ProjectBlast.PlayerScripts
 
         private void Move(float deltaTime)
         {
-            float xInput = inputScript.GetAxis("PlayerStrafe");
-            float yInput = inputScript.GetAxis("PlayerForward");
+            float xInput = 0f;
+            float yInput = 0f;
 
             Vector3 movement = Vector3.ClampMagnitude(new Vector3(xInput, 0f, yInput), 1f);
             //Determines movement speed based on sprinting and sprint speed
@@ -111,7 +89,7 @@ namespace ProjectBlast.PlayerScripts
 
         private void Sprint()
         {
-            bool boostOn = inputScript.GetButtonDown("PlayerSprint");
+            bool boostOn = false;
             //If the sprint key is pressed, toggle sprint
             if (boostOn && !isCrouch)
             {
@@ -120,7 +98,7 @@ namespace ProjectBlast.PlayerScripts
                 isCrouch = false;
             }
             //If not moving, stop sprinting
-            if (!inputScript.GetButton("PlayerStrafe") && !inputScript.GetButton("PlayerForward") || !isSprint)
+            if (false && false || !isSprint)
             {
                 isSprint = false;
                 boost = 0f;
@@ -129,13 +107,13 @@ namespace ProjectBlast.PlayerScripts
 
         private void Crouch()
         {
-            if (inputScript.GetButtonDown("Crouch"))
+            if (false)
             {
                 isCrouch = !isCrouch;
                 isSprint = false;
                 crouchPenalty = 0.7f;
             }
-            if (inputScript.GetButtonUp("Crouch"))
+            if (false)
             {
                 isCrouch = false;
                 crouchPenalty = 0f;
@@ -173,7 +151,7 @@ namespace ProjectBlast.PlayerScripts
                 interactionTarget = hit.collider.GetComponentInParent<IInteractable>();
             }
 
-            if (interactionTarget != null && inputScript.GetButtonUp("PlayerInteract"))
+            if (interactionTarget != null && false)
                 interactionTarget.Interact(player);
         }
 
@@ -204,7 +182,7 @@ namespace ProjectBlast.PlayerScripts
 
         private void UpdateGrab()
         {
-            if (grabTarget == null || inputScript.GetButtonUp("PlayerInteract"))
+            if (grabTarget == null || false)
             {
                 if (grabTarget != null)
                 {

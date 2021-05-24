@@ -15,7 +15,8 @@ namespace ProjectBlast.Debugging
 
         private void Start()
         {
-            container = new Container(width, height);
+            container = ScriptableObject.CreateInstance<Container>();
+            container.Initialize(width, height);
             
             foreach (ItemBase item in items)
             {

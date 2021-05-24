@@ -44,7 +44,7 @@ namespace ProjectBlast.Vehicles
                 return false;
 
             SeatPilot(newPilot);
-            newPilot.SetActiveController(shipController);
+            //newPilot.SetActiveController(shipController);
 
             if (newPilot as Player)
             {
@@ -83,7 +83,7 @@ namespace ProjectBlast.Vehicles
             pilot.transform.position = exitPoint.position;
             pilot.Unlock();
             pilot.SetCollidersActive(true);
-            pilot.SetActiveController(null);
+            //pilot.SetActiveController(null);
             pilot = null;
         }
 

@@ -25,10 +25,10 @@ namespace ProjectBlast.CameraScripts
         {
             // Move
             Vector3 basePosition = target.position + height;
-
+            
             // Rotate
-            float deltaXRotation = -Input.GetAxis("Mouse Y") * sensitivity;
-            float deltaYRotation = Input.GetAxis("Mouse X") * sensitivity;
+            float deltaXRotation = 0f;//-Input.GetAxis("Mouse Y") * sensitivity;
+            float deltaYRotation = 0f;//Input.GetAxis("Mouse X") * sensitivity;
 
             cameraRotation.x = Mathf.Clamp(cameraRotation.x + deltaXRotation, minXRotation, maxXRotation);
             cameraRotation.y = cameraRotation.y + deltaYRotation % 360f;

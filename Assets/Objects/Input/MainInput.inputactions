@@ -1,0 +1,33 @@
+{
+    "name": "MainInput",
+    "maps": [
+        {
+            "name": "Inventory",
+            "id": "20581c89-0359-46a9-9b88-bf0ce78a3733",
+            "actions": [
+                {
+                    "name": "Rotate Item",
+                    "type": "Button",
+                    "id": "86d36a6b-47ad-4f62-9734-d2f01330771d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "06dacac9-66e3-4ab1-8339-5fe8c7e6f404",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate Item",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

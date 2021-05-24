@@ -26,6 +26,8 @@ namespace ProjectBlast.Items.Containers.Gui
 
         private Container activeContainer;
 
+        public RectTransform ItemParent => itemArea;
+
         private void Awake()
         {
             containerSlotPool.Initialize(containerSlotPrefab, DEFAULT_SLOT_POOL_SIZE);
@@ -35,10 +37,19 @@ namespace ProjectBlast.Items.Containers.Gui
         public Container GetContainer() => activeContainer;
         public void SetContainer(Container container)
         {
+            if (this.activeContainer)
+            {
+                activeContainer.OnAddItem -= OnAddItem;
+                activeContainer.OnRemoveItem -= OnRemoveItem;
+            }
+
             ClearContainerView();
             activeContainer = container;
             if (activeContainer == null)
                 return;
+
+            activeContainer.OnAddItem += OnAddItem;
+            activeContainer.OnRemoveItem += OnRemoveItem;
 
             UpdateGrid();
             UpdateItems();
@@ -75,19 +86,11 @@ namespace ProjectBlast.Items.Containers.Gui
 
         private void UpdateItems()
         {
-            IList<ContainerItemInstance> items = activeContainer.Contents.GetItems();
+            IList<ContainerItemInstance> items = activeContainer.GetItems();
             List<ContainerItemGui> itemGuis = containerItemPool.Get(items.Count);
             for (int i = 0; i < itemGuis.Count; i++)
             {
-                ContainerItemInstance itemData = items[i];
-                ContainerItemGui itemGui = itemGuis[i];
-
-                itemGui.gameObject.SetActive(true);
-                itemGui.transform.SetParent(itemArea, false);
-
-                itemGui.SetItemData(itemData);
-                itemGui.SetContainer(activeContainer);
-                itemGui.SetCoordinates(itemData.Coordinates);
+                SetupContainerItemGui(items[i], itemGuis[i]);
             }
         }
 
@@ -96,6 +99,9 @@ namespace ProjectBlast.Items.Containers.Gui
             if (activeContainer == null)
                 return;
 
+            containerItemPool.ReturnToPool(itemGuiMap.Values);
+            itemGuiMap.Clear();
+
             foreach (var slot in activeSlots)
                 slot.Unassign();
 
@@ -103,19 +109,18 @@ namespace ProjectBlast.Items.Containers.Gui
             activeContainer = null;
         }
 
-        public void HoverItem(ItemInstance item, Vector2Int coordinates, bool isValid)
+        public void HoverItem(Vector2Int itemDimensions, Vector2Int coordinates, bool isValid)
         {
             Vector2Int dimensions = activeContainer.Dimensions;
-            Vector2Int itemSize = item.Size;
             Color color = isValid ? validHoverColor : invalidHoverColor;
 
-            for (int x = 0; x < itemSize.x; x++)
+            for (int x = 0; x < itemDimensions.x; x++)
             {
                 int x2 = coordinates.x + x;
                 if (x2 >= dimensions.x || x2 < 0)
                     continue;
 
-                for (int y = 0; y < itemSize.y; y++)
+                for (int y = 0; y < itemDimensions.y; y++)
                 {
                     int y2 = coordinates.y + y;
                     if (y2 >= dimensions.y || y2 < 0)
@@ -133,6 +138,35 @@ namespace ProjectBlast.Items.Containers.Gui
             {
                 slot.ClearTint();
             }
+        }
+
+        private void OnAddItem(ContainerItemInstance itemInstance)
+        {
+            ContainerItemGui itemGui = containerItemPool.Get();
+            SetupContainerItemGui(itemInstance, itemGui);
+        }
+
+        private void OnRemoveItem(ContainerItemInstance itemInstance)
+        {
+            if (itemGuiMap.ContainsKey(itemInstance))
+            {
+                containerItemPool.ReturnToPool(itemGuiMap[itemInstance]);
+                itemGuiMap.Remove(itemInstance);
+            }
+        }
+
+        private Dictionary<ContainerItemInstance, ContainerItemGui> itemGuiMap = new Dictionary<ContainerItemInstance, ContainerItemGui>();
+
+        private void SetupContainerItemGui(ContainerItemInstance itemInstance, ContainerItemGui itemGui)
+        {
+            itemGui.gameObject.SetActive(true);
+            itemGui.transform.SetParent(itemArea, false);
+
+            itemGui.SetItemInstance(itemInstance);
+            itemGui.SetContainer(activeContainer);
+            itemGui.SetCoordinates(itemInstance.Coordinates);
+
+            itemGuiMap.Add(itemInstance, itemGui);
         }
     }
 }

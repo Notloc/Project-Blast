@@ -54,7 +54,14 @@ namespace Notloc.Utility
             return objs;
         }
 
-        public void ReturnToPool(List<T> objs)
+        public void ReturnToPool(T obj)
+        {
+            obj.gameObject.SetActive(false);
+            obj.transform.parent = parent;
+            availableObjects.Enqueue(obj); 
+        }
+
+        public void ReturnToPool(ICollection<T> objs)
         {
             foreach (var obj in objs)
             {

@@ -1,3 +1,4 @@
+using Notloc.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,9 @@ public class ItemInstance
 {
     public ItemBase Item => item;
     public Sprite Sprite => item.Sprite;
-    public Vector2Int Size => item.Size;
+
+    public Vector2Int BaseSize => item.BaseSize;
+    public Vector2Int FlippedSize => item.BaseSize.Swap();
 
     private ItemBase item;
 

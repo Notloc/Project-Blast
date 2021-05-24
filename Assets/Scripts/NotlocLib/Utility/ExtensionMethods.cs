@@ -71,5 +71,25 @@ namespace Notloc.Utility
             eulers.x = 0f;
             return Quaternion.Euler(eulers);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public static RectTransform RectTransform(this Transform t)
+        {
+            return (RectTransform)t;
+        }
+
+
+
     }
 }

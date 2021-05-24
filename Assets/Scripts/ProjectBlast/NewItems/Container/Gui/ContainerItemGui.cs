@@ -13,6 +13,7 @@ namespace ProjectBlast.Items.Containers.Gui
     {
         [SerializeField] Image itemImage = null;
         [SerializeField] Vector2Int size = Vector2Int.one;
+        [SerializeField] ContainerItemDragManager itemDragManager = null;
 
         private UnityEvent<ContainerItemGui, Container> OnItemDrag = new UnityEvent<ContainerItemGui, Container>();
         private UnityEvent<ContainerItemGui, Container> OnItemDragStart = new UnityEvent<ContainerItemGui, Container>();
@@ -21,7 +22,7 @@ namespace ProjectBlast.Items.Containers.Gui
         private RectTransform rect;
 
         private Container container;
-        private ContainerItemInstance itemData;
+        private ContainerItemInstance itemInstance;
         private Vector2Int coordinates;
 
         private void Awake()
@@ -29,9 +30,9 @@ namespace ProjectBlast.Items.Containers.Gui
             rect = (RectTransform)transform;
             rect.sizeDelta = size * ContainerSlotGui.SLOT_SIZE_PIXELS;
 
-            OnItemDragStart.AddListener(ContainerItemDragManager.OnItemDragStart);
-            OnItemDrag.AddListener(ContainerItemDragManager.OnItemDrag);
-            OnItemDragEnd.AddListener(ContainerItemDragManager.OnItemDragEnd);
+            OnItemDragStart.AddListener(itemDragManager.OnItemDragStart);
+            OnItemDrag.AddListener(itemDragManager.OnItemDrag);
+            OnItemDragEnd.AddListener(itemDragManager.OnItemDragEnd);
         }
 
         public Vector2Int GetCoordinates() => coordinates;
@@ -43,11 +44,11 @@ namespace ProjectBlast.Items.Containers.Gui
             rect.anchoredPosition = anchorPos * ContainerSlotGui.SLOT_SIZE_PIXELS;
         }
 
-        public ContainerItemInstance GetItemData() => itemData; 
-        public void SetItemData(ContainerItemInstance itemData)
+        public ContainerItemInstance GetItemInstance() => itemInstance; 
+        public void SetItemInstance(ContainerItemInstance itemInstance)
         {
-            this.itemData = itemData;
-            itemImage.sprite = itemData != null ? itemData.Item.Sprite : null;
+            this.itemInstance = itemInstance;
+            itemImage.sprite = itemInstance != null ? itemInstance.Item.Sprite : null;
             Resize();
         }
 
@@ -59,29 +60,31 @@ namespace ProjectBlast.Items.Containers.Gui
 
         private void Resize()
         {
-            rect.sizeDelta = itemData.Item.Size * ContainerSlotGui.SLOT_SIZE_PIXELS;
+            rect.sizeDelta = itemInstance.Size * ContainerSlotGui.SLOT_SIZE_PIXELS;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            itemImage.raycastTarget = false;
+            SetRaycastTarget(false);
+            itemImage.enabled = false;
             OnItemDragStart?.Invoke(this, container);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            rect.anchoredPosition += eventData.delta;
-
-
-            Container targetContainer = container; // TODO, get this via raycast or something
-            OnItemDrag?.Invoke(this, targetContainer);
+            OnItemDrag?.Invoke(this, container);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            itemImage.raycastTarget = true;
-            Container targetContainer = container; // TODO, get this via raycast or something
-            OnItemDragEnd?.Invoke(this, targetContainer);
+            SetRaycastTarget(true);
+            itemImage.enabled = true;
+            OnItemDragEnd?.Invoke(this, container);
+        }
+
+        public void SetRaycastTarget(bool state)
+        {
+            itemImage.raycastTarget = state;
         }
     }
 }
