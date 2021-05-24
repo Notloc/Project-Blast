@@ -15,7 +15,7 @@ namespace ProjectBlast.Items.Containers.Gui
         [SerializeField] Vector2Int size = Vector2Int.one;
         [SerializeField] ContainerItemDragManager itemDragManager = null;
 
-        private UnityEvent<ContainerItemGui, Container> OnItemDrag = new UnityEvent<ContainerItemGui, Container>();
+        private UnityEvent OnItemDrag = new UnityEvent();
         private UnityEvent<ContainerItemGui, Container> OnItemDragStart = new UnityEvent<ContainerItemGui, Container>();
         private UnityEvent<ContainerItemGui, Container> OnItemDragEnd = new UnityEvent<ContainerItemGui, Container>();
 
@@ -72,7 +72,7 @@ namespace ProjectBlast.Items.Containers.Gui
 
         public void OnDrag(PointerEventData eventData)
         {
-            OnItemDrag?.Invoke(this, container);
+            OnItemDrag?.Invoke();
         }
 
         public void OnEndDrag(PointerEventData eventData)

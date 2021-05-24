@@ -43,7 +43,10 @@ namespace Notloc.Utility
 
 
 
-
+        public static Vector2 Swap(this Vector2 vector)
+        {
+            return new Vector2(vector.y, vector.x);
+        }
 
         public static Vector2Int Swap(this Vector2Int vector)
         {

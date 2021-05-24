@@ -57,7 +57,7 @@ namespace Notloc.Utility
         public void ReturnToPool(T obj)
         {
             obj.gameObject.SetActive(false);
-            obj.transform.parent = parent;
+            obj.transform.SetParent(parent, false);
             availableObjects.Enqueue(obj); 
         }
 
@@ -66,7 +66,7 @@ namespace Notloc.Utility
             foreach (var obj in objs)
             {
                 obj.gameObject.SetActive(false);
-                obj.transform.parent = parent;
+                obj.transform.SetParent(parent, false);
                 availableObjects.Enqueue(obj);
             }
         }

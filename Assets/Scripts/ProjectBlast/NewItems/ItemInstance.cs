@@ -10,7 +10,6 @@ public class ItemInstance
     public Sprite Sprite => item.Sprite;
 
     public Vector2Int BaseSize => item.BaseSize;
-    public Vector2Int FlippedSize => item.BaseSize.Swap();
 
     private ItemBase item;
 

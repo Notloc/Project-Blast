@@ -20,9 +20,11 @@ namespace ProjectBlast.Items.Containers.Gui
         private List<RaycastResult> uiRaycastBuffer = new List<RaycastResult>(10);
 
         private ContainerDragItemGui dragItemGui;
-        
+        private Container originContainer;
+
         public void OnItemDragStart(ContainerItemGui itemGui, Container container)
         {
+            this.originContainer = container;
             UpdateOriginContainerSlots(itemGui);
             SetDragItem(itemGui);
 
@@ -63,28 +65,21 @@ namespace ProjectBlast.Items.Containers.Gui
 
 
 
-        public void OnItemDrag(ContainerItemGui itemGui, Container originContainer)
+        public void OnItemDrag()
         {
             ContainerItemInstance itemData = dragItemGui.DragItemInstance;
             Vector2 mousePos = Mouse.current.position.ReadValue();
 
-            // Move drag item
-            RectTransform dragItemRect = dragItemGui.transform.RectTransform();
-            Vector2 offset = dragItemRect.sizeDelta/2f;
-            dragItemRect.anchoredPosition = mousePos - offset;
-
+            PositionDragItem(mousePos);
 
             ClearItemHover();
+
             // Get hovered container
             ContainerGui targetContainerGui = RaycastForContainerGui();
             if (!targetContainerGui)
                 return;
 
-            Vector2 dragPos;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(targetContainerGui.ItemParent, Mouse.current.position.ReadValue() - offset, null, out dragPos);
-            
-            int pixelSize = ContainerSlotGui.SLOT_SIZE_PIXELS;
-            Vector2Int dragCoordinates = Vector2Int.RoundToInt(new Vector2(dragPos.x / pixelSize, -dragPos.y / pixelSize));
+            Vector2Int dragCoordinates = CalculateDragCoordinates(mousePos, targetContainerGui);
 
             // Determine coordinates item will occupy
             Container targetContainer = targetContainerGui.GetContainer();
@@ -108,24 +103,17 @@ namespace ProjectBlast.Items.Containers.Gui
 
         public void OnItemDragEnd(ContainerItemGui itemGui, Container originContainer)
         {
-            ContainerItemInstance itemData = dragItemGui.DragItemInstance;
             HideDragItem();
+            ClearItemHover();
 
             // Get hovered container
             ContainerGui targetContainerGui = RaycastForContainerGui();
             if (!targetContainerGui)
                 return;
 
-            RectTransform dragItemRect = dragItemGui.transform.RectTransform();
-            Vector2 offset = dragItemRect.sizeDelta / 2f;
+            Vector2Int dragCoordinates = CalculateDragCoordinates(Mouse.current.position.ReadValue(), targetContainerGui);
 
-            Vector2 dragPos;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(targetContainerGui.ItemParent, Mouse.current.position.ReadValue() - offset, null, out dragPos);
-
-            int pixelSize = ContainerSlotGui.SLOT_SIZE_PIXELS;
-            Vector2Int dragCoordinates = Vector2Int.RoundToInt(new Vector2(dragPos.x / pixelSize, -dragPos.y / pixelSize));
-
-            ClearItemHover();
+            ContainerItemInstance itemData = dragItemGui.DragItemInstance;
 
             // Determine coordinates item will occupy
             Container targetContainer = targetContainerGui.GetContainer();
@@ -179,6 +167,47 @@ namespace ProjectBlast.Items.Containers.Gui
         private void OnRotateItem(CallbackContext context)
         {
             dragItemGui.Rotate();
+            OnItemDrag();
+        }
+
+        private void PositionDragItem(Vector2 mousePos)
+        {
+            RectTransform dragItemRect = dragItemGui.transform.RectTransform();
+            dragItemRect.anchoredPosition = mousePos - CalculateItemOffset();
+        }
+
+        private Vector2Int CalculateDragCoordinates(Vector2 mousePos, ContainerGui targetContainerGui)
+        {
+            Vector2 itemOffset = CalculateItemOffset();
+
+            Vector2 dragPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(targetContainerGui.ItemParent, Mouse.current.position.ReadValue(), null, out dragPos);
+            dragPos += (targetContainerGui.ItemParent.sizeDelta / 2f); // Localize to bottom left of target container
+            
+            dragPos.x = dragPos.x - itemOffset.x;
+
+            if (dragItemGui.DragItemInstance.IsRotated)
+                dragPos.y = dragPos.y - itemOffset.y;
+            else
+                dragPos.y = dragPos.y + itemOffset.y;
+
+            dragPos.y = (dragPos.y - targetContainerGui.ItemParent.sizeDelta.y); // Flip y
+            return Vector2Int.RoundToInt(new Vector2(dragPos.x / ContainerSlotGui.SLOT_SIZE_PIXELS, -dragPos.y / ContainerSlotGui.SLOT_SIZE_PIXELS));
+        }
+
+        private Vector2 CalculateItemOffset()
+        {
+            RectTransform dragItemRect = dragItemGui.transform.RectTransform();
+            if (dragItemGui.DragItemInstance.IsRotated)
+            {
+                Vector2 itemOffset = dragItemRect.sizeDelta.Swap() / 2f;
+                itemOffset.y = itemOffset.y - dragItemRect.sizeDelta.x;
+                return itemOffset;
+            }
+            else
+            {
+                return dragItemRect.sizeDelta / 2f;
+            }
         }
     }
 }

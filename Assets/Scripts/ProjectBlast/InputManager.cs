@@ -8,5 +8,6 @@ public class InputManager : MonoBehaviour
     private void Awake()
     {
         mainInput = new MainInput();
+        mainInput.Enable();
     }
 }

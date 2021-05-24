@@ -27,7 +27,11 @@ namespace ProjectBlast.Items.Containers.Gui
         private void Resize()
         {
             RectTransform rect = (RectTransform)transform;
-            rect.sizeDelta = dragItemInstance.Size * ContainerSlotGui.SLOT_SIZE_PIXELS;
+            rect.sizeDelta = dragItemInstance.Item.BaseSize * ContainerSlotGui.SLOT_SIZE_PIXELS;
+            if (dragItemInstance.IsRotated)
+                rect.localRotation = Quaternion.Euler(0f, 0f, -90f);
+            else
+                rect.localRotation = Quaternion.identity;
         }
     }
 }
