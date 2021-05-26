@@ -2,6 +2,33 @@
     "name": "MainInput",
     "maps": [
         {
+            "name": "Player",
+            "id": "dadd9176-b62d-4478-9041-241f552dcd74",
+            "actions": [
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "048c8690-b4fd-4eee-b477-f7c3ff386f10",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a0b1f470-cd5b-48a4-974c-af55d016bb0c",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "Inventory",
             "id": "20581c89-0359-46a9-9b88-bf0ce78a3733",
             "actions": [

@@ -15,6 +15,7 @@ namespace ProjectBlast.Items.Containers.Gui
         {
             ContainerItemInstance target = itemGui.GetItemInstance();
             dragItemInstance = new ContainerItemInstance(target.Item, target.Coordinates, target.IsRotated);
+            itemImage.sprite = target.Item.Sprite;
             Resize();
         }
 

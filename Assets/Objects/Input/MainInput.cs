@@ -15,6 +15,33 @@ public class @MainInput : IInputActionCollection, IDisposable
     ""name"": ""MainInput"",
     ""maps"": [
         {
+            ""name"": ""Player"",
+            ""id"": ""dadd9176-b62d-4478-9041-241f552dcd74"",
+            ""actions"": [
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""048c8690-b4fd-4eee-b477-f7c3ff386f10"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""a0b1f470-cd5b-48a4-974c-af55d016bb0c"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""Inventory"",
             ""id"": ""20581c89-0359-46a9-9b88-bf0ce78a3733"",
             ""actions"": [
@@ -44,6 +71,9 @@ public class @MainInput : IInputActionCollection, IDisposable
     ],
     ""controlSchemes"": []
 }");
+        // Player
+        m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
+        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         // Inventory
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_RotateItem = m_Inventory.FindAction("Rotate Item", throwIfNotFound: true);
@@ -93,6 +123,39 @@ public class @MainInput : IInputActionCollection, IDisposable
         asset.Disable();
     }
 
+    // Player
+    private readonly InputActionMap m_Player;
+    private IPlayerActions m_PlayerActionsCallbackInterface;
+    private readonly InputAction m_Player_Interact;
+    public struct PlayerActions
+    {
+        private @MainInput m_Wrapper;
+        public PlayerActions(@MainInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputActionMap Get() { return m_Wrapper.m_Player; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
+        public void SetCallbacks(IPlayerActions instance)
+        {
+            if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
+            {
+                @Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+            }
+            m_Wrapper.m_PlayerActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
+            }
+        }
+    }
+    public PlayerActions @Player => new PlayerActions(this);
+
     // Inventory
     private readonly InputActionMap m_Inventory;
     private IInventoryActions m_InventoryActionsCallbackInterface;
@@ -125,6 +188,10 @@ public class @MainInput : IInputActionCollection, IDisposable
         }
     }
     public InventoryActions @Inventory => new InventoryActions(this);
+    public interface IPlayerActions
+    {
+        void OnInteract(InputAction.CallbackContext context);
+    }
     public interface IInventoryActions
     {
         void OnRotateItem(InputAction.CallbackContext context);

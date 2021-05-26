@@ -204,6 +204,7 @@ GameObject:
   - component: {fileID: 5930233270721937698}
   - component: {fileID: 7788034856381914482}
   - component: {fileID: 7788034856381914483}
+  - component: {fileID: 7497169486162052697}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -261,9 +262,6 @@ MonoBehaviour:
   isSprint: 0
   isCrouch: 0
   rotationSmoothing: 5
-  interactionDistance: 3.5
-  holdToGrabLength: 0.35
-  grabbedItemDistanceMult: 0.5
 --- !u!54 &7788034856381914483
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -280,3 +278,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &7497169486162052697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7788034856381914493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 508e44ba473a8c94388e7fe8f059e155, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 5930233270721937698}
+  interactionDistance: 3.5
+  holdToGrabLength: 0.35
+  grabbedItemDistanceMult: 0.5

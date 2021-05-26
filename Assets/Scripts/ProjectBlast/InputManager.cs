@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+namespace ProjectBlast.Engine
 {
-    public static MainInput mainInput;
-    private void Awake()
+    public class InputManager : MonoBehaviour
     {
-        mainInput = new MainInput();
-        mainInput.Enable();
+        public static MainInput mainInput;
+        private void Awake()
+        {
+            mainInput = new MainInput();
+            mainInput.Enable();
+        }
     }
 }
