@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: 3x1Item
   m_EditorClassIdentifier: 
   size: {x: 3, y: 1}
-  sprite: {fileID: 21300000, guid: dcc13e79f329a624d9349b45601ee1ee, type: 3}
+  sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}

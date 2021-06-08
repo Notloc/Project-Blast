@@ -11,6 +11,7 @@ namespace ProjectBlast.Vehicles
     public class Spaceship : MonoBehaviour, IVehicle, IInteractable
     {
         [SerializeField] new Rigidbody rigidbody = null;
+        [SerializeField] SpaceshipCameraController cameraController = null;
         [SerializeField] SpaceshipController shipController = null;
         [SerializeField] SpaceShipState shipState = SpaceShipState.LANDED;
 
@@ -25,6 +26,7 @@ namespace ProjectBlast.Vehicles
 
         [SerializeField] float landingRadius = 100f;
         [SerializeField] float landingTime = 6f;
+        
 
         public SpaceShipState ShipState { get { return shipState; } }
         public float MaxSpeed { get { return maxSpeed; } }
@@ -48,7 +50,7 @@ namespace ProjectBlast.Vehicles
 
             if (newPilot as Player)
             {
-                CameraManager.Instance.SetCameraController(CameraControllerType.SPACESHIP, transform);
+                CameraManager.Instance.SetActiveCameraController(cameraController);
             }
 
             return true;
@@ -61,7 +63,7 @@ namespace ProjectBlast.Vehicles
 
             if (pilot as Player)
             {
-                CameraManager.Instance.SetCameraController(CameraControllerType.PLAYER, pilot.transform);
+                CameraManager.Instance.DisableCameraController(cameraController);
             }
 
             RemovePilot();

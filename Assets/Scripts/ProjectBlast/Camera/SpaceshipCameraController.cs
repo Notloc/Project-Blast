@@ -6,8 +6,7 @@ namespace ProjectBlast.CameraScripts
 {
     public class SpaceshipCameraController : CameraController
     {
-        public override CameraControllerType CameraControllerType => CameraControllerType.SPACESHIP;
-
+        [SerializeField] Transform target;
         [SerializeField] Vector3 offset = Vector3.zero;
 
         [SerializeField] float rotationSmoothing = 6f;
@@ -16,9 +15,8 @@ namespace ProjectBlast.CameraScripts
         Quaternion targetPreviousRotation;
         Quaternion cameraPreviousRotation;
 
-        public override void Enable(Transform target)
+        public override void Enable()
         {
-            base.Enable(target);
             targetPreviousRotation = target.rotation;
         }
 

@@ -58,10 +58,7 @@ namespace ProjectBlast.PlayerScripts
                 return;
 
             Quaternion cameraRotationFlat = camera.transform.rotation.Flatten();
-
-            Quaternion rotation = Quaternion.LookRotation(cameraRotationFlat * direction);
-            rotation = Quaternion.Slerp(rigidbody.rotation, rotation, Time.fixedDeltaTime * rotationSmoothing);
-            rigidbody.MoveRotation(rotation);
+            rigidbody.MoveRotation(cameraRotationFlat);
         }
 
         private void Move(float deltaTime)

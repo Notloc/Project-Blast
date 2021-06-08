@@ -10,10 +10,11 @@ namespace ProjectBlast.PlayerScripts
     {
         //[SerializeField] ContainerBehaviour containerBehaviour = null;
         [SerializeField] PlayerController playerController = null;
+        [SerializeField] PlayerCameraController playerCamera = null;
 
         private void Start()
         {
-            CameraManager.Instance.SetCameraController(CameraControllerType.PLAYER, transform);
+            CameraManager.Instance.SetActiveCameraController(playerCamera);
         }
 
         public Container GetInventory()

@@ -6,15 +6,18 @@ namespace ProjectBlast.CameraScripts
 {
     public abstract class CameraController : MonoBehaviour
     {
-        public abstract CameraControllerType CameraControllerType { get; }
-        [SerializeField] protected Transform cameraTransform;
-        protected Transform target;
+        protected Transform cameraTransform;
+        protected new Camera camera;
 
+        private void Start()
+        {
+            camera = Camera.main;
+            cameraTransform = camera.transform;
+        }
 
-        public virtual void Enable(Transform target)
+        public virtual void Enable()
         {
             enabled = true;
-            this.target = target;
         }
 
         public virtual void Disable()

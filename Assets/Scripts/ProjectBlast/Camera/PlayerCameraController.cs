@@ -6,7 +6,7 @@ namespace ProjectBlast.CameraScripts
 {
     public class PlayerCameraController : CameraController
     {
-        public override CameraControllerType CameraControllerType => CameraControllerType.PLAYER;
+        [SerializeField] Transform target;
 
         [Header("Camera Options")]
         [SerializeField] float sensitivity = 2f;
