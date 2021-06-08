@@ -5,12 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class Item : ScriptableItem
 {
-    [SerializeField] ItemBase itemBase;
-    [SerializeField] uint itemId;
+    [SerializeField] protected ItemBase itemBase;
+    [SerializeField] protected uint itemId;
     public override bool IsUnique { get { return _isUnique; } }
     [SerializeField] private bool _isUnique = false;
 
-    public void Init(ItemBase itemBase)
+    public virtual void Init(ItemBase itemBase)
     {
         this.itemBase = itemBase;
         itemId = itemBase.GetId();

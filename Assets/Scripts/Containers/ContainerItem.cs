@@ -1,4 +1,5 @@
-﻿[System.Serializable]
+﻿//TODO: Remove this class and combine it with ItemEntity
+[System.Serializable]
 public struct ContainerItem
 {
     public Item item;

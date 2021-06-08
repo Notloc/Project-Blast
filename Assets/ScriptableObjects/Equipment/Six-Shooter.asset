@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f07bdccccddf62a4095e9391fe05ab8b, type: 3}
+  m_Name: Six-Shooter
+  m_EditorClassIdentifier: 
+  itemValue: 500
+  itemWeight: 5
+  model: {fileID: 3542390902973601997, guid: b2ec3bbdf57f41442879d9578e44eb7c, type: 3}
+  equipmentBehaviour: {fileID: 8123092567738330147, guid: d17709c29be691e4b93f571008a01936,
+    type: 3}
+  damage: 10
+  fireRate: 5
+  projectile: {fileID: 6002941138965439427, guid: c951bb1be9edfaf458712850f4c68544,
+    type: 3}
+  projectileSpeed: 125
+  isAutomatic: 0
