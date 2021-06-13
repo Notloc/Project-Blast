@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace ProjectBlast.Items.Containers.Gui
 {
-    public class ContainerItemGui : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
+    public class ContainerItemGui : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler
     {
         [SerializeField] Image itemImage = null;
         [SerializeField] Vector2Int size = Vector2Int.one;
@@ -85,6 +85,11 @@ namespace ProjectBlast.Items.Containers.Gui
         public void SetRaycastTarget(bool state)
         {
             itemImage.raycastTarget = state;
+        }
+
+        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+        {
+            Debug.Log(eventData.clickCount);
         }
     }
 }

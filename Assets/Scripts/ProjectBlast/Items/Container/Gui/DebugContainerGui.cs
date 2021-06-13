@@ -11,7 +11,7 @@ namespace ProjectBlast.Debugging
         Container container;
         [SerializeField] ContainerGui containerView = null;
         [SerializeField] List<ItemBase> items = null;
-        [SerializeField] int width, height;
+        [SerializeField] int width = 3, height = 3;
 
         private void Start()
         {

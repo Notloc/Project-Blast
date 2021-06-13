@@ -10,7 +10,7 @@ namespace Notloc.Utility
         /// Event that triggers when the scriptable objects data is updated.
         /// Only works in the editor. Will never be called in builds.
         /// </summary>
-        public event System.Action OnDataUpdated;
+        public event System.Action<UpdatableData> OnDataUpdated;
 
 #if UNITY_EDITOR
         protected virtual void OnValidate()
@@ -21,7 +21,7 @@ namespace Notloc.Utility
         private void NotifySubscribers()
         {
             UnityEditor.EditorApplication.update -= NotifySubscribers;
-            OnDataUpdated?.Invoke();
+            OnDataUpdated?.Invoke(this);
         }
 #else
     protected virtual void OnValidate() {}

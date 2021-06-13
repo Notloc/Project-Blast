@@ -6,12 +6,11 @@ using UnityEngine;
 [System.Serializable]
 public class ItemInstance
 {
-    public ItemBase Item => item;
+    public ItemBase ItemBase => item;
+    [SerializeField] ItemBase item;
+    
     public Sprite Sprite => item.Sprite;
-
-    public Vector2Int BaseSize => item.BaseSize;
-
-    private ItemBase item;
+    public virtual Vector2Int BaseSize => item.BaseSize;
 
     public ItemInstance(ItemBase item)
     {

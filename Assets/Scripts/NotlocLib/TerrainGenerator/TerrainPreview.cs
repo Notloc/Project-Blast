@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Notloc.Utility;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace Notloc.Terrain
         }
 
 
-        public void GeneratePreview()
+        public void GeneratePreview(UpdatableData caller = null)
         {
             TerrainData data = terrainGenerator.GenerateTerrainData(terrainSettings, terrainSize);
 
