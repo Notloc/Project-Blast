@@ -12,6 +12,8 @@ public class ItemInstance
     public Sprite Sprite => item.Sprite;
     public virtual Vector2Int BaseSize => item.BaseSize;
 
+    public virtual string Name => item.name;
+    public string Description => item.Description;
     public ItemInstance(ItemBase item)
     {
         this.item = item;

@@ -15,4 +15,10 @@ public class ItemBase : UpdatableData
 
     public GameObject ModelPrefab => modelPrefab.gameObject;
     [SerializeField] ItemModel modelPrefab = null;
+
+    public IList<string> Tags => tags.AsReadOnly();
+    [SerializeField] List<string> tags = new List<string>();
+
+    public string Description => description;
+    [SerializeField] string description = "Item Description";
 }

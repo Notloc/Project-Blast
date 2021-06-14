@@ -87,9 +87,14 @@ namespace ProjectBlast.Items.Containers.Gui
             itemImage.raycastTarget = state;
         }
 
-        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+        public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log(eventData.clickCount);
+            OpenItemExamine();
+        }
+
+        private void OpenItemExamine()
+        {
+
         }
     }
 }
