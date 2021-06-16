@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9612ecb303e7e6449e70e42f9b03ea6, type: 3}
+  m_Name: RifleBase
+  m_EditorClassIdentifier: 
+  size: {x: 2, y: 2}
+  sprite: {fileID: 21300000, guid: 14a644595c1b45647ab885bc8ccdc48a, type: 3}
+  modelPrefab: {fileID: 1887070702037617009, guid: 51efbdec4fc612f4696e40b1d2ab9c9d,
+    type: 3}
+  tags: []
+  description: Item Description
+  modSlots:
+  - slotName: RIFLE_MAGAZINE
+    compatibilityTags:
+    - RIFLE
+    - MAGIZINE
+  - slotName: RIFLE_GRIP
+    compatibilityTags:
+    - RIFLE
+    - GRIP
+  - slotName: RIFLE_BARREL
+    compatibilityTags:
+    - RIFLE
+    - BARREL
+  - slotName: RIFLE_STOCK
+    compatibilityTags:
+    - RIFLE
+    - STOCK
+  roundsPerSecond: 3
+  handling: 50
+  reloadTime: 3
+  damage: 50

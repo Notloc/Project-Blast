@@ -5,13 +5,11 @@ using UnityEngine;
 [System.Serializable]
 public class WeaponAttachmentInstance : ModdableItemInstance
 {
-    public WeaponAttachmentBase WeaponAttachmentBase => weaponAttachmentBase;
-    [SerializeField] WeaponAttachmentBase weaponAttachmentBase;
-
-    public string SlotName => weaponAttachmentBase.SlotName;
-
-    public WeaponAttachmentInstance(WeaponAttachmentBase itemBase) : base(itemBase)
-    {
-        this.weaponAttachmentBase = itemBase;
+    public WeaponAttachmentBase WeaponAttachmentBase => (WeaponAttachmentBase)ItemBase;
+    public WeaponAttachmentInstance(WeaponAttachmentBase itemBase, List<ItemModData> attachments = null) : base(itemBase) {
+        if (attachments != null)
+        {
+            installedMods = attachments;
+        }
     }
 }

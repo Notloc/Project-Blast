@@ -61,7 +61,7 @@ namespace ProjectBlast.Items.Containers.Gui
 
         private void CreateDragItem()
         {
-            dragItemGui = Instantiate(dragItemGuiPrefab, GameObject.FindGameObjectWithTag("Main Canvas").transform);
+            dragItemGui = Instantiate(dragItemGuiPrefab, GameObject.FindGameObjectWithTag(Tags.MAIN_GUI).transform);
         }
 
 

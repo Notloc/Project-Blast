@@ -14,15 +14,16 @@ namespace ProjectBlast.Items.Containers.Gui
         [SerializeField] Image itemImage = null;
         [SerializeField] Vector2Int size = Vector2Int.one;
         [SerializeField] ContainerItemDragManager itemDragManager = null;
+        [SerializeField] ItemInspectorGuiFactory itemInspectorFactory = null;
 
         private UnityEvent OnItemDrag = new UnityEvent();
         private UnityEvent<ContainerItemGui, Container> OnItemDragStart = new UnityEvent<ContainerItemGui, Container>();
         private UnityEvent<ContainerItemGui, Container> OnItemDragEnd = new UnityEvent<ContainerItemGui, Container>();
 
-        private RectTransform rect;
+        protected RectTransform rect;
 
         private Container container;
-        private ContainerItemInstance itemInstance;
+        private ContainerItemInstance containerItemInstance;
         private Vector2Int coordinates;
 
         private void Awake()
@@ -44,10 +45,10 @@ namespace ProjectBlast.Items.Containers.Gui
             rect.anchoredPosition = anchorPos * ContainerSlotGui.SLOT_SIZE_PIXELS;
         }
 
-        public ContainerItemInstance GetItemInstance() => itemInstance; 
+        public ContainerItemInstance GetItemInstance() => containerItemInstance; 
         public void SetItemInstance(ContainerItemInstance itemInstance)
         {
-            this.itemInstance = itemInstance;
+            this.containerItemInstance = itemInstance;
             itemImage.sprite = itemInstance != null ? itemInstance.Item.Sprite : null;
             Resize();
         }
@@ -58,9 +59,9 @@ namespace ProjectBlast.Items.Containers.Gui
             this.container = container;
         }
 
-        private void Resize()
+        protected virtual void Resize()
         {
-            rect.sizeDelta = itemInstance.Size * ContainerSlotGui.SLOT_SIZE_PIXELS;
+            rect.sizeDelta = containerItemInstance.Size * ContainerSlotGui.SLOT_SIZE_PIXELS;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -89,12 +90,13 @@ namespace ProjectBlast.Items.Containers.Gui
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            OpenItemExamine();
+            if (eventData.clickCount == 2)
+                OpenItemExamine();
         }
 
         private void OpenItemExamine()
         {
-
+            itemInspectorFactory.CreateItemInspectorGui(containerItemInstance.Item);
         }
     }
 }

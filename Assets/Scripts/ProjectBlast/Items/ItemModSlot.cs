@@ -5,9 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class ItemModSlot
 {
-    [SerializeField] string slotName = "Mod Slot";
-    [SerializeField] List<string> compatibilityTags = new List<string>();
-
     public string SlotName => slotName;
+    [SerializeField] string slotName = "Mod Slot";
+
     public IList<string> CompatibilityTags => compatibilityTags.AsReadOnly();
+    [SerializeField] List<string> compatibilityTags = new List<string>();
 }

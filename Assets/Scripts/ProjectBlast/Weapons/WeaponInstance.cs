@@ -11,18 +11,22 @@ public class WeaponInstance : ModdableItemInstance
     public override Vector2Int BaseSize => itemSize;
     private Vector2Int itemSize = Vector2Int.one;
 
-    public WeaponInstance(WeaponBase itemBase) : base(itemBase)
+    public WeaponInstance(WeaponBase weaponBase, List<ItemModData> attachments = null) : base(weaponBase)
     {
-        weaponBase = itemBase;
+        this.weaponBase = weaponBase;
         itemSize = base.BaseSize;
+        SetAttachments(attachments);
     }
 
-    public void SetAttachments(List<WeaponAttachmentInstance> attachments)
+    public void SetAttachments(List<ItemModData> attachments)
     {
         installedMods.Clear();
-        foreach (var a in attachments)
+        if (attachments != null)
         {
-            installedMods.Add(a);
+            foreach (var a in attachments)
+            {
+                installedMods.Add(a);
+            }
         }
         CalculateSize();
     }
@@ -30,9 +34,9 @@ public class WeaponInstance : ModdableItemInstance
     private void CalculateSize()
     {
         Vector2Int modSize = Vector2Int.zero;
-        foreach (ItemInstance item in installedMods)
+        foreach (ItemModData data in installedMods)
         {
-            WeaponAttachmentInstance attachmentInstance = item as WeaponAttachmentInstance;
+            WeaponAttachmentInstance attachmentInstance = data.itemInstance as WeaponAttachmentInstance;
             if (attachmentInstance == null)
                 continue;
             modSize += attachmentInstance.WeaponAttachmentBase.SizeModifier;

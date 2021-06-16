@@ -6,53 +6,64 @@ using UnityEngine.Assertions;
 
 public class WeaponBehaviour : MonoBehaviour
 {
-    public WeaponInstance WeaponInstance => weaponInstance;
-    [SerializeField] WeaponInstance weaponInstance = null;
+    public WeaponInstance WeaponInstance { get; private set; }
+    [SerializeField] WeaponInstanceHolder weaponInstanceHolder = null;
 
-    [SerializeField] List<WeaponAttachmentInstance> attachments;
-
-    private Dictionary<WeaponAttachmentInstance, GameObject> attachmentModelDict = new Dictionary<WeaponAttachmentInstance, GameObject>();
+    private Dictionary<ItemInstance, GameObject> attachmentModelDict = new Dictionary<ItemInstance, GameObject>();
     private Dictionary<ItemBase, WeaponAttachmentInstance> itemBaseToAttachmentInstanceDict;
 
     private void Awake()
     {
-        weaponInstance.SetAttachments(attachments);
-        InitializeGun();
+        if (weaponInstanceHolder != null)
+        {
+            SetWeaponInstance(weaponInstanceHolder.GetWeaponInstance());
+        }
     }
 
-    private void InitializeGun()
+    public void SetWeaponInstance(WeaponInstance weaponInstance)
     {
-        itemBaseToAttachmentInstanceDict = Util.Dictionary(weaponInstance.InstalledMods, item => item.ItemBase, item => item as WeaponAttachmentInstance);
-
-
+        this.WeaponInstance = weaponInstance;
+        itemBaseToAttachmentInstanceDict = Util.Dictionary(weaponInstance.InstalledMods, data => data.itemInstance.ItemBase, data => data.itemInstance as WeaponAttachmentInstance);
         CreateModel();
     }
 
     private void CreateModel()
     {
-        GameObject gunModel = Instantiate(weaponInstance.WeaponBase.ModelPrefab, transform);
+        GameObject gunModel = Instantiate(WeaponInstance.WeaponBase.ModelPrefab, transform);
         ItemModelPositionData positionData = gunModel.GetComponent<ItemModelPositionData>();
 
-        IList<ItemInstance> installedMods = weaponInstance.InstalledMods;
-        foreach(ItemInstance mod in installedMods)
+        IList<ItemModData> installedMods = WeaponInstance.InstalledMods;
+        foreach(ItemModData data in installedMods)
         {
-            WeaponAttachmentInstance attachment = mod as WeaponAttachmentInstance;
-            if (attachment == null)
-                continue;
-
-            AddAttachmentModel(attachment, positionData);
-            attachment.ItemBase.OnDataUpdated += UpdateAttachmentModel;
+            CreateAttachmentModel(data, positionData);
+            data.itemInstance.ItemBase.OnDataUpdated += UpdateAttachmentModel; // TODO: This is basically debug code
         }
     }
 
-    private void AddAttachmentModel(WeaponAttachmentInstance attachment, ItemModelPositionData positionData)
+    private void CreateAttachmentModel(ItemModData attachmentData, ItemModelPositionData positionData)
     {
-        Assert.IsTrue(positionData.ModSlotPositionsByName.ContainsKey(attachment.SlotName), "Attachment Slot [" + attachment.SlotName + "] not found in the weapons position data.");
+        ItemInstance attachment = attachmentData.itemInstance;
+        string slotName = attachmentData.modSlotName;
 
-        Transform attachPoint = positionData.ModSlotPositionsByName[attachment.SlotName].AttachmentPoint;
-        GameObject attachmentModel = Instantiate(attachment.WeaponAttachmentBase.ModelPrefab, attachPoint);
+        Assert.IsTrue(positionData.ModSlotPositionsByName.ContainsKey(slotName), "Attachment Slot [" + slotName + "] not found in the weapons position data.");
+
+        Transform attachPoint = positionData.ModSlotPositionsByName[slotName].AttachmentPoint;
+        GameObject attachmentModel = Instantiate(attachment.ItemBase.ModelPrefab, attachPoint);
 
         attachmentModelDict.Add(attachment, attachmentModel);
+
+        ModdableItemInstance moddableAttachment = attachment as ModdableItemInstance;
+        if (moddableAttachment != null)
+        {
+            ItemModelPositionData moddableAttachmentPositionData = attachmentModel.GetComponent<ItemModelPositionData>();
+
+            IList<ItemModData> subMods = moddableAttachment.InstalledMods;
+            foreach (ItemModData subMod in subMods)
+            {
+                CreateAttachmentModel(subMod, moddableAttachmentPositionData);
+                attachment.ItemBase.OnDataUpdated += UpdateAttachmentModel; // TODO: This is basically debug code
+            }
+        }
     }
 
     private void UpdateAttachmentModel(UpdatableData caller)
@@ -90,5 +101,16 @@ public class WeaponBehaviour : MonoBehaviour
 
         attachmentModelDict[attachment] = newModel;
         Destroy(oldModel);
+    }
+
+
+    public void RemoveAttachment()
+    {
+
+    }
+
+    public void AddAttachment()
+    {
+
     }
 }

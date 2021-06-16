@@ -14,6 +14,8 @@ public class ItemInstance
 
     public virtual string Name => item.name;
     public string Description => item.Description;
+    public IList<string> Tags => item.Tags;
+
     public ItemInstance(ItemBase item)
     {
         this.item = item;

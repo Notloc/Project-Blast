@@ -91,3 +91,5 @@ MonoBehaviour:
   itemImage: {fileID: 1720652342615183736}
   size: {x: 1, y: 1}
   itemDragManager: {fileID: 11400000, guid: e309e26f48f31624e97123470bd5603e, type: 2}
+  itemInspectorFactory: {fileID: 11400000, guid: 64bb8597e7ff7594dae42fc1942ba270,
+    type: 2}

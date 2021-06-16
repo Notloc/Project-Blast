@@ -2,10 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu]
 public class ItemInspectorGuiFactory : ScriptableObject
 {
-    public ItemInspectGui CreateItemInspectorGui(ItemInstance item)
-    {
+    [SerializeField] ItemInspectGui itemInspectGuiPrefab = null;
 
+    private MainGui mainGui;
+
+    public void CreateItemInspectorGui(ItemInstance item)
+    {
+        if (!mainGui)
+            mainGui = GameObject.FindGameObjectWithTag(Tags.MAIN_GUI).GetComponent<MainGui>();
+
+        ItemInspectGui itemInspect = Instantiate(itemInspectGuiPrefab, mainGui.transform);
+        itemInspect.Open(item);
+        // return itemInspect; // This does not work by default as itemInspect.Open can decide to Destroy itself and simply bring an existing window to the front
     }
 }
