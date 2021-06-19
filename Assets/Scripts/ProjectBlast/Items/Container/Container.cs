@@ -7,15 +7,15 @@ using UnityEngine.Events;
 namespace ProjectBlast.Items.Containers
 {
     [CreateAssetMenu]
-    public class Container : ScriptableObject
+    public class Container : ScriptableObject, IContainer
     {
         [SerializeField] int width = 2;
         [SerializeField] int height = 2;
         [SerializeField] private List<ContainerItemInstance> itemData = new List<ContainerItemInstance>();
         [SerializeField] private ContainerItemGrid containerGrid;
 
-        public UnityAction<ContainerItemInstance> OnAddItem;
-        public UnityAction<ContainerItemInstance> OnRemoveItem;
+        public UnityAction<ContainerItemInstance> OnAddItem { get; set; }
+        public UnityAction<ContainerItemInstance> OnRemoveItem { get; set; }
 
         public int Width => width;
         public int Height => height;

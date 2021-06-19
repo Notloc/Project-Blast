@@ -17,12 +17,12 @@ namespace ProjectBlast.Items.Containers.Gui
         [SerializeField] ItemInspectorGuiFactory itemInspectorFactory = null;
 
         private UnityEvent OnItemDrag = new UnityEvent();
-        private UnityEvent<ContainerItemGui, Container> OnItemDragStart = new UnityEvent<ContainerItemGui, Container>();
-        private UnityEvent<ContainerItemGui, Container> OnItemDragEnd = new UnityEvent<ContainerItemGui, Container>();
+        private UnityEvent<ContainerItemGui, IContainer> OnItemDragStart = new UnityEvent<ContainerItemGui, IContainer>();
+        private UnityEvent<ContainerItemGui, IContainer> OnItemDragEnd = new UnityEvent<ContainerItemGui, IContainer>();
 
         protected RectTransform rect;
 
-        private Container container;
+        private IContainer container;
         private ContainerItemInstance containerItemInstance;
         private Vector2Int coordinates;
 
@@ -53,8 +53,8 @@ namespace ProjectBlast.Items.Containers.Gui
             Resize();
         }
 
-        public Container GetContainer() => container;
-        public void SetContainer(Container container)
+        public IContainer GetContainer() => container;
+        public void SetContainer(IContainer container)
         {
             this.container = container;
         }

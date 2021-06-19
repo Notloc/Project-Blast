@@ -6,10 +6,5 @@ using UnityEngine;
 public class WeaponAttachmentInstance : ModdableItemInstance
 {
     public WeaponAttachmentBase WeaponAttachmentBase => (WeaponAttachmentBase)ItemBase;
-    public WeaponAttachmentInstance(WeaponAttachmentBase itemBase, List<ItemModData> attachments = null) : base(itemBase) {
-        if (attachments != null)
-        {
-            installedMods = attachments;
-        }
-    }
+    public WeaponAttachmentInstance(WeaponAttachmentBase itemBase, List<ItemModData> attachments = null) : base(itemBase, attachments) {}
 }

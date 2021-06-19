@@ -9,8 +9,10 @@ public class WeaponBehaviour : MonoBehaviour
     public WeaponInstance WeaponInstance { get; private set; }
     [SerializeField] WeaponInstanceHolder weaponInstanceHolder = null;
 
+    private List<GameObject> attachmentModels = new List<GameObject>();
     private Dictionary<ItemInstance, GameObject> attachmentModelDict = new Dictionary<ItemInstance, GameObject>();
-    private Dictionary<ItemBase, WeaponAttachmentInstance> itemBaseToAttachmentInstanceDict;
+    private Dictionary<GameObject, ItemInstance> attachmentInstanceDict = new Dictionary<GameObject, ItemInstance>();
+    private Dictionary<Transform, GameObject> attachmentPointToAttachmentModelDict = new Dictionary<Transform, GameObject>();
 
     private void Awake()
     {
@@ -22,8 +24,16 @@ public class WeaponBehaviour : MonoBehaviour
 
     public void SetWeaponInstance(WeaponInstance weaponInstance)
     {
+        if (this.WeaponInstance != null)
+        {
+            this.WeaponInstance.OnModAdded -= OnAddAttachment;
+            this.WeaponInstance.OnModRemoved -= OnRemoveAttachment;
+        }
+
         this.WeaponInstance = weaponInstance;
-        itemBaseToAttachmentInstanceDict = Util.Dictionary(weaponInstance.InstalledMods, data => data.itemInstance.ItemBase, data => data.itemInstance as WeaponAttachmentInstance);
+        this.WeaponInstance.OnModAdded += OnAddAttachment;
+        this.WeaponInstance.OnModRemoved += OnRemoveAttachment;
+
         CreateModel();
     }
 
@@ -32,11 +42,13 @@ public class WeaponBehaviour : MonoBehaviour
         GameObject gunModel = Instantiate(WeaponInstance.WeaponBase.ModelPrefab, transform);
         ItemModelPositionData positionData = gunModel.GetComponent<ItemModelPositionData>();
 
+        attachmentModelDict.Add(WeaponInstance, gunModel);
+        attachmentInstanceDict.Add(gunModel, WeaponInstance);
+
         IList<ItemModData> installedMods = WeaponInstance.InstalledMods;
         foreach(ItemModData data in installedMods)
         {
             CreateAttachmentModel(data, positionData);
-            data.itemInstance.ItemBase.OnDataUpdated += UpdateAttachmentModel; // TODO: This is basically debug code
         }
     }
 
@@ -50,67 +62,76 @@ public class WeaponBehaviour : MonoBehaviour
         Transform attachPoint = positionData.ModSlotPositionsByName[slotName].AttachmentPoint;
         GameObject attachmentModel = Instantiate(attachment.ItemBase.ModelPrefab, attachPoint);
 
+        attachmentModels.Add(attachmentModel);
         attachmentModelDict.Add(attachment, attachmentModel);
+        attachmentInstanceDict.Add(attachmentModel, attachment);
+        attachmentPointToAttachmentModelDict.Add(attachPoint, attachmentModel);
 
         ModdableItemInstance moddableAttachment = attachment as ModdableItemInstance;
         if (moddableAttachment != null)
         {
+            moddableAttachment.OnModAdded += OnAddAttachment;
+            moddableAttachment.OnModRemoved += OnRemoveAttachment;
+
             ItemModelPositionData moddableAttachmentPositionData = attachmentModel.GetComponent<ItemModelPositionData>();
 
             IList<ItemModData> subMods = moddableAttachment.InstalledMods;
             foreach (ItemModData subMod in subMods)
             {
                 CreateAttachmentModel(subMod, moddableAttachmentPositionData);
-                attachment.ItemBase.OnDataUpdated += UpdateAttachmentModel; // TODO: This is basically debug code
             }
         }
     }
 
-    private void UpdateAttachmentModel(UpdatableData caller)
+    public void OnRemoveAttachment(ItemInstance itemInstance)
     {
-        ItemBase item = (ItemBase)caller;
-        WeaponAttachmentInstance attachment = itemBaseToAttachmentInstanceDict[item];
+        GameObject attachmentModel = attachmentModelDict[itemInstance];
 
-        GameObject oldModel = attachmentModelDict[attachment];
-        Transform attachPoint = oldModel.transform.parent;
+        List<GameObject> modelsToDestroy = new List<GameObject>();
+        GetModelsToDestroy(attachmentModel, modelsToDestroy);
         
-        GameObject newModel = Instantiate(attachment.WeaponAttachmentBase.ModelPrefab, attachPoint);
 
-        ItemModelPositionData oldPositionData = oldModel.GetComponent<ItemModelPositionData>();
-        ItemModelPositionData newPositionData = newModel.GetComponent<ItemModelPositionData>();
-        if (oldPositionData && newPositionData)
+        foreach (GameObject model in modelsToDestroy)
         {
-            foreach (var slotData in newPositionData.ModSlotPositions)
-            {
-                string name = slotData.SlotName;
-                ItemModSlotPositionData prevData, newData;
-                oldPositionData.ModSlotPositionsByName.TryGetValue(name, out prevData);
-                newPositionData.ModSlotPositionsByName.TryGetValue(name, out newData);
+            ItemInstance item = attachmentInstanceDict[model];
+            attachmentModelDict.Remove(item);
+            attachmentInstanceDict.Remove(model);
+            attachmentModels.Remove(attachmentModel);
+            attachmentPointToAttachmentModelDict.Remove(model.transform.parent);
+            Destroy(model);
 
-                if (prevData != null && newData != null)
+            ModdableItemInstance moddableAttachment = item as ModdableItemInstance;
+            if (moddableAttachment != null)
+            {
+                moddableAttachment.OnModAdded -= OnAddAttachment;
+                moddableAttachment.OnModRemoved -= OnRemoveAttachment;
+            }
+        }   
+    }
+
+    private void GetModelsToDestroy(GameObject model, List<GameObject> outList)
+    {
+        outList.Add(model);
+        ItemModelPositionData positionData = model.GetComponent<ItemModelPositionData>();
+        if (positionData)
+        {
+            foreach (ItemModSlotPositionData modSlotPosition in positionData.ModSlotPositions)
+            {
+                if (attachmentPointToAttachmentModelDict.ContainsKey(modSlotPosition.AttachmentPoint))
                 {
-                    while (prevData.AttachmentPoint.childCount > 0)
-                    {
-                        Transform child = prevData.AttachmentPoint.GetChild(0);
-                        child.SetParent(null, false);
-                        child.SetParent(newData.AttachmentPoint, false);
-                    }
+                    GameObject attachment = attachmentPointToAttachmentModelDict[modSlotPosition.AttachmentPoint];
+                    GetModelsToDestroy(attachment, outList);
                 }
             }
         }
 
-        attachmentModelDict[attachment] = newModel;
-        Destroy(oldModel);
     }
 
-
-    public void RemoveAttachment()
+    public void OnAddAttachment(ItemModData itemModData, ItemInstance parent)
     {
+        GameObject attachmentModel = attachmentModelDict[parent];
+        ItemModelPositionData positionData = attachmentModel.GetComponent<ItemModelPositionData>();
 
-    }
-
-    public void AddAttachment()
-    {
-
+        CreateAttachmentModel(itemModData, positionData);
     }
 }

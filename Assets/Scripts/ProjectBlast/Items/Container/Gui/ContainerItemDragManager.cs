@@ -21,9 +21,9 @@ namespace ProjectBlast.Items.Containers.Gui
         private List<RaycastResult> uiRaycastBuffer = new List<RaycastResult>(10);
 
         private ContainerDragItemGui dragItemGui;
-        private Container originContainer;
+        private IContainer originContainer;
 
-        public void OnItemDragStart(ContainerItemGui itemGui, Container container)
+        public void OnItemDragStart(ContainerItemGui itemGui, IContainer container)
         {
             this.originContainer = container;
             UpdateOriginContainerSlots(itemGui);
@@ -83,7 +83,7 @@ namespace ProjectBlast.Items.Containers.Gui
             Vector2Int dragCoordinates = CalculateDragCoordinates(mousePos, targetContainerGui);
 
             // Determine coordinates item will occupy
-            Container targetContainer = targetContainerGui.GetContainer();
+            IContainer targetContainer = targetContainerGui.GetContainer();
             coordinateBuffer.Clear();
             for (int x = 0; x < itemData.Size.x; x++)
             {
@@ -102,7 +102,7 @@ namespace ProjectBlast.Items.Containers.Gui
             ItemHover(itemData, dragCoordinates, targetContainerGui, isClear);
         }
 
-        public void OnItemDragEnd(ContainerItemGui itemGui, Container originContainer)
+        public void OnItemDragEnd(ContainerItemGui itemGui, IContainer originContainer)
         {
             HideDragItem();
             ClearItemHover();
@@ -117,7 +117,7 @@ namespace ProjectBlast.Items.Containers.Gui
             ContainerItemInstance itemData = dragItemGui.DragItemInstance;
 
             // Determine coordinates item will occupy
-            Container targetContainer = targetContainerGui.GetContainer();
+            IContainer targetContainer = targetContainerGui.GetContainer();
             coordinateBuffer.Clear();
             for (int x = 0; x < itemData.Size.x; x++)
             {

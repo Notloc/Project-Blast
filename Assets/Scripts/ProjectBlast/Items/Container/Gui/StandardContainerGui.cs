@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace ProjectBlast.Items.Containers.Gui
 {
-    public class ContainerGui : MonoBehaviour
+    public class StandardContainerGui : ContainerGui
     {
         [SerializeField] ContainerSlotGui containerSlotPrefab = null;
         [SerializeField] ContainerItemGui containerItemPrefab = null;
@@ -24,20 +24,23 @@ namespace ProjectBlast.Items.Containers.Gui
         private ObjectPool<ContainerItemGui> containerItemPool = new ObjectPool<ContainerItemGui>();
         private static readonly int DEFAULT_ITEM_POOL_SIZE = 250;
 
-        private Container activeContainer;
+        private IContainer activeContainer;
 
-        public RectTransform ItemParent => itemArea;
+        public override RectTransform ItemParent => itemArea;
 
-        private void Awake()
+        private bool initialized = false;
+
+        public override IContainer GetContainer() => activeContainer;
+        public override void SetContainer(IContainer container)
         {
-            containerSlotPool.Initialize(containerSlotPrefab, DEFAULT_SLOT_POOL_SIZE);
-            containerItemPool.Initialize(containerItemPrefab, DEFAULT_ITEM_POOL_SIZE);
-        }
+            if (!initialized)
+            {
+                containerSlotPool.Initialize(containerSlotPrefab, DEFAULT_SLOT_POOL_SIZE);
+                containerItemPool.Initialize(containerItemPrefab, DEFAULT_ITEM_POOL_SIZE);
+                initialized = true;
+            }
 
-        public Container GetContainer() => activeContainer;
-        public void SetContainer(Container container)
-        {
-            if (this.activeContainer)
+            if (this.activeContainer != null)
             {
                 activeContainer.OnAddItem -= OnAddItem;
                 activeContainer.OnRemoveItem -= OnRemoveItem;
@@ -94,7 +97,7 @@ namespace ProjectBlast.Items.Containers.Gui
             }
         }
 
-        public void ClearContainerView()
+        public override void ClearContainerView()
         {
             if (activeContainer == null)
                 return;
@@ -109,7 +112,7 @@ namespace ProjectBlast.Items.Containers.Gui
             activeContainer = null;
         }
 
-        public void HoverItem(Vector2Int itemDimensions, Vector2Int coordinates, bool isValid)
+        public override void HoverItem(Vector2Int itemDimensions, Vector2Int coordinates, bool isValid)
         {
             Vector2Int dimensions = activeContainer.Dimensions;
             Color color = isValid ? validHoverColor : invalidHoverColor;
@@ -132,7 +135,7 @@ namespace ProjectBlast.Items.Containers.Gui
             }
         }
 
-        public void ClearHover()
+        public override void ClearHover()
         {
             foreach (ContainerSlotGui slot in activeSlots)
             {

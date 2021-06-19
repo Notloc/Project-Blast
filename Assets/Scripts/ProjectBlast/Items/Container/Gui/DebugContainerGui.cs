@@ -20,7 +20,18 @@ namespace ProjectBlast.Debugging
             
             foreach (ItemBase item in items)
             {
-                container.AddItem(new ItemInstance(item));
+                if (item as WeaponBase)
+                {
+                    container.AddItem(new WeaponInstance(item as WeaponBase));
+                }
+                else if (item as WeaponAttachmentBase)
+                {
+                    container.AddItem(new WeaponAttachmentInstance(item as WeaponAttachmentBase));
+                }
+                else
+                {
+                    container.AddItem(new ItemInstance(item));
+                }
             }
 
             containerView.SetContainer(container);

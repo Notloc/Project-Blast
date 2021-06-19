@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu]
 public class WeaponAttachmentInstanceHolder : ScriptableObject
 {
-    [SerializeField] WeaponAttachmentBase attachmentBase;
-    [SerializeField] List<SubAttachmentData> subAttachments;
+    [SerializeField] WeaponAttachmentBase attachmentBase = null;
+    [SerializeField] List<SubAttachmentData> subAttachments = null;
 
     public WeaponAttachmentInstance GetWeaponAttachmentInstance()
     {

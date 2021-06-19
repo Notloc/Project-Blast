@@ -14,7 +14,7 @@ public class ContainerSlotGui : MonoBehaviour, IPointerEnterHandler, IPointerExi
     [SerializeField] Image tintImage = null;
     [SerializeField] Color selectedTint = new Color(1f, 1f, 1f, 0.4f);
 
-    private Container container;
+    private IContainer container;
     private int index;
 
     private bool isSelected;
@@ -22,7 +22,7 @@ public class ContainerSlotGui : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     private Color customTint = Color.clear;
 
-    public void Assign(Container container, int index)
+    public void Assign(IContainer container, int index)
     {
         this.container = container;
         this.index = index;

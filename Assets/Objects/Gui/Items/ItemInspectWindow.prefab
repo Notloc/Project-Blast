@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   genericItemInspect: {fileID: 8893105890500011077}
-  weaponItemInspect: {fileID: 1180059760100374352}
+  moddableItemInspect: {fileID: 1180059760100374352}
 --- !u!1 &668237641571580090
 GameObject:
   m_ObjectHideFlags: 0
@@ -27,7 +27,7 @@ GameObject:
   - component: {fileID: 4570198594801315502}
   - component: {fileID: 1180059760100374352}
   m_Layer: 5
-  m_Name: WeaponItemInspect
+  m_Name: ModdableItemInspect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -20,10 +20,9 @@ MonoBehaviour:
   - ATTACHMENT
   - BARREL
   - RIFLE
-  description: Item Description
+  description: Big Booty Barrel
   modSlots:
   - slotName: BARREL_FRONT
     compatibilityTags:
     - RIFLE_BARREL_FRONT
-  slotName: RIFLE_BARREL
   sizeModifier: {x: 1, y: 0}

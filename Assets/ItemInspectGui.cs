@@ -7,7 +7,7 @@ using UnityEngine;
 public class ItemInspectGui : MonoBehaviour
 {
     [SerializeField] GenericItemInspectGui genericItemInspect = null;
-    [SerializeField] WeaponItemInspectGui weaponItemInspect = null;
+    [SerializeField] ModdableItemInspectGui moddableItemInspect = null;
 
     private GameObject activeInspect;
     private ItemInstance item;
@@ -19,7 +19,7 @@ public class ItemInspectGui : MonoBehaviour
     private void Awake()
     {
         genericItemInspect.gameObject.SetActive(false);
-        weaponItemInspect.gameObject.SetActive(false);
+        moddableItemInspect.gameObject.SetActive(false);
 
         Window = GetComponent<GuiWindow>();
         Window.OnClose += OnClose;
@@ -36,11 +36,11 @@ public class ItemInspectGui : MonoBehaviour
         {
             this.item = item;
 
-            if (item as WeaponInstance != null)
+            if (item as ModdableItemInstance != null)
             {
-                activeInspect = weaponItemInspect.gameObject;
-                weaponItemInspect.gameObject.SetActive(true);
-                weaponItemInspect.SetItem(item);
+                activeInspect = moddableItemInspect.gameObject;
+                moddableItemInspect.gameObject.SetActive(true);
+                moddableItemInspect.SetItem(item);
             }
             else
             {

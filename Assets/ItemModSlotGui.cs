@@ -4,27 +4,62 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class ItemModSlotGui : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI slotName = null;
+    [SerializeField] TextMeshProUGUI slotNameText = null;
     [SerializeField] ContainerItemGui containerItem = null;
+
+    public UnityAction<ItemInstance, string> OnAddedItem;
+    public UnityAction<ItemInstance, string> OnRemovedItem;
 
     public ItemModSlot ModSlot => modSlot;
     private ItemModSlot modSlot;
 
-    private ContainerItemInstance item;
+    public ItemInstance Item => item;
+    private ItemInstance item;
 
-    public void SetItemModSlot(ItemModSlot modSlot)
+    [SerializeField] SpoofContainer container = null;
+
+    private void Awake()
     {
-        this.modSlot = modSlot;
-        slotName.text = modSlot.SlotName;
+        containerItem.gameObject.SetActive(false);
     }
 
-    public void SetItem(ContainerItemInstance item)
+    public void Initialize(ItemModSlot modSlot)
+    {
+        container.OnAddItem += OnAddItem;
+        container.OnRemoveItem += OnRemoveItem;
+
+        this.modSlot = modSlot;
+        slotNameText.text = modSlot.SlotName;
+        containerItem.SetContainer(container);
+    }
+
+    public void SetItem(ItemInstance item)
     {
         this.item = item;
-        containerItem.SetItemInstance(item);
+        containerItem.gameObject.SetActive(item != null);
+        containerItem.SetItemInstance(item != null ? new ContainerItemInstance(item, Vector2Int.zero) : null);
+    }
+
+    private void OnAddItem(ContainerItemInstance containerItem)
+    {
+        if (this.item == null)
+        {
+            SetItem(containerItem.Item);
+            OnAddedItem?.Invoke(containerItem.Item, modSlot.SlotName);
+        }
+    }
+
+    private void OnRemoveItem(ContainerItemInstance containerItem)
+    {
+        if (containerItem.Item == item)
+        {
+            OnRemovedItem?.Invoke(item, modSlot.SlotName);
+            SetItem(null);
+        }
     }
 }
