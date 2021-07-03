@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8591462152699911691}
   - component: {fileID: 5935795849225171513}
   - component: {fileID: 1160826088761305445}
-  - component: {fileID: 2938711248847268955}
   - component: {fileID: 6141562512068454102}
   m_Layer: 5
   m_Name: ItemModSlot
@@ -65,7 +64,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotNameText: {fileID: 444581841470871428}
   containerItem: {fileID: 2343650342319398287}
-  container: {fileID: 2938711248847268955}
 --- !u!114 &1160826088761305445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,18 +84,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &2938711248847268955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 385714218215500650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bba22a417d2726478b3d1ebc9c82444, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6141562512068454102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,7 +96,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef7a137ed905409438673df86176ae3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  container: {fileID: 2938711248847268955}
   itemParent: {fileID: 8152191932088424396}
 --- !u!1 &533638014027268001
 GameObject:

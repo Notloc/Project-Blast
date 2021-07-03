@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class ItemModSlot
+public class ItemModSlotData
 {
     public string SlotName => slotName;
     [SerializeField] string slotName = "Mod Slot";

@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Rifle_Stock
   m_EditorClassIdentifier: 
   size: {x: 1, y: 1}
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 6d111654fae20e048bad819a377b5978, type: 3}
   modelPrefab: {fileID: 8804504496388881457, guid: 4b75fd90dfa67ae429ec36fac787b5c1,
     type: 3}
+  tags:
+  - RIFLE_STOCK
+  description: Item Description
   modSlots: []
-  slotName: RIFLE_STOCK
   sizeModifier: {x: 1, y: 0}

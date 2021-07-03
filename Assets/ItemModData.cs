@@ -5,12 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class ItemModData
 {
-    public ItemInstance itemInstance;
-    public string modSlotName;
+    public ItemInstance mod;
+    public string slotName;
 
-    public ItemModData(ItemInstance itemInstance, string modSlotName)
+    public ItemModData(ItemInstance mod, string slotName)
     {
-        this.itemInstance = itemInstance;
-        this.modSlotName = modSlotName;
+        this.mod = mod;
+        this.slotName = slotName;
     }
 }

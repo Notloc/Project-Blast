@@ -42,8 +42,9 @@ namespace ProjectBlast.Items.Containers.Gui
 
             if (this.activeContainer != null)
             {
-                activeContainer.OnAddItem -= OnAddItem;
-                activeContainer.OnRemoveItem -= OnRemoveItem;
+                this.activeContainer.OnAddItem -= OnAddItem;
+                this.activeContainer.OnRemoveItem -= OnRemoveItem;
+                this.activeContainer.OnUpdateItem -= OnUpdateItem;
             }
 
             ClearContainerView();
@@ -53,6 +54,7 @@ namespace ProjectBlast.Items.Containers.Gui
 
             activeContainer.OnAddItem += OnAddItem;
             activeContainer.OnRemoveItem += OnRemoveItem;
+            activeContainer.OnUpdateItem += OnUpdateItem;
 
             UpdateGrid();
             UpdateItems();
@@ -89,11 +91,11 @@ namespace ProjectBlast.Items.Containers.Gui
 
         private void UpdateItems()
         {
-            IList<ContainerItemInstance> items = activeContainer.GetItems();
+            IList<ContainerItemEntry> items = activeContainer.GetItems();
             List<ContainerItemGui> itemGuis = containerItemPool.Get(items.Count);
             for (int i = 0; i < itemGuis.Count; i++)
             {
-                SetupContainerItemGui(items[i], itemGuis[i]);
+                SetupItemGui(items[i], itemGuis[i]);
             }
         }
 
@@ -112,24 +114,75 @@ namespace ProjectBlast.Items.Containers.Gui
             activeContainer = null;
         }
 
-        public override void HoverItem(Vector2Int itemDimensions, Vector2Int coordinates, bool isValid)
+        private void OnAddItem(ContainerItemEntry itemInstance)
         {
+            ContainerItemGui itemGui = containerItemPool.Get();
+            SetupItemGui(itemInstance, itemGui);
+        }
+
+        private void OnRemoveItem(ContainerItemEntry containerItem)
+        {
+            ItemInstance item = containerItem.Item;
+            if (itemGuiMap.ContainsKey(item))
+            {
+                containerItemPool.ReturnToPool(itemGuiMap[item]);
+                itemGuiMap.Remove(item);
+            }
+        }
+
+        private void OnUpdateItem(ContainerItemEntry containerItem)
+        {
+            if (!itemGuiMap.ContainsKey(containerItem.Item))
+                return;
+
+            ItemInstance item = containerItem.Item;
+            if (itemGuiMap.ContainsKey(item))
+            {
+                ContainerItemGui itemGui = itemGuiMap[item];
+                itemGui.SetContainerItem(this, containerItem);
+            }
+        }
+
+        private Dictionary<ItemInstance, ContainerItemGui> itemGuiMap = new Dictionary<ItemInstance, ContainerItemGui>();
+        private void SetupItemGui(ContainerItemEntry containerItem, ContainerItemGui itemGui)
+        {
+            itemGui.gameObject.SetActive(true);
+            itemGui.transform.SetParent(itemArea, false);
+
+            itemGui.SetContainerItem(this, containerItem);
+            itemGui.SetContainer(activeContainer);
+
+            itemGuiMap.Add(containerItem.Item, itemGui);
+        }
+
+        
+
+        public override void HoverItem(IDragItem dragItem, Vector2 mousePosition)
+        {
+            Vector2Int dragCoordinates = CalculateDragCoordinates(dragItem, mousePosition);
+
+
+            ContainerItemEntry itemEntry = dragItem.ContainerItem;
+
+
             Vector2Int dimensions = activeContainer.Dimensions;
-            Color color = isValid ? validHoverColor : invalidHoverColor;
+            Color color = activeContainer.DoesItemFit(itemEntry.Item, dragCoordinates, itemEntry.IsRotated) ? validHoverColor : invalidHoverColor;
+
+            Vector2Int itemDimensions = itemEntry.Size;
 
             for (int x = 0; x < itemDimensions.x; x++)
             {
-                int x2 = coordinates.x + x;
-                if (x2 >= dimensions.x || x2 < 0)
+                int xCoord = dragCoordinates.x + x;
+                if (xCoord >= dimensions.x || xCoord < 0)
                     continue;
 
                 for (int y = 0; y < itemDimensions.y; y++)
                 {
-                    int y2 = coordinates.y + y;
-                    if (y2 >= dimensions.y || y2 < 0)
+                    int yCoord = dragCoordinates.y + y;
+                    if (yCoord >= dimensions.y || yCoord < 0)
                         continue;
 
-                    int index = (y2 * dimensions.x) + x2;
+                    int index = (yCoord * dimensions.x) + xCoord;
                     activeSlots[index].SetTint(color);
                 }
             }
@@ -143,33 +196,52 @@ namespace ProjectBlast.Items.Containers.Gui
             }
         }
 
-        private void OnAddItem(ContainerItemInstance itemInstance)
+        private Vector2Int CalculateDragCoordinates(IDragItem dragItem, Vector2 mousePos)
         {
-            ContainerItemGui itemGui = containerItemPool.Get();
-            SetupContainerItemGui(itemInstance, itemGui);
+            Vector2 itemOffset = CalculateDragItemOffsetForCoordinateCalculations(dragItem);
+
+            Vector2 dragPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(this.ItemParent, mousePos, null, out dragPos);
+            dragPos += (this.ItemParent.sizeDelta / 2f); // Localize to bottom left of target container
+            dragPos -= itemOffset;
+
+            dragPos.y = (dragPos.y - this.ItemParent.sizeDelta.y); // Flip y
+            return Vector2Int.RoundToInt(new Vector2(dragPos.x / ContainerSlotGui.SLOT_SIZE_PIXELS, -dragPos.y / ContainerSlotGui.SLOT_SIZE_PIXELS));
         }
 
-        private void OnRemoveItem(ContainerItemInstance itemInstance)
+        private Vector2 CalculateDragItemOffsetForCoordinateCalculations(IDragItem dragItem)
         {
-            if (itemGuiMap.ContainsKey(itemInstance))
+            Vector2 itemOffset = dragItem.RectTransform.sizeDelta / 2f;
+            if (dragItem.ContainerItem.IsRotated)
             {
-                containerItemPool.ReturnToPool(itemGuiMap[itemInstance]);
-                itemGuiMap.Remove(itemInstance);
+                itemOffset = itemOffset.Swap();
+            }
+            itemOffset.y *= -1f;
+            return itemOffset;
+        }
+
+        public override void ReceiveDraggedItem(IDragItem dragItem, Vector2 mousePosition)
+        {
+            Vector2Int dragCoordinates = CalculateDragCoordinates(dragItem, mousePosition);
+            ContainerItemEntry itemEntry = dragItem.ContainerItem;
+
+            if (activeContainer.DoesItemFit(itemEntry.Item, dragCoordinates, itemEntry.IsRotated))
+            {
+                if ((IDragItemReceiver)this == dragItem.ParentDragItemReceiver)
+                {
+                    activeContainer.MoveItem(itemEntry.Item, dragCoordinates, itemEntry.IsRotated);
+                }
+                else
+                {
+                    activeContainer.AddItem(itemEntry.Item, dragCoordinates, itemEntry.IsRotated);
+                    dragItem.ParentDragItemReceiver.RemoveDraggedItem(dragItem);
+                }
             }
         }
 
-        private Dictionary<ContainerItemInstance, ContainerItemGui> itemGuiMap = new Dictionary<ContainerItemInstance, ContainerItemGui>();
-
-        private void SetupContainerItemGui(ContainerItemInstance itemInstance, ContainerItemGui itemGui)
+        public override void RemoveDraggedItem(IDragItem draggedItem)
         {
-            itemGui.gameObject.SetActive(true);
-            itemGui.transform.SetParent(itemArea, false);
-
-            itemGui.SetItemInstance(itemInstance);
-            itemGui.SetContainer(activeContainer);
-            itemGui.SetCoordinates(itemInstance.Coordinates);
-
-            itemGuiMap.Add(itemInstance, itemGui);
+            activeContainer.RemoveItem(draggedItem.ContainerItem.Item);
         }
     }
 }

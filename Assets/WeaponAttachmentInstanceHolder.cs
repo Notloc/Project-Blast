@@ -10,7 +10,9 @@ public class WeaponAttachmentInstanceHolder : ScriptableObject
 
     public WeaponAttachmentInstance GetWeaponAttachmentInstance()
     {
-        return new WeaponAttachmentInstance(attachmentBase, GetSubAttachments());
+        WeaponAttachmentInstance attachment = new WeaponAttachmentInstance(attachmentBase);
+        attachment.SetModData(GetSubAttachments());
+        return attachment;
     }
 
     private List<ItemModData> GetSubAttachments()

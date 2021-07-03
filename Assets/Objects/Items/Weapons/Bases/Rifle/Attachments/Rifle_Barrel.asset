@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Rifle_Barrel
   m_EditorClassIdentifier: 
   size: {x: 1, y: 1}
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 533c90ea173eddc41827dd01061a0f69, type: 3}
   modelPrefab: {fileID: 6032497250785767174, guid: 116d436fc5510844d8ff998e33591e3a,
     type: 3}
   tags:
   - ATTACHMENT
-  - BARREL
+  - BARREL_BARREL
   - RIFLE
   description: Big Booty Barrel
   modSlots:
-  - slotName: BARREL_FRONT
+  - slotName: RIFLE_BARREL_FRONT
     compatibilityTags:
     - RIFLE_BARREL_FRONT
   sizeModifier: {x: 1, y: 0}

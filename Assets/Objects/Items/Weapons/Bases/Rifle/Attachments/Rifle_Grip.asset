@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Rifle_Grip
   m_EditorClassIdentifier: 
   size: {x: 1, y: 1}
-  sprite: {fileID: 0}
+  sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   modelPrefab: {fileID: 8524064186910466992, guid: ac0b2a4fcd9aa024596a9957b45895a6,
     type: 3}
+  tags:
+  - RIFLE_GRIP
+  description: Item Description
   modSlots: []
-  slotName: RIFLE_GRIP
   sizeModifier: {x: 0, y: 0}

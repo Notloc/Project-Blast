@@ -3,71 +3,82 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ModdableItemInspectGui : GenericItemInspectGui
 {
     [SerializeField] RectTransform attachmentSlotsParent = null;
-    [SerializeField] ModdableItemSlotsGui moddableItemSlotsPrefab = null;
+    [SerializeField] ModdableItemModSlotsGui moddableItemSlotsPrefab = null;
 
-    private List<ModdableItemSlotsGui> modSlotGuis = new List<ModdableItemSlotsGui>();
-    private Dictionary<ItemInstance, ModdableItemSlotsGui> modSlotGuisByItems = new Dictionary<ItemInstance, ModdableItemSlotsGui>();
-    private Dictionary<ItemInstance, ItemInstance> parentItemMap = new Dictionary<ItemInstance, ItemInstance>();
+    private List<ModdableItemModSlotsGui> modSlotGuis = new List<ModdableItemModSlotsGui>();
+    private Dictionary<ItemInstance, ModdableItemModSlotsGui> modSlotGuisByItems = new Dictionary<ItemInstance, ModdableItemModSlotsGui>();
 
-    public override void SetItem(ItemInstance item)
+    private UnityAction<ItemModSlotInstance> OnModAdded;
+    private UnityAction<ItemModSlotInstance, ItemInstance> OnModRemoved;
+
+    private ModdableItemInstance topLevelModdableItem;
+
+    private void Awake()
     {
-        base.SetItem(item);
-        Clear();
-
-        ModdableItemInstance moddable = (ModdableItemInstance)item;
-        CreateModdableItemSlotsGui(moddable, null);
+        OnModAdded += OnModAdd;
+        OnModRemoved += OnModRemove;
     }
 
-    private void CreateModdableItemSlotsGui(ModdableItemInstance moddableItem, ItemInstance parent)
+    private void OnDestroy()
     {
-        if (parent != null)
-        {
-            parentItemMap.Add(moddableItem, parent);
-        }
+        OnModAdded -= OnModAdd;
+        OnModRemoved -= OnModRemoved;
+    }
 
+    public override void SetItem(ItemInstance item, IContainer container)
+    {
+        base.SetItem(item, container);
+        Clear();
+
+        topLevelModdableItem = (ModdableItemInstance)item;
+        CreateModdableItemSlotsGui(topLevelModdableItem, topLevelModdableItem);
+    }
+
+    private void CreateModdableItemSlotsGui(ModdableItemInstance moddableItem, ModdableItemInstance topLevelModdableItem)
+    {
         if (moddableItem != null && moddableItem.ModdableItemBase.ModSlots.Count > 0)
         {
-            ModdableItemSlotsGui modSlotsGui = Instantiate(moddableItemSlotsPrefab, attachmentSlotsParent);
+            ModdableItemModSlotsGui modSlotsGui = Instantiate(moddableItemSlotsPrefab, attachmentSlotsParent);
             modSlotGuis.Add(modSlotsGui);
             
-            modSlotsGui.SetModdableItem(moddableItem);
-            modSlotsGui.OnItemAdded += OnItemAdded;
-            modSlotsGui.OnItemRemoved += OnItemRemoved;
+            modSlotsGui.SetModdableItem(moddableItem, topLevelModdableItem, container, OnModAdded, OnModRemoved);
+
 
             modSlotGuisByItems.Add(moddableItem, modSlotsGui);
         }
 
-        foreach (ItemModData data in moddableItem.InstalledMods)
+        foreach (ItemModSlotInstance data in moddableItem.ModSlots)
         {
-            if (data.itemInstance is ModdableItemInstance)
+            if (data.Mod is ModdableItemInstance)
             {
-                CreateModdableItemSlotsGui((ModdableItemInstance)data.itemInstance, moddableItem);
+                CreateModdableItemSlotsGui((ModdableItemInstance)data.Mod, topLevelModdableItem);
             }
         }
     }
 
     private void Clear()
     {
-        foreach (ModdableItemSlotsGui gui in modSlotGuis)
+        foreach (ModdableItemModSlotsGui gui in modSlotGuis)
         {
             Destroy(gui.gameObject);
         }
     }
 
-    private void OnItemAdded(ItemInstance item, ItemInstance parent)
+    private void OnModAdd(ItemModSlotInstance modSlot)
     {
-        ModdableItemInstance moddableItem = item as ModdableItemInstance;
+        ModdableItemInstance moddableItem = modSlot.Mod as ModdableItemInstance;
         if (moddableItem != null)
         {
-            CreateModdableItemSlotsGui(moddableItem, parent);
+            CreateModdableItemSlotsGui(moddableItem, topLevelModdableItem);
         }
     }
 
-    private void OnItemRemoved(ItemInstance item)
+    private void OnModRemove(ItemModSlotInstance modSlot, ItemInstance item)
     {
 
         List<ItemInstance> effectedMods = new List<ItemInstance>();
@@ -82,9 +93,7 @@ public class ModdableItemInspectGui : GenericItemInspectGui
                 modSlotGuis.Remove(slot);
                 Destroy(slot.gameObject); // TODO: Pool instead
             }
-            parentItemMap.Remove(mod);
         }
-
     }
 
     private void GetChildAttachments(ItemInstance item, List<ItemInstance> outList)
@@ -93,9 +102,9 @@ public class ModdableItemInspectGui : GenericItemInspectGui
         ModdableItemInstance moddableItem = item as ModdableItemInstance;
         if (moddableItem != null)
         {
-            foreach (ItemModData modData in moddableItem.InstalledMods)
+            foreach (ItemModSlotInstance modData in moddableItem.ModSlots)
             {
-                GetChildAttachments(modData.itemInstance, outList);
+                GetChildAttachments(modData.Mod, outList);
             }
         }
     }

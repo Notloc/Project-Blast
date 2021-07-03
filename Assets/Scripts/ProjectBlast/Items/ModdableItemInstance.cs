@@ -8,68 +8,100 @@ public abstract class ModdableItemInstance : ItemInstance
 {
     public ModdableItemBase ModdableItemBase => (ModdableItemBase)ItemBase;
 
-    public UnityAction<ItemModData, ItemInstance> OnModAdded;
-    public UnityAction<ItemInstance> OnModRemoved;
+    public UnityAction<ItemModSlotInstance> OnModAdded;
+    public UnityAction<ItemModSlotInstance, ItemInstance> OnModRemoved;
 
-    public IList<ItemModData> InstalledMods => installedMods.AsReadOnly();
-    [SerializeField] private List<ItemModData> installedMods = new List<ItemModData>();
-    private Dictionary<ItemInstance, ItemModData> installedModsCache = new Dictionary<ItemInstance, ItemModData>();
+    public IList<ItemModSlotInstance> ModSlots => modSlots.AsReadOnly();
+    [SerializeField] private List<ItemModSlotInstance> modSlots = new List<ItemModSlotInstance>();
+    private Dictionary<string, ItemModSlotInstance> modSlotsByName;
 
-    public override Vector2Int BaseSize => itemSize;
+    public override Vector2Int Size => itemSize;
     private Vector2Int itemSize = Vector2Int.one;
 
-    public ModdableItemInstance(ModdableItemBase itemBase, List<ItemModData> mods = null) : base(itemBase)
+    public ModdableItemInstance(ModdableItemBase itemBase) : base(itemBase)
     {
-        itemSize = base.BaseSize;
-        SetMods(mods);
+        itemSize = base.Size;
+        CreateModSlots();
     }
 
-    public void AddMod(ItemModData modData, ItemInstance parent)
+    private void CreateModSlots()
     {
-        installedMods.Add(modData);
-        installedModsCache.Add(modData.itemInstance, modData);
-        CalculateSize();
-        OnModAdded?.Invoke(modData, parent);
+        foreach (ItemModSlotData modSlot in ModdableItemBase.ModSlots)
+        {
+            modSlots.Add(new ItemModSlotInstance(this, modSlot));
+        }
+        modSlotsByName = Util.Dictionary(modSlots, slot => slot.ModSlotData.SlotName);
+    }
+
+    public void AddMod(ItemModData modData)
+    {
+        if (!modSlotsByName.ContainsKey(modData.slotName))
+        {
+            return;
+        }
+
+        ItemInstance modToAdd = modData.mod;
+        ItemModSlotInstance modSlot = modSlotsByName[modData.slotName];
+        if (modSlot.Mod == null && modToAdd != null)
+        {
+            modSlot.SetMod(modToAdd);
+
+            ModdableItemInstance moddableItem = modToAdd as ModdableItemInstance;
+            if (moddableItem != null)
+            {
+                moddableItem.OnModAdded += OnModAdded;
+            }
+
+            OnModAdded?.Invoke(modSlot);
+            CalculateSize();
+            OnItemUpdated?.Invoke(this);
+        }
     }
 
     public void RemoveMod(ItemInstance item)
     {
-        if (installedModsCache.ContainsKey(item))
+        foreach (ItemModSlotInstance modSlot in modSlots)
         {
-            ItemModData modData = installedModsCache[item];
-            installedMods.Remove(modData);
-            installedModsCache.Remove(item);
-            CalculateSize();
-            OnModRemoved?.Invoke(item);
-        }
-    }
-
-    public void SetMods(List<ItemModData> mods)
-    {
-        installedMods.Clear();
-        installedModsCache.Clear();
-        if (mods != null)
-        {
-            foreach (ItemModData mod in mods)
+            if (modSlot.Mod == item)
             {
-                installedMods.Add(mod);
-                installedModsCache.Add(mod.itemInstance, mod);
+                ModdableItemInstance moddableItem = modSlot.Mod as ModdableItemInstance;
+                if (moddableItem != null)
+                {
+                    moddableItem.OnModAdded -= OnModAdded;
+                }
+
+                modSlot.SetMod(null);
+                OnModRemoved?.Invoke(modSlot, item);
+                CalculateSize();
+                OnItemUpdated?.Invoke(this);
             }
         }
-        CalculateSize();
     }
 
     private void CalculateSize()
     {
         Vector2Int modSize = Vector2Int.zero;
-        foreach (ItemModData data in InstalledMods)
+        foreach (ItemModSlotInstance modSlot in ModSlots)
         {
-            WeaponAttachmentInstance attachmentInstance = data.itemInstance as WeaponAttachmentInstance;
+            WeaponAttachmentInstance attachmentInstance = modSlot.Mod as WeaponAttachmentInstance;
             if (attachmentInstance == null)
                 continue;
             modSize += attachmentInstance.WeaponAttachmentBase.SizeModifier;
         }
 
-        itemSize = modSize + base.BaseSize;
+        itemSize = modSize + base.Size;
+    }
+
+    public void SetModData(List<ItemModData> modData)
+    {
+        foreach (ItemModData mod in modData)
+        {
+            AddMod(mod);
+        }
+    }
+
+    public void TriggerUpdate()
+    {
+        OnItemUpdated?.Invoke(this);
     }
 }

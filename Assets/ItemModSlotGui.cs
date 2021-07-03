@@ -7,59 +7,112 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class ItemModSlotGui : MonoBehaviour
+public class ItemModSlotGui : MonoBehaviour, IDragItemReceiver, IDragItemHoverReceiver
 {
     [SerializeField] TextMeshProUGUI slotNameText = null;
-    [SerializeField] ContainerItemGui containerItem = null;
+    [SerializeField] ContainerItemGui containerItemGui = null;
 
-    public UnityAction<ItemInstance, string> OnAddedItem;
-    public UnityAction<ItemInstance, string> OnRemovedItem;
-
-    public ItemModSlot ModSlot => modSlot;
-    private ItemModSlot modSlot;
+    public ItemModSlotInstance ModSlot => modSlot;
+    private ItemModSlotInstance modSlot;
 
     public ItemInstance Item => item;
     private ItemInstance item;
 
-    [SerializeField] SpoofContainer container = null;
+    private IContainer container;
+    public ModdableItemInstance TopLevelModdableItem { get; private set; }
+
+    private UnityAction<ItemModSlotInstance> onAddItem;
+    private UnityAction<ItemModSlotInstance, ItemInstance> onRemoveItem;
 
     private void Awake()
     {
-        containerItem.gameObject.SetActive(false);
+        containerItemGui.gameObject.SetActive(false);
     }
 
-    public void Initialize(ItemModSlot modSlot)
+    private void OnDestroy()
     {
-        container.OnAddItem += OnAddItem;
-        container.OnRemoveItem += OnRemoveItem;
+        if (modSlot == null)
+        {
+            return;
+        }
+
+        ModdableItemInstance moddableItem = modSlot.parentModdableItem;
+        moddableItem.OnModAdded -= OnModAdded;
+        moddableItem.OnModRemoved -= OnModRemoved;
+    }
+
+    public void Initialize(ItemModSlotInstance modSlot, ModdableItemInstance topLevelItem, IContainer container, UnityAction<ItemModSlotInstance> onAddItem, UnityAction<ItemModSlotInstance, ItemInstance> onRemoveItem)
+    {
+        this.TopLevelModdableItem = topLevelItem;
+        this.container = container;
+
+        this.onAddItem = onAddItem;
+        this.onRemoveItem = onRemoveItem;
 
         this.modSlot = modSlot;
-        slotNameText.text = modSlot.SlotName;
-        containerItem.SetContainer(container);
+        slotNameText.text = modSlot.ModSlotData.SlotName;
+
+        ModdableItemInstance moddableItem = modSlot.parentModdableItem;
+        moddableItem.OnModAdded += OnModAdded;
+        moddableItem.OnModRemoved += OnModRemoved;
+
+        containerItemGui.SetContainer(null);
     }
 
     public void SetItem(ItemInstance item)
     {
         this.item = item;
-        containerItem.gameObject.SetActive(item != null);
-        containerItem.SetItemInstance(item != null ? new ContainerItemInstance(item, Vector2Int.zero) : null);
+        containerItemGui.gameObject.SetActive(item != null);
+        containerItemGui.SetContainerItem(this, item != null ? new ContainerItemEntry(item, null,  Vector2Int.zero) : default);
     }
 
-    private void OnAddItem(ContainerItemInstance containerItem)
+    private void OnModAdded(ItemModSlotInstance modSlot)
     {
-        if (this.item == null)
+        if (this.modSlot == modSlot)
         {
-            SetItem(containerItem.Item);
-            OnAddedItem?.Invoke(containerItem.Item, modSlot.SlotName);
+            SetItem(modSlot.Mod);
+            onAddItem?.Invoke(modSlot);
         }
     }
 
-    private void OnRemoveItem(ContainerItemInstance containerItem)
+    private void OnModRemoved(ItemModSlotInstance modSlot, ItemInstance removedItem)
     {
-        if (containerItem.Item == item)
+        if (this.modSlot == modSlot)
         {
-            OnRemovedItem?.Invoke(item, modSlot.SlotName);
             SetItem(null);
+            onRemoveItem?.Invoke(modSlot, removedItem);
         }
+    }
+
+
+
+
+
+
+
+
+
+    // TODO: Hover effects
+    public void HoverItem(Vector2Int itemDimensions, Vector2Int coordinates, bool isValid) {}
+    public void ClearHover() {}
+
+    public ContainerItemEntry GetContainerItem()
+    {
+        return new ContainerItemEntry(item, null, Vector2Int.zero);
+    }
+
+    public void HoverItem(IDragItem dragItem, Vector2 mousePosition)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void ReceiveDraggedItem(IDragItem draggedItem, Vector2 mousePosition)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void RemoveDraggedItem(IDragItem draggedItem)
+    {
+        throw new System.NotImplementedException();
     }
 }

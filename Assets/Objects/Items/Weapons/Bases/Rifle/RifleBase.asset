@@ -21,20 +21,16 @@ MonoBehaviour:
   modSlots:
   - slotName: RIFLE_MAGAZINE
     compatibilityTags:
-    - RIFLE
-    - MAGIZINE
+    - RIFLE_MAGAZINE
   - slotName: RIFLE_GRIP
     compatibilityTags:
-    - RIFLE
-    - GRIP
+    - RIFLE_GRIP
   - slotName: RIFLE_BARREL
     compatibilityTags:
-    - RIFLE
-    - BARREL
+    - RIFLE_BARREL
   - slotName: RIFLE_STOCK
     compatibilityTags:
-    - RIFLE
-    - STOCK
+    - RIFLE_STOCK
   roundsPerSecond: 3
   handling: 50
   reloadTime: 3

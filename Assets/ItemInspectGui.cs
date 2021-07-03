@@ -25,7 +25,7 @@ public class ItemInspectGui : MonoBehaviour
         Window.OnClose += OnClose;
     }
 
-    public void Open(ItemInstance item)
+    public void Open(ItemInstance item, IContainer container)
     {
         if (openItemInspects.ContainsKey(item))
         {
@@ -40,13 +40,13 @@ public class ItemInspectGui : MonoBehaviour
             {
                 activeInspect = moddableItemInspect.gameObject;
                 moddableItemInspect.gameObject.SetActive(true);
-                moddableItemInspect.SetItem(item);
+                moddableItemInspect.SetItem(item, container);
             }
             else
             {
                 activeInspect = genericItemInspect.gameObject;
                 genericItemInspect.gameObject.SetActive(true);
-                genericItemInspect.SetItem(item);
+                genericItemInspect.SetItem(item, container);
             }
 
             openItemInspects.Add(item, this);

@@ -11,10 +11,12 @@ public class GenericItemInspectGui : MonoBehaviour
     [SerializeField] Image itemImage = null; // TODO: replace with 3D preview
 
     protected ItemInstance item;
-    
-    public virtual void SetItem(ItemInstance item)
+    protected IContainer container;
+
+    public virtual void SetItem(ItemInstance item, IContainer container)
     {
         this.item = item;
+        this.container = container;
 
         itemName.text = item.Name;
         itemDescription.text = item.Description;

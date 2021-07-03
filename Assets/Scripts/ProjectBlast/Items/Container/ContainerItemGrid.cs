@@ -22,24 +22,24 @@ namespace ProjectBlast.Items.Containers
             gridSlots = new ContainerItemGridSlot[width * height];
         }
 
-        public void FillSlots(Vector2Int size, Vector2Int coordinates)
+        public void FillSlots(ContainerItemEntry item)
         {
-            for (int x = 0; x < size.x; x++) {
-                for (int y = 0; y < size.y; y++)
+            for (int x = 0; x < item.Size.x; x++) {
+                for (int y = 0; y < item.Size.y; y++)
                 {
-                    Vector2Int coord = coordinates + new Vector2Int(x, y);
+                    Vector2Int coord = item.Coordinates + new Vector2Int(x, y);
                     int index = coord.y * width + coord.x;
                     gridSlots[index].isFilled = true;
                 }
             }
         }
 
-        public void ClearSlots(Vector2Int size, Vector2Int coordinates)
+        public void ClearSlots(ContainerItemEntry item)
         {
-            for (int x = 0; x < size.x; x++) {
-                for (int y = 0; y < size.y; y++)
+            for (int x = 0; x < item.Size.x; x++) {
+                for (int y = 0; y < item.Size.y; y++)
                 {
-                    Vector2Int coord = coordinates + new Vector2Int(x, y);
+                    Vector2Int coord = item.Coordinates + new Vector2Int(x, y);
                     int index = coord.y * width + coord.x;
                     gridSlots[index].isFilled = false;
                 }
@@ -53,6 +53,19 @@ namespace ProjectBlast.Items.Containers
                     if (!IsSlotClear(coordinates + new Vector2Int(x, y)))
                         return false;
             
+            return true;
+        }
+
+        public bool IsSlotsClear(Vector2Int size, Vector2Int coordinates, HashSet<Vector2Int> ignore)
+        {
+            for (int x = 0; x < size.x; x++) {
+                for (int y = 0; y < size.y; y++)
+                {
+                    Vector2Int coord = coordinates + new Vector2Int(x, y);
+                    if (!ignore.Contains(coord) && !IsSlotClear(coord))
+                        return false;
+                }
+            }
             return true;
         }
 

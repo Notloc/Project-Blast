@@ -45,17 +45,21 @@ public class WeaponBehaviour : MonoBehaviour
         attachmentModelDict.Add(WeaponInstance, gunModel);
         attachmentInstanceDict.Add(gunModel, WeaponInstance);
 
-        IList<ItemModData> installedMods = WeaponInstance.InstalledMods;
-        foreach(ItemModData data in installedMods)
+        IList<ItemModSlotInstance> modSlots = WeaponInstance.ModSlots;
+        foreach(ItemModSlotInstance modSlot in modSlots)
         {
-            CreateAttachmentModel(data, positionData);
+            CreateModelForModSlot(modSlot, positionData);
         }
     }
 
-    private void CreateAttachmentModel(ItemModData attachmentData, ItemModelPositionData positionData)
+    private void CreateModelForModSlot(ItemModSlotInstance modSlot, ItemModelPositionData positionData)
     {
-        ItemInstance attachment = attachmentData.itemInstance;
-        string slotName = attachmentData.modSlotName;
+        ItemInstance attachment = modSlot.Mod;
+        string slotName = modSlot.ModSlotData.SlotName;
+        if (attachment == null)
+        {
+            return;
+        }
 
         Assert.IsTrue(positionData.ModSlotPositionsByName.ContainsKey(slotName), "Attachment Slot [" + slotName + "] not found in the weapons position data.");
 
@@ -75,17 +79,20 @@ public class WeaponBehaviour : MonoBehaviour
 
             ItemModelPositionData moddableAttachmentPositionData = attachmentModel.GetComponent<ItemModelPositionData>();
 
-            IList<ItemModData> subMods = moddableAttachment.InstalledMods;
-            foreach (ItemModData subMod in subMods)
+            IList<ItemModSlotInstance> subModSlots = moddableAttachment.ModSlots;
+            foreach (ItemModSlotInstance subModSlot in subModSlots)
             {
-                CreateAttachmentModel(subMod, moddableAttachmentPositionData);
+                if (subModSlot.Mod != null)
+                {
+                    CreateModelForModSlot(subModSlot, moddableAttachmentPositionData);
+                }
             }
         }
     }
 
-    public void OnRemoveAttachment(ItemInstance itemInstance)
+    public void OnRemoveAttachment(ItemModSlotInstance modSlot, ItemInstance removedItem)
     {
-        GameObject attachmentModel = attachmentModelDict[itemInstance];
+        GameObject attachmentModel = attachmentModelDict[removedItem];
 
         List<GameObject> modelsToDestroy = new List<GameObject>();
         GetModelsToDestroy(attachmentModel, modelsToDestroy);
@@ -127,11 +134,11 @@ public class WeaponBehaviour : MonoBehaviour
 
     }
 
-    public void OnAddAttachment(ItemModData itemModData, ItemInstance parent)
+    public void OnAddAttachment(ItemModSlotInstance modSlot)
     {
-        GameObject attachmentModel = attachmentModelDict[parent];
-        ItemModelPositionData positionData = attachmentModel.GetComponent<ItemModelPositionData>();
+        GameObject parentModel = attachmentModelDict[modSlot.parentModdableItem];
+        ItemModelPositionData positionData = parentModel.GetComponent<ItemModelPositionData>();
 
-        CreateAttachmentModel(itemModData, positionData);
+        CreateModelForModSlot(modSlot, positionData);
     }
 }

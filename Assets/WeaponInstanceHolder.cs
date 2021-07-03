@@ -10,7 +10,9 @@ public class WeaponInstanceHolder : ScriptableObject
 
     public WeaponInstance GetWeaponInstance()
     {
-        return new WeaponInstance(weaponBase, GetItemModData());
+        WeaponInstance weapon = new WeaponInstance(weaponBase);
+        weapon.SetModData(GetItemModData());
+        return weapon;
     }
 
     private List<ItemModData> GetItemModData()

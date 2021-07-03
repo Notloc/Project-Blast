@@ -16,7 +16,8 @@ MonoBehaviour:
   sprite: {fileID: 0}
   modelPrefab: {fileID: -58529955961317313, guid: 8f0ea1d70fbc01e4d96c31e81fe1046a,
     type: 3}
-  tags: []
+  tags:
+  - RIFLE_MAGAZINE
+  description: Item Description
   modSlots: []
-  slotName: RIFLE_MAGIZINE
   sizeModifier: {x: 0, y: 1}

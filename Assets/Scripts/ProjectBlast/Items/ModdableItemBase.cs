@@ -6,7 +6,7 @@ public class ModdableItemBase : ItemBase
 {
 
     [Header("Mods")]
-    [SerializeField] List<ItemModSlot> modSlots;
-    public IList<ItemModSlot> ModSlots => modSlots;
+    [SerializeField] List<ItemModSlotData> modSlots;
+    public IList<ItemModSlotData> ModSlots => modSlots;
 
 }
