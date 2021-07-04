@@ -9,7 +9,7 @@ namespace ProjectBlast.PlayerScripts
     public class PlayerController : MonoBehaviour
     {
         [Header("Required References")]
-        [SerializeField] Player player = null;
+        //[SerializeField] Player player = null;
         [SerializeField] new Rigidbody rigidbody = null;
 
         [Header("Movement Options")]
@@ -18,7 +18,7 @@ namespace ProjectBlast.PlayerScripts
         [SerializeField] float crouchPenalty = 0f;
         [SerializeField] bool isSprint = false;
         [SerializeField] bool isCrouch = false;
-        [SerializeField] float rotationSmoothing = 5f;
+        //[SerializeField] float rotationSmoothing = 5f;
 
         private bool controlEnabled = true;
         private new Camera camera;
@@ -92,7 +92,7 @@ namespace ProjectBlast.PlayerScripts
 
         private void Crouch()
         {
-            if (false)
+/*            if (false)
             {
                 isCrouch = !isCrouch;
                 isSprint = false;
@@ -102,7 +102,7 @@ namespace ProjectBlast.PlayerScripts
             {
                 isCrouch = false;
                 crouchPenalty = 0f;
-            }
+            }*/
         }
 
         

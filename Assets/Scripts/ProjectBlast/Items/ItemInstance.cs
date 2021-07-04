@@ -8,6 +8,7 @@ using UnityEngine.Events;
 public class ItemInstance
 {
     public UnityAction<ItemInstance> OnItemUpdated;
+    public UnityAction<ItemInstance> OnItemRelocated;
 
     public ItemBase ItemBase => item;
     [SerializeField] ItemBase item;
@@ -22,5 +23,31 @@ public class ItemInstance
     public ItemInstance(ItemBase item)
     {
         this.item = item;
+    }
+
+    public ItemInstance Parent => parent;
+    [SerializeField] ItemInstance parent;
+
+    public void SetParent(ItemInstance parent)
+    {
+        if (this == parent)
+        {
+            throw new System.Exception("An item cannot be its own parent!");
+        }
+        this.parent = parent;
+    }
+
+    public ItemInstance GetTopLevelParent()
+    {
+        if (parent != null)
+        {
+            return parent.GetTopLevelParent();
+        }
+        return this;
+    }
+
+    public void TriggerRelocationEvent()
+    {
+        OnItemRelocated?.Invoke(this);
     }
 }

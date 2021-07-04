@@ -12,7 +12,7 @@ namespace ProjectBlast.Vehicles
     {
         [SerializeField] new Rigidbody rigidbody = null;
         [SerializeField] SpaceshipCameraController cameraController = null;
-        [SerializeField] SpaceshipController shipController = null;
+        //[SerializeField] SpaceshipController shipController = null;
         [SerializeField] SpaceShipState shipState = SpaceShipState.LANDED;
 
         [SerializeField] Transform seatPoint = null;

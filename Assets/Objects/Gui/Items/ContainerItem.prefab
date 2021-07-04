@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -93,3 +93,4 @@ MonoBehaviour:
   itemDragManager: {fileID: 11400000, guid: e309e26f48f31624e97123470bd5603e, type: 2}
   itemInspectorFactory: {fileID: 11400000, guid: 64bb8597e7ff7594dae42fc1942ba270,
     type: 2}
+  rect: {fileID: 9033409964888067665}

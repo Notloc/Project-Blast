@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modSlotPositionData:
-  - slotName: BARREL_FRONT
+  - slotName: RIFLE_BARREL_FRONT
     attachmentPoint: {fileID: 6068719066711608113}
 --- !u!1 &1509287189372958169
 GameObject:

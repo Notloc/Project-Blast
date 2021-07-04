@@ -12,9 +12,9 @@ namespace ProjectBlast.Vehicles
         [SerializeField] Spaceship spaceship = null;
         [SerializeField] protected new Rigidbody rigidbody = null;
 
-        [SerializeField] float pitchMultiplier = 1f;
-        [SerializeField] float yawMultiplier = 0.25f;
-        [SerializeField] float rollMultiplier = 3f;
+        //[SerializeField] float pitchMultiplier = 1f;
+        //[SerializeField] float yawMultiplier = 0.25f;
+        //[SerializeField] float rollMultiplier = 3f;
 
         private bool controlsActive = true;
 

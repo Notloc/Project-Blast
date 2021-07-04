@@ -14,14 +14,14 @@ namespace ProjectBlast.Items.Containers
     {
         [SerializeField] int width = 2;
         [SerializeField] int height = 2;
-        [SerializeField] private List<ContainerItemEntry> containerItems = new List<ContainerItemEntry>();
-        [SerializeField] private Dictionary<ItemInstance, ContainerItemEntry> containerItemCache = new Dictionary<ItemInstance, ContainerItemEntry>();
+        [SerializeField] private List<ContainerEntry> containerItems = new List<ContainerEntry>();
+        [SerializeField] private Dictionary<ItemInstance, ContainerEntry> containerItemCache = new Dictionary<ItemInstance, ContainerEntry>();
 
         [SerializeField] private ContainerItemGrid containerGrid;
 
-        public UnityAction<ContainerItemEntry> OnAddItem { get; set; }
-        public UnityAction<ContainerItemEntry> OnRemoveItem { get; set; }
-        public UnityAction<ContainerItemEntry> OnUpdateItem { get; set; }
+        public UnityAction<ContainerEntry> OnAddItem { get; set; }
+        public UnityAction<ContainerEntry> OnRemoveItem { get; set; }
+        public UnityAction<ContainerEntry> OnUpdateItem { get; set; }
 
         public int Width => width;
         public int Height => height;
@@ -35,7 +35,7 @@ namespace ProjectBlast.Items.Containers
             containerGrid = new ContainerItemGrid(width, height);
         }
 
-        public IList<ContainerItemEntry> GetItems()
+        public IList<ContainerEntry> GetItems()
         {
             return containerItems.AsReadOnly();
         }
@@ -76,7 +76,7 @@ namespace ProjectBlast.Items.Containers
         /// <returns></returns>
         public bool AddItem(ItemInstance itemInstance, Vector2Int coordinates, bool isRotated)
         {
-            ContainerItemEntry containerItem = new ContainerItemEntry(itemInstance, this, coordinates, isRotated);
+            ContainerEntry containerItem = new ContainerEntry(itemInstance, this, coordinates, isRotated);
             if (!containerGrid.IsSlotsClear(containerItem.Size, coordinates))
                 return false;
 
@@ -87,15 +87,16 @@ namespace ProjectBlast.Items.Containers
             itemInstance.OnItemUpdated += OnItemUpdated;
 
             OnAddItem?.Invoke(containerItem);
+            itemInstance.TriggerRelocationEvent();
             return true;
         }
 
         public bool MoveItem(ItemInstance itemInstance, Vector2Int coordinates, bool isRotated)
         {
-            ContainerItemEntry existingItem = containerItemCache[itemInstance];
+            ContainerEntry existingItem = containerItemCache[itemInstance];
             HashSet<Vector2Int> existingItemCoordinates = GetCoordinateSet(existingItem);
 
-            ContainerItemEntry newItem = new ContainerItemEntry(itemInstance, this, coordinates, isRotated);
+            ContainerEntry newItem = new ContainerEntry(itemInstance, this, coordinates, isRotated);
             if (!containerGrid.IsSlotsClear(newItem.Size, coordinates, existingItemCoordinates))
                 return false;
 
@@ -118,14 +119,16 @@ namespace ProjectBlast.Items.Containers
                 return false;
             }
 
-            ContainerItemEntry containerItem = containerItemCache[item];
+            ContainerEntry containerItem = containerItemCache[item];
 
             containerItems.Remove(containerItem);
             containerItemCache.Remove(item);
             containerGrid.ClearSlots(containerItem);
 
-            item.OnItemUpdated -= OnItemUpdated;
             OnRemoveItem?.Invoke(containerItem);
+
+            item.OnItemUpdated -= OnItemUpdated;
+            item.TriggerRelocationEvent();
             return true;
         }
 
@@ -146,7 +149,7 @@ namespace ProjectBlast.Items.Containers
 
         private void OnItemUpdated(ItemInstance itemInstance)
         {
-            ContainerItemEntry containerItem = containerItemCache[itemInstance];
+            ContainerEntry containerItem = containerItemCache[itemInstance];
             if (containerItem.Item != null)
             {
                 if (containerItem.Size != itemInstance.Size)
@@ -160,20 +163,30 @@ namespace ProjectBlast.Items.Containers
             }
         }
 
-        public bool WillResizedItemFit(ItemInstance item, Vector2Int sizeMod)
+        public bool WillResizedItemFit(ItemInstance item, ItemInstance other, Vector2Int sizeMod)
         {
             if (sizeMod.x <= 0 && sizeMod.y <= 0)
                 return true;
 
             Vector2Int newSize = item.Size + sizeMod;
-            ContainerItemEntry containerItem = containerItemCache[item];
+            ContainerEntry containerItem = containerItemCache[item];
             if (containerItem.IsRotated)
             {
                 newSize = newSize.Swap();
                 sizeMod = sizeMod.Swap();
             }
 
-            HashSet<Vector2Int> originalCoordinates = GetCoordinateSet(containerItem);
+            HashSet<Vector2Int> originalCoordinates;
+            if (containerItemCache.ContainsKey(other))
+            {
+                originalCoordinates = GetCoordinateSet(containerItem, containerItemCache[other]);
+            }
+            else
+            {
+                originalCoordinates = GetCoordinateSet(containerItem);
+            }
+            
+            
             // For each possible direction the item can expand in
             for (int x = 0; x >= -sizeMod.x; x--)
             {
@@ -200,10 +213,10 @@ namespace ProjectBlast.Items.Containers
             return false;
         }
 
-        private void ResizeItem(ContainerItemEntry containerItem)
+        private void ResizeItem(ContainerEntry containerItem)
         {
             Vector2Int sizeMod = containerItem.Item.Size - (containerItem.IsRotated ? containerItem.Size.Swap() : containerItem.Size);
-            Vector2Int newSize = containerItem.Item.Size + sizeMod;
+            Vector2Int newSize = containerItem.Item.Size;
 
             if (containerItem.IsRotated)
             {
@@ -216,16 +229,21 @@ namespace ProjectBlast.Items.Containers
             // Check if it fits
             Vector2Int GetNewItemPosition()
             {
+                if (sizeMod.x <= 0 && sizeMod.y <= 0)
+                {
+                    return containerItem.Coordinates;
+                }
+
                 // For each possible direction the item can expand in
-                for (int x = 0; x >= sizeMod.x; x--)
+                for (int x = 0; x >= -sizeMod.x; x--)
                 {
                     for (int y = 0; y >= -sizeMod.y; y--)
                     {
                         bool IsClear()
                         {
-                            for (int x2 = 0; x2 < newSize.x; x++)
+                            for (int x2 = 0; x2 < newSize.x; x2++)
                             {
-                                for (int y2 = 0; y2 < newSize.y; y++)
+                                for (int y2 = 0; y2 < newSize.y; y2++)
                                 {
                                     Vector2Int coord = containerItem.Coordinates + new Vector2Int(x + x2, y + y2);
                                     if (!originalCoordinates.Contains(coord) && !IsCoordinatesClear(coord))
@@ -235,7 +253,7 @@ namespace ProjectBlast.Items.Containers
                             return true;
                         }
                         if (IsClear())
-                            return new Vector2Int(x, y);
+                            return containerItem.Coordinates + new Vector2Int(x, y);
                     }
                 }
                 return -Vector2Int.one;
@@ -247,24 +265,24 @@ namespace ProjectBlast.Items.Containers
                 newPosition = containerItem.Coordinates;
             }
 
-            RemoveItem(containerItem.Item);
-            AddItem(containerItem.Item, newPosition, containerItem.IsRotated);
+            MoveItem(containerItem.Item, newPosition, containerItem.IsRotated);
         }
 
-        private HashSet<Vector2Int> GetCoordinateSet(ContainerItemEntry containerItem)
+        private HashSet<Vector2Int> GetCoordinateSet(params ContainerEntry[] containerEntries)
         {
             HashSet<Vector2Int> coordinateSet = new HashSet<Vector2Int>();
-
-            Vector2Int baseCoordinate = containerItem.Coordinates;
-            Vector2Int size = containerItem.Size;
-            for (int x = 0; x < size.x; x++)
+            foreach (ContainerEntry entry in containerEntries)
             {
-                for (int y = 0; y < size.y; y++)
+                Vector2Int baseCoordinate = entry.Coordinates;
+                Vector2Int size = entry.Size;
+                for (int x = 0; x < size.x; x++)
                 {
-                    coordinateSet.Add(new Vector2Int(x + baseCoordinate.x, y + baseCoordinate.y));
+                    for (int y = 0; y < size.y; y++)
+                    {
+                        coordinateSet.Add(new Vector2Int(x + baseCoordinate.x, y + baseCoordinate.y));
+                    }
                 }
             }
-
             return coordinateSet;
         }
 

@@ -22,7 +22,7 @@ namespace ProjectBlast.Items.Containers
             gridSlots = new ContainerItemGridSlot[width * height];
         }
 
-        public void FillSlots(ContainerItemEntry item)
+        public void FillSlots(ContainerEntry item)
         {
             for (int x = 0; x < item.Size.x; x++) {
                 for (int y = 0; y < item.Size.y; y++)
@@ -34,7 +34,7 @@ namespace ProjectBlast.Items.Containers
             }
         }
 
-        public void ClearSlots(ContainerItemEntry item)
+        public void ClearSlots(ContainerEntry item)
         {
             for (int x = 0; x < item.Size.x; x++) {
                 for (int y = 0; y < item.Size.y; y++)
