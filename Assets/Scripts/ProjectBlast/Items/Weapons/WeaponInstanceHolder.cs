@@ -8,7 +8,7 @@ public class WeaponInstanceHolder : ScriptableObject
     [SerializeField] WeaponBase weaponBase = null;
     [SerializeField] List<WeaponAttachmentData> attachments = null;
 
-    public WeaponInstance GetWeaponInstance()
+    public WeaponInstance CreateWeaponInstance()
     {
         WeaponInstance weapon = new WeaponInstance(weaponBase);
         weapon.SetModData(GetItemModData());

@@ -18,11 +18,12 @@ MonoBehaviour:
     type: 3}
   tags:
   - ATTACHMENT
-  - BARREL_BARREL
+  - BARREL
   - RIFLE
   description: Big Booty Barrel
   modSlots:
-  - slotName: RIFLE_BARREL_FRONT
+  - slotName: BARREL_FRONT
     compatibilityTags:
-    - RIFLE_BARREL_FRONT
+    - BARREL_FRONT
+    - RIFLE
   sizeModifier: {x: 1, y: 0}

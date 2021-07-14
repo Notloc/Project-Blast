@@ -17,7 +17,8 @@ MonoBehaviour:
   modelPrefab: {fileID: 6032497250785767174, guid: a6d3a27b32364f54997ac7846e610c12,
     type: 3}
   tags:
-  - RIFLE_BARREL_FRONT
+  - BARREL_FRONT
+  - RIFLE
   description: Item Description
   modSlots: []
   sizeModifier: {x: 1, y: 0}

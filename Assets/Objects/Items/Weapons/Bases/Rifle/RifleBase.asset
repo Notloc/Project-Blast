@@ -27,7 +27,8 @@ MonoBehaviour:
     - RIFLE_GRIP
   - slotName: RIFLE_BARREL
     compatibilityTags:
-    - RIFLE_BARREL
+    - BARREL
+    - RIFLE
   - slotName: RIFLE_STOCK
     compatibilityTags:
     - RIFLE_STOCK

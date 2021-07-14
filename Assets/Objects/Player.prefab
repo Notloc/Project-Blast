@@ -126,6 +126,36 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &7232490105986801255
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3903275327911135369}
+  m_Layer: 0
+  m_Name: GunHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3903275327911135369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7232490105986801255}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7788034856381914481}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7788034856381914493
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,6 +170,10 @@ GameObject:
   - component: {fileID: 7121238227984773065}
   - component: {fileID: 7788034856381914483}
   - component: {fileID: 7497169486162052697}
+  - component: {fileID: 6602743147384992313}
+  - component: {fileID: 7643452935082278750}
+  - component: {fileID: 4832429776713730759}
+  - component: {fileID: 6730273039734281586}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -161,6 +195,7 @@ Transform:
   - {fileID: 7896849291328171397}
   - {fileID: 5033311236059678387}
   - {fileID: 2047914043}
+  - {fileID: 3903275327911135369}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -191,14 +226,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da91d500081abce42bafabfc6b177d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 5930233270721937698}
   rigidbody: {fileID: 7788034856381914483}
   speed: 10
   boost: 5
   crouchPenalty: 0
   isSprint: 0
   isCrouch: 0
-  rotationSmoothing: 5
 --- !u!114 &7121238227984773065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,6 +282,61 @@ MonoBehaviour:
   interactionDistance: 3.5
   holdToGrabLength: 0.35
   grabbedItemDistanceMult: 0.5
+--- !u!114 &6602743147384992313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7788034856381914493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 629d573a0ad953b4eba8ec2922e387f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponPrefab: {fileID: 5007046039095721644, guid: 33cb36bdc1c742b4b9ee1b6036a66949,
+    type: 3}
+  weaponParent: {fileID: 3903275327911135369}
+--- !u!114 &7643452935082278750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7788034856381914493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ecd8aa56ee4d44b9ad50100393db76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4832429776713730759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7788034856381914493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab91686b274f50748b6803bf7d0c126f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6730273039734281586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7788034856381914493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f51ff81fc218b5459b82d4c08dae150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponSlots: {fileID: 7643452935082278750}
+  primaryWeaponHolder: {fileID: 11400000, guid: cfa3975cb9c3e9542b6c144f2a8692c3,
+    type: 2}
+  weaponController: {fileID: 6602743147384992313}
 --- !u!1 &8663129418126969136
 GameObject:
   m_ObjectHideFlags: 0

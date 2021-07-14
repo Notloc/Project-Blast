@@ -9,16 +9,14 @@ public class WeaponBehaviour : MonoBehaviour
     public WeaponInstance WeaponInstance { get; private set; }
     [SerializeField] WeaponInstanceHolder weaponInstanceHolder = null;
 
-    private List<GameObject> attachmentModels = new List<GameObject>();
-    private Dictionary<ItemInstance, GameObject> attachmentModelDict = new Dictionary<ItemInstance, GameObject>();
-    private Dictionary<GameObject, ItemInstance> attachmentInstanceDict = new Dictionary<GameObject, ItemInstance>();
-    private Dictionary<Transform, GameObject> attachmentPointToAttachmentModelDict = new Dictionary<Transform, GameObject>();
+    private WeaponGraphics weaponGraphics;
 
     private void Awake()
     {
+        weaponGraphics = new WeaponGraphics();
         if (weaponInstanceHolder != null)
         {
-            SetWeaponInstance(weaponInstanceHolder.GetWeaponInstance());
+            SetWeaponInstance(weaponInstanceHolder.CreateWeaponInstance());
         }
     }
 
@@ -34,111 +32,16 @@ public class WeaponBehaviour : MonoBehaviour
         this.WeaponInstance.OnModAdded += OnAddAttachment;
         this.WeaponInstance.OnModRemoved += OnRemoveAttachment;
 
-        CreateModel();
-    }
-
-    private void CreateModel()
-    {
-        GameObject gunModel = Instantiate(WeaponInstance.WeaponBase.ModelPrefab, transform);
-        ItemModelPositionData positionData = gunModel.GetComponent<ItemModelPositionData>();
-
-        attachmentModelDict.Add(WeaponInstance, gunModel);
-        attachmentInstanceDict.Add(gunModel, WeaponInstance);
-
-        IList<ItemModSlotInstance> modSlots = WeaponInstance.ModSlots;
-        foreach(ItemModSlotInstance modSlot in modSlots)
-        {
-            CreateModelForModSlot(modSlot, positionData);
-        }
-    }
-
-    private void CreateModelForModSlot(ItemModSlotInstance modSlot, ItemModelPositionData positionData)
-    {
-        ItemInstance attachment = modSlot.Mod;
-        string slotName = modSlot.ModSlotData.SlotName;
-        if (attachment == null)
-        {
-            return;
-        }
-
-        Assert.IsTrue(positionData.ModSlotPositionsByName.ContainsKey(slotName), "Attachment Slot [" + slotName + "] not found in the weapons position data.");
-
-        Transform attachPoint = positionData.ModSlotPositionsByName[slotName].AttachmentPoint;
-        GameObject attachmentModel = Instantiate(attachment.ItemBase.ModelPrefab, attachPoint);
-
-        attachmentModels.Add(attachmentModel);
-        attachmentModelDict.Add(attachment, attachmentModel);
-        attachmentInstanceDict.Add(attachmentModel, attachment);
-        attachmentPointToAttachmentModelDict.Add(attachPoint, attachmentModel);
-
-        ModdableItemInstance moddableAttachment = attachment as ModdableItemInstance;
-        if (moddableAttachment != null)
-        {
-            moddableAttachment.OnModAdded += OnAddAttachment;
-            moddableAttachment.OnModRemoved += OnRemoveAttachment;
-
-            ItemModelPositionData moddableAttachmentPositionData = attachmentModel.GetComponent<ItemModelPositionData>();
-
-            IList<ItemModSlotInstance> subModSlots = moddableAttachment.ModSlots;
-            foreach (ItemModSlotInstance subModSlot in subModSlots)
-            {
-                if (subModSlot.Mod != null)
-                {
-                    CreateModelForModSlot(subModSlot, moddableAttachmentPositionData);
-                }
-            }
-        }
-    }
-
-    public void OnRemoveAttachment(ItemModSlotInstance modSlot, ItemInstance removedItem)
-    {
-        GameObject attachmentModel = attachmentModelDict[removedItem];
-
-        List<GameObject> modelsToDestroy = new List<GameObject>();
-        GetModelsToDestroy(attachmentModel, modelsToDestroy);
-        
-
-        foreach (GameObject model in modelsToDestroy)
-        {
-            ItemInstance item = attachmentInstanceDict[model];
-            attachmentModelDict.Remove(item);
-            attachmentInstanceDict.Remove(model);
-            attachmentModels.Remove(model);
-            attachmentPointToAttachmentModelDict.Remove(model.transform.parent);
-            Destroy(model);
-
-            ModdableItemInstance moddableAttachment = item as ModdableItemInstance;
-            if (moddableAttachment != null)
-            {
-                moddableAttachment.OnModAdded -= OnAddAttachment;
-                moddableAttachment.OnModRemoved -= OnRemoveAttachment;
-            }
-        }   
-    }
-
-    private void GetModelsToDestroy(GameObject model, List<GameObject> outList)
-    {
-        outList.Add(model);
-        ItemModelPositionData positionData = model.GetComponent<ItemModelPositionData>();
-        if (positionData)
-        {
-            foreach (ItemModSlotPositionData modSlotPosition in positionData.ModSlotPositions)
-            {
-                if (attachmentPointToAttachmentModelDict.ContainsKey(modSlotPosition.AttachmentPoint))
-                {
-                    GameObject attachment = attachmentPointToAttachmentModelDict[modSlotPosition.AttachmentPoint];
-                    GetModelsToDestroy(attachment, outList);
-                }
-            }
-        }
-
+        weaponGraphics.CreateModel(weaponInstance, transform);
     }
 
     public void OnAddAttachment(ItemModSlotInstance modSlot)
     {
-        GameObject parentModel = attachmentModelDict[modSlot.parentModdableItem];
-        ItemModelPositionData positionData = parentModel.GetComponent<ItemModelPositionData>();
+        weaponGraphics.OnAddAttachment(modSlot);
+    }
 
-        CreateModelForModSlot(modSlot, positionData);
+    public void OnRemoveAttachment(ItemModSlotInstance modSlot, ItemInstance removedItem)
+    {
+        weaponGraphics.OnRemoveAttachment(modSlot, removedItem); 
     }
 }

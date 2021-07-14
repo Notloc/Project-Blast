@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class DebugWeaponItemGui : MonoBehaviour
 {
-    [SerializeField] WeaponBehaviour weaponBehaviour;
-    [SerializeField] ContainerGui gui;
+    [SerializeField] WeaponBehaviour weaponBehaviour = null;
+    [SerializeField] ContainerGui gui = null;
 
     private void Start()
     {
