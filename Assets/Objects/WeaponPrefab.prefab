@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2273857746146874723}
   - component: {fileID: 5007046039095721644}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WeaponPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

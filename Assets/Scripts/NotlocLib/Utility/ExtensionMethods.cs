@@ -7,6 +7,17 @@ namespace Notloc.Utility
 {
     public static class ExtensionMethods
     {
+
+        public static void SetLayerRecursively(this GameObject obj, int layer)
+        {
+            obj.layer = layer;
+            foreach (Transform t in obj.transform)
+                SetLayerRecursively(t.gameObject, layer);
+        }
+
+
+
+
         /// <summary>
         /// Converts the Vector2 into a Vector3, using the Y coordinate as Z instead.
         /// </summary>

@@ -6,7 +6,8 @@ namespace ProjectBlast.CameraScripts
 {
     public class PlayerCameraController : CameraController
     {
-        [SerializeField] Transform target;
+        [SerializeField] Transform target = null;
+        [SerializeField] Transform pivot = null;
 
         [Header("Camera Options")]
         [SerializeField] float sensitivity = 2f;
@@ -23,8 +24,6 @@ namespace ProjectBlast.CameraScripts
 
         private void Update()
         {
-            // Move
-            Vector3 basePosition = target.position + height;
             
             // Rotate
             float deltaXRotation = -Input.GetAxis("Mouse Y") * sensitivity;
@@ -34,11 +33,13 @@ namespace ProjectBlast.CameraScripts
             cameraRotation.y = cameraRotation.y + deltaYRotation % 360f;
 
             Quaternion rotation = Quaternion.Euler(cameraRotation.x, cameraRotation.y, 0f);
+            pivot.rotation = rotation;
 
-            cameraTransform.position = basePosition + rotation * offset;
+            // Move
+            Vector3 basePosition = target.position + height;
+            cameraTransform.position = basePosition + offset;
 
-
-            cameraTransform.rotation = rotation;
+            cameraTransform.rotation = target.rotation;
         }
 
     }

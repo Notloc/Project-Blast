@@ -10,7 +10,8 @@ namespace ProjectBlast.PlayerScripts
     {
         [Header("Required References")]
         //[SerializeField] Player player = null;
-        [SerializeField] new Rigidbody rigidbody = null;
+        [SerializeField] Rigidbody movementBody = null;
+        [SerializeField] Rigidbody rotationBody = null;
 
         [Header("Movement Options")]
         [SerializeField] float speed = 10f;     //Movement speed
@@ -18,7 +19,7 @@ namespace ProjectBlast.PlayerScripts
         [SerializeField] float crouchPenalty = 0f;
         [SerializeField] bool isSprint = false;
         [SerializeField] bool isCrouch = false;
-        //[SerializeField] float rotationSmoothing = 5f;
+        [SerializeField] float rotationSmoothing = 5f;
 
         private bool controlEnabled = true;
         private new Camera camera;
@@ -38,6 +39,8 @@ namespace ProjectBlast.PlayerScripts
             if (!controlEnabled)
                 return;
 
+            UpdateRotatingBody();
+
             Sprint();
             Crouch();
         }
@@ -47,18 +50,20 @@ namespace ProjectBlast.PlayerScripts
             if (!controlEnabled)
                 return;
 
-            Rotate();
             Move(Time.fixedDeltaTime);
+            Rotate();
         }
 
         private void Rotate()
         {
-            Vector3 direction = rigidbody.velocity;
-            if (direction == Vector3.zero)
-                return;
-
             Quaternion cameraRotationFlat = camera.transform.rotation.Flatten();
-            rigidbody.MoveRotation(cameraRotationFlat);
+            Quaternion targetRotation = Quaternion.Lerp(rotationBody.rotation, cameraRotationFlat, Time.fixedDeltaTime * rotationSmoothing);
+            rotationBody.MoveRotation(targetRotation);
+        }
+
+        private void UpdateRotatingBody()
+        {
+            rotationBody.position = movementBody.position;
         }
 
         private void Move(float deltaTime)
@@ -68,8 +73,8 @@ namespace ProjectBlast.PlayerScripts
 
             Vector3 movement = Vector3.ClampMagnitude(new Vector3(xInput, 0f, yInput), 1f);
             //Determines movement speed based on sprinting and sprint speed
-            Vector3 verticalVelocity = new Vector3(0f, rigidbody.velocity.y, 0f);
-            rigidbody.velocity = camera.transform.rotation.Flatten() * (movement * ((speed + boost) * (1 - crouchPenalty))) + verticalVelocity;
+            Vector3 verticalVelocity = new Vector3(0f, movementBody.velocity.y, 0f);
+            movementBody.velocity = camera.transform.rotation.Flatten() * (movement * ((speed + boost) * (1 - crouchPenalty))) + verticalVelocity;
         }
 
         private void Sprint()

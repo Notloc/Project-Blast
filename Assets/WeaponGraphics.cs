@@ -1,3 +1,4 @@
+using Notloc.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class WeaponGraphics
     public void CreateModel(WeaponInstance weaponInstance, Transform transform)
     {
         GameObject gunModel = GameObject.Instantiate(weaponInstance.WeaponBase.ModelPrefab, transform);
+        gunModel.SetLayerRecursively(Layers.GHOST);
         ItemModelPositionData positionData = gunModel.GetComponent<ItemModelPositionData>();
 
         attachmentModelDict.Add(weaponInstance, gunModel);
@@ -39,6 +41,7 @@ public class WeaponGraphics
 
         Transform attachPoint = positionData.ModSlotPositionsByName[slotName].AttachmentPoint;
         GameObject attachmentModel = GameObject.Instantiate(attachment.ItemBase.ModelPrefab, attachPoint);
+        attachmentModel.SetLayerRecursively(Layers.GHOST);
 
         attachmentModels.Add(attachmentModel);
         attachmentModelDict.Add(attachment, attachmentModel);

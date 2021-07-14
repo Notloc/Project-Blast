@@ -16,3 +16,9 @@ MonoBehaviour:
   attachments:
   - attachment: {fileID: 11400000, guid: 9a652a57da76a8b4faff5004937cdd5e, type: 2}
     slotName: RIFLE_BARREL
+  - attachment: {fileID: 11400000, guid: 5400a9dc9a6778f4d98f637c3ffbdc7a, type: 2}
+    slotName: RIFLE_GRIP
+  - attachment: {fileID: 11400000, guid: f15aa092c0d18f248b3587906f79937a, type: 2}
+    slotName: RIFLE_MAGAZINE
+  - attachment: {fileID: 11400000, guid: 4657eab88b251804388f16581bca089c, type: 2}
+    slotName: RIFLE_STOCK

@@ -494,6 +494,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8360339993645095973, guid: 58f4e44a3fcad52458af0933d4d091ae,
+        type: 3}
+      propertyPath: near clip plane
+      value: 0.05
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58f4e44a3fcad52458af0933d4d091ae, type: 3}
 --- !u!1 &1134784759
@@ -728,16 +733,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7121238227984773065, guid: 03abb4120b377f048be8fd89ca7a5084,
-        type: 3}
-      propertyPath: offset.y
-      value: 0.08
-      objectReference: {fileID: 0}
-    - target: {fileID: 7121238227984773065, guid: 03abb4120b377f048be8fd89ca7a5084,
-        type: 3}
-      propertyPath: offset.z
-      value: 0.05
-      objectReference: {fileID: 0}
     - target: {fileID: 7788034856381914481, guid: 03abb4120b377f048be8fd89ca7a5084,
         type: 3}
       propertyPath: m_RootOrder
